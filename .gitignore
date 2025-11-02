@@ -1,0 +1,42 @@
+# Archivos y carpetas que Unity puede regenerar
+[Ll]ibrary/
+[Tt]emp/
+[Oo]bj/
+[Bb]uild/
+[Bb]uilds/
+[Ll]ogs/
+UserSettings/
+
+# Archivos de VS y Rider
+*.csproj
+*.unityproj
+*.sln
+*.suo
+*.tmp
+*.user
+*.userprefs
+*.pidb
+*.booproj
+*.svd
+
+# Archivos generados por compiladores
+*.pdb
+*.mdb
+*.opendb
+*.VC.db
+
+# Archivos del sistema
+.DS_Store
+Thumbs.db
+
+# Archivos de builds
+*.apk
+*.aab
+*.exe
+*.app
+*.ipa
+*.msi
+
+# Archivos de backups
+*.bak
+*.orig
