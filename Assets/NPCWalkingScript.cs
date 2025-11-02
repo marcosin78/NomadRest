@@ -1,9 +1,10 @@
 using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
+using System;
 
 [RequireComponent(typeof(Collider))]
-public class NPCWalkingScript : MonoBehaviour, IInteractable
+public class NPCWalkingScript : MonoBehaviour
 {
     public float speed = 3f;
     public float stopDistance = 0.3f;
@@ -117,15 +118,20 @@ public class NPCWalkingScript : MonoBehaviour, IInteractable
             index = 0;
         }
     }
-    void OnCollisionEnter(Collision collision)
+    void OnTriggerEnter(Collider other)
     {
-        var provider = collision.transform.GetComponent<IWaypointProvider>();
+        var provider = other.transform.GetComponent<IWaypointProvider>();
+
+      
         if (provider != null && provider == this.provider)
         {
             // Si el waypoint es el destino actual, lo marcamos como no disponible
             if (provider is WaypointScript ws)
             {
                 ws.SetAvailability(false);
+
+                Debug.Log("NPC ha llegado a su waypoint: " + other.gameObject.name);
+
 
             }
         }
@@ -148,15 +154,5 @@ public class NPCWalkingScript : MonoBehaviour, IInteractable
         Gizmos.DrawLine(castOrigin, castOrigin + transform.forward * avoidDistance);
     }
 
-
-    //Logica de interaccion
-    public void OnInteract()
-    {
-        // Cuando el jugador pulsa E y apunta al NPC, este desaparece
-        Destroy(gameObject);
-    }
-     public string GetName()
-    {
-        return gameObject.name; // Opcional: nombre para UI
-    }
+   
 }

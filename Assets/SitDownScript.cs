@@ -23,9 +23,17 @@ public class SitDownScript : MonoBehaviour
     void HandleContact(Transform targetSeat)
     {
 
-        if(targetSeat.CompareTag("SEAT"))
+        if (targetSeat.CompareTag("SEAT"))
         {
             Debug.Log("Colliding with: " + targetSeat.name);
+
+            // Si este objeto tiene BeerDrinkingScript, activa askingBeer
+            var beerScript = GetComponent<BeerDrinkingScript>();
+            if (beerScript != null)
+            {
+                beerScript.askingBeer = true;
+                Debug.Log("NPC " + gameObject.name + " is now asking for a beer.");
+            }
         }
 
     }

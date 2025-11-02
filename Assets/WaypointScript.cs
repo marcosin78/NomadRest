@@ -15,20 +15,46 @@ public class WaypointScript : MonoBehaviour, IWaypointProvider
 
     }
 
-    // Update is called once per frame
-    void Update()
+    void OnTriggerEnter(Collider other)
     {
-
-        if(isAvailable == false)
+         Debug.Log("Waypoint trigger enter: " + other.name);
+        if (other.GetComponent<BeerDrinkingScript>() != null)
         {
-            //Podria añadir algun efecto visual para indicar que no esta disponible
+            SetAvailability(false);
+            Debug.Log("Waypoint " + gameObject.name + " ocupado por " + other.name);
 
-
+            // Suscribirse al evento de destrucción del NPC
+            BeerDrinkingScript npc = other.GetComponent<BeerDrinkingScript>();
+            if (npc != null)
+            {
+                npc.OnDestroyed += OnNpcDestroyed;
+            }
         }
+    }
+     // Marca como disponible al salir el NPC
+    void OnTriggerExit(Collider other)
+    {
+        if (other.GetComponent<BeerDrinkingScript>() != null)
+        {
+            SetAvailability(true);
+            Debug.Log("Waypoint " + gameObject.name + " libre por " + other.name);
 
+            // Desuscribirse del evento de destrucción del NPC
+            BeerDrinkingScript npc = other.GetComponent<BeerDrinkingScript>();
+            if (npc != null)
+            {
+                npc.OnDestroyed -= OnNpcDestroyed;
+            }
+        }
     }
     public void SetAvailability(bool availability)
     {
         isAvailable = availability;
+    }
+    // Este método se llama cuando el NPC es destruido
+    private void OnNpcDestroyed()
+    {
+        SetAvailability(true);
+        Debug.Log("Waypoint " + gameObject.name + " liberado porque el NPC fue destruido");
     }
 }
