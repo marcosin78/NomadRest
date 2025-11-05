@@ -199,7 +199,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f82a41b1b48ddb6478d64c85754ce4c7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: '::'
-  beerPrefab: {fileID: 3116334735027170204, guid: d00061cf5c40d1245a2f3f83bc86d3a2, type: 3}
+  drinkPrefabs:
+  - {fileID: 3116334735027170204, guid: d00061cf5c40d1245a2f3f83bc86d3a2, type: 3}
+  - {fileID: 3116334735027170204, guid: 2e387bce904057c4c886e80a56cd3385, type: 3}
+  isDispensing: 0
+  drinkOptions: 0100000002000000
+  selectedDrink: 0
 --- !u!65 &247266036
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -219,8 +224,8 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 2.0000005, y: 3, z: 3.9999998}
-  m_Center: {x: 0.5000001, y: 1, z: -1.5000001}
+  m_Size: {x: 1.0000005, y: 2, z: 3}
+  m_Center: {x: 1.0000001, y: 0.5, z: -1.0000002}
 --- !u!1 &342139051
 GameObject:
   m_ObjectHideFlags: 0
@@ -853,6 +858,91 @@ Transform:
   - {fileID: 1172449371}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1001 &4129805577416146901
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 1689194404203034252, guid: ff6b8325f2f33df458e8a29a789685f1, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -3.45
+      objectReference: {fileID: 0}
+    - target: {fileID: 1689194404203034252, guid: ff6b8325f2f33df458e8a29a789685f1, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 2.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 1689194404203034252, guid: ff6b8325f2f33df458e8a29a789685f1, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: -3.2033584
+      objectReference: {fileID: 0}
+    - target: {fileID: 1689194404203034252, guid: ff6b8325f2f33df458e8a29a789685f1, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 0.7071067
+      objectReference: {fileID: 0}
+    - target: {fileID: 1689194404203034252, guid: ff6b8325f2f33df458e8a29a789685f1, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: -0.7071068
+      objectReference: {fileID: 0}
+    - target: {fileID: 1689194404203034252, guid: ff6b8325f2f33df458e8a29a789685f1, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1689194404203034252, guid: ff6b8325f2f33df458e8a29a789685f1, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1689194404203034252, guid: ff6b8325f2f33df458e8a29a789685f1, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1689194404203034252, guid: ff6b8325f2f33df458e8a29a789685f1, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1689194404203034252, guid: ff6b8325f2f33df458e8a29a789685f1, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2034195402901236790, guid: ff6b8325f2f33df458e8a29a789685f1, type: 3}
+      propertyPath: m_Name
+      value: BeerTap
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 2034195402901236790, guid: ff6b8325f2f33df458e8a29a789685f1, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 4129805577416146903}
+  m_SourcePrefab: {fileID: 100100000, guid: ff6b8325f2f33df458e8a29a789685f1, type: 3}
+--- !u!1 &4129805577416146902 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 2034195402901236790, guid: ff6b8325f2f33df458e8a29a789685f1, type: 3}
+  m_PrefabInstance: {fileID: 4129805577416146901}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &4129805577416146903
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4129805577416146902}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0220255cf68a4934f9f7de2d3d6e2696, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: '::'
+  beerLiquidPrefab: {fileID: 3116334735027170204, guid: c238606fcb4ca044b9f9e54b0dc34ef3, type: 3}
+  throwForce: 2
+  throwBeerQuantity: 300
+  angleRange: 70
+  angleOffset: 10
+  destroyDelay: 3
+  cooldownTime: 0.05
+  directionLerpTime: 0.5
 --- !u!1001 &5446450909532069341
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -924,3 +1014,4 @@ SceneRoots:
   - {fileID: 521107333}
   - {fileID: 1017033300}
   - {fileID: 247266032}
+  - {fileID: 4129805577416146901}

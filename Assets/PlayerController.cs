@@ -39,9 +39,6 @@ public class PlayerController : MonoBehaviour
 
         movement.Normalize(); // Prevents faster diagonal movement
 
-
-
-
     }
     void FixedUpdate()
     {
