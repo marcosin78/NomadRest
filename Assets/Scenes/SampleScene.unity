@@ -143,9 +143,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::MoveArmScript
   ballRb: {fileID: 1409571116}
   forceMultiplier: 30
-  maxDistance: 3
-  coneAngle: 45
+  maxDistance: 2
+  coneAngle: 180
   cam: {fileID: 283447677}
+  coneOriginOffset: {x: 0, y: 0, z: 0}
   mouseForceBoost: 10
 --- !u!1001 &247266032
 PrefabInstance:
@@ -157,7 +158,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: -8679921383154817045, guid: 2732e618e8f154c46b986936a299e585, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -3.2523048
+      value: -0.56501055
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 2732e618e8f154c46b986936a299e585, type: 3}
       propertyPath: m_LocalPosition.y
@@ -165,11 +166,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 2732e618e8f154c46b986936a299e585, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -4.597425
+      value: -5.0724916
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 2732e618e8f154c46b986936a299e585, type: 3}
       propertyPath: m_LocalRotation.w
-      value: -0.00000035762784
+      value: 0.70710623
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 2732e618e8f154c46b986936a299e585, type: 3}
       propertyPath: m_LocalRotation.x
@@ -177,7 +178,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 2732e618e8f154c46b986936a299e585, type: 3}
       propertyPath: m_LocalRotation.y
-      value: 1
+      value: 0.70710737
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 2732e618e8f154c46b986936a299e585, type: 3}
       propertyPath: m_LocalRotation.z
@@ -189,10 +190,18 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 2732e618e8f154c46b986936a299e585, type: 3}
       propertyPath: m_LocalEulerAnglesHint.y
-      value: 180
+      value: 90
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 2732e618e8f154c46b986936a299e585, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 530601266313323602, guid: 2732e618e8f154c46b986936a299e585, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0.49384695
+      objectReference: {fileID: 0}
+    - target: {fileID: 530601266313323602, guid: 2732e618e8f154c46b986936a299e585, type: 3}
+      propertyPath: m_LocalPosition.z
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: 2732e618e8f154c46b986936a299e585, type: 3}
@@ -523,7 +532,7 @@ MonoBehaviour:
   cellSize: 1
   gridOrigin: {x: 0, y: 0, z: 0}
   visualizeGrid: 1
-  gizmoScale: 1
+  gizmoScale: 0.1
   startPosition: {x: 0, y: 0}
   endPosition: {x: 10, y: 10}
 --- !u!4 &735245330
@@ -1006,15 +1015,15 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 1689194404203034252, guid: ff6b8325f2f33df458e8a29a789685f1, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -3.45
+      value: -1.78
       objectReference: {fileID: 0}
     - target: {fileID: 1689194404203034252, guid: ff6b8325f2f33df458e8a29a789685f1, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 2.5
+      value: 2.45
       objectReference: {fileID: 0}
     - target: {fileID: 1689194404203034252, guid: ff6b8325f2f33df458e8a29a789685f1, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -3.2033584
+      value: -5.79
       objectReference: {fileID: 0}
     - target: {fileID: 1689194404203034252, guid: ff6b8325f2f33df458e8a29a789685f1, type: 3}
       propertyPath: m_LocalRotation.w
@@ -1075,7 +1084,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: '::'
   beerLiquidPrefab: {fileID: 3116334735027170204, guid: c238606fcb4ca044b9f9e54b0dc34ef3, type: 3}
   throwForce: 1.5
-  throwBeerQuantity: 100
+  throwBeerQuantity: 400
   angleRange: 40
   angleOffset: 10
   destroyDelay: 1
@@ -1103,7 +1112,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8875920998172318802, guid: 551a4cbb7b3329048b76fee0801e3b39, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -5.4799995
+      value: -1.4799995
       objectReference: {fileID: 0}
     - target: {fileID: 8875920998172318802, guid: 551a4cbb7b3329048b76fee0801e3b39, type: 3}
       propertyPath: m_LocalRotation.w
