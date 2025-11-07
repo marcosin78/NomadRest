@@ -17,7 +17,7 @@ public class WaypointScript : MonoBehaviour, IWaypointProvider
 
     void OnTriggerEnter(Collider other)
     {
-         Debug.Log("Waypoint trigger enter: " + other.name);
+
         if (other.GetComponent<BeerDrinkingScript>() != null)
         {
             SetAvailability(false);
@@ -55,6 +55,6 @@ public class WaypointScript : MonoBehaviour, IWaypointProvider
     private void OnNpcDestroyed()
     {
         SetAvailability(true);
-        Debug.Log("Waypoint " + gameObject.name + " liberado porque el NPC fue destruido");
+        
     }
 }

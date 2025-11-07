@@ -28,7 +28,6 @@ public class BeerDispenserScript : MonoBehaviour, IInteractable
     public void OnInteract()
     {
 
-        // Busca el PlayerController en la escena (puedes mejorar esto si tienes varios jugadores)
 
         if(player!=null && player.availableHands==true)
         {

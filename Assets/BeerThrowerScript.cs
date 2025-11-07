@@ -3,9 +3,12 @@ using System.Collections;
 public class BeerThrowerScript : MonoBehaviour
 {
     public GameObject beerLiquidPrefab;
-     BeerDispenserScript BeerDispenserScript;
+    BeerDispenserScript BeerDispenserScript;
+
+    PlayerController player;
+    MoveArmScript moveArm;
     public float throwForce = 0.3f;
-    public int throwBeerQuantity = 3;
+    public int throwBeerQuantity = 1;
     public float angleRange = 60f; // Rango máximo de ángulo en grados
     public int angleOffset = 0;
     public float destroyDelay = 3f; // Segundos antes de eliminar cada cubo
@@ -22,6 +25,9 @@ public class BeerThrowerScript : MonoBehaviour
     {
 
         BeerDispenserScript = FindObjectOfType<BeerDispenserScript>();
+        player = FindObjectOfType<PlayerController>();
+        moveArm = player.GetComponentInChildren<MoveArmScript>(true);
+
         if (BeerDispenserScript != null)
         {
             Debug.Log("BeerDispenserScript found.");
@@ -50,40 +56,57 @@ public class BeerThrowerScript : MonoBehaviour
 
     }
 
+
+    //Rutina para lanzar la cerveza
     IEnumerator ThrowBeerCoroutine()
     {
         if (beerLiquidPrefab != null)
         {
 
-        int thrown = 0;
-        while (thrown < throwBeerQuantity)
-        {
-            GameObject beerInstance = Instantiate(beerLiquidPrefab, transform.position, transform.rotation);
-            Rigidbody rb = beerInstance.GetComponent<Rigidbody>();
+            //Bloqueando camara
+            player.LockCamera();
 
-            if (rb != null)
+            moveArm.ActivateArm();
+
+            int thrown = 0;
+            
+            while (thrown < throwBeerQuantity)
             {
-                rb.AddForce(currentDirection * throwForce, ForceMode.VelocityChange);
-            }
+                GameObject beerInstance = Instantiate(beerLiquidPrefab, transform.position, transform.rotation);
+                Rigidbody rb = beerInstance.GetComponent<Rigidbody>();
 
-            StartCoroutine(DestroyAfterDelay(beerInstance, destroyDelay));
-            thrown++;
-            yield return new WaitForSeconds(cooldownTime);
-        }
-        
-        // Cuando termina, para la rutina de dirección
-        if (directionRoutine != null)
-        {
-            StopCoroutine(directionRoutine);
-            directionRoutine = null;
-        }
+                if (rb != null)
+                {
+                    rb.AddForce(currentDirection * throwForce, ForceMode.VelocityChange);
+                }
+
+                StartCoroutine(DestroyAfterDelay(beerInstance, destroyDelay));
+                thrown++;
+                yield return new WaitForSeconds(cooldownTime);
+            }
+                
+            // Cuando termina, para la rutina de dirección
+            if (directionRoutine != null)
+            {
+                StopCoroutine(directionRoutine);
+                directionRoutine = null;
+            }
             throwRoutine = null;
-    }
+
+
+            //Desactivar brazo
+            moveArm.DeactivateArm();
+
+            // Desbloquea la cámara al finalizar
+            player.UnlockCamera();
+        }
         else
         {
             Debug.LogWarning("beerLiquidPrefab is not assigned.");
         }
     }
+    
+    //Redirecciona la cerveza lanzada cada cierto tiempo
     IEnumerator DirectionCoroutine()
     {
         while (true)
@@ -105,6 +128,8 @@ public class BeerThrowerScript : MonoBehaviour
             currentDirection = targetDirection;
         }
     }
+
+    //Destruye el objeto después de un retraso
     IEnumerator DestroyAfterDelay(GameObject obj, float delay)
     {
         yield return new WaitForSeconds(delay);
