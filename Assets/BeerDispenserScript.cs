@@ -51,7 +51,7 @@ public class BeerDispenserScript : MonoBehaviour, IInteractable
                 {
                     Debug.Log("Giving soda to player");
                 }
-            player.TakeItem(selectedPrefab);
+
         }
         else
         {

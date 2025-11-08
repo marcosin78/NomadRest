@@ -106,7 +106,7 @@ public class MoveArmScript : MonoBehaviour
         {
             float totalForce = forceMultiplier * mouseForceBoost * Time.deltaTime;
             ballRb.AddForce(forceDir.normalized * totalForce, ForceMode.Force);
-            Debug.Log($"Fuerza aplicada: {forceDir.normalized * totalForce}, mouseVertical={mouseVertical}, mouseHorizontal={mouseHorizontal}");
+            
         }
     }
 

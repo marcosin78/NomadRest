@@ -5,6 +5,8 @@ public class BeerThrowerScript : MonoBehaviour
     public GameObject beerLiquidPrefab;
     BeerDispenserScript BeerDispenserScript;
 
+    LiquidDetector liquidDetector;
+
     PlayerController player;
     MoveArmScript moveArm;
     public float throwForce = 0.3f;
@@ -68,6 +70,11 @@ public class BeerThrowerScript : MonoBehaviour
 
             moveArm.ActivateArm();
 
+
+            //Activar el detector de liquidos 
+            liquidDetector = FindObjectOfType<LiquidDetector>();
+            liquidDetector.setTotalDrops(throwBeerQuantity);
+
             int thrown = 0;
             
             while (thrown < throwBeerQuantity)
@@ -99,6 +106,29 @@ public class BeerThrowerScript : MonoBehaviour
 
             // Desbloquea la cámara al finalizar
             player.UnlockCamera();
+
+            //Entregar el % de gotas recogidas
+            float fillPercent = liquidDetector.GetFillPercent();
+            Debug.Log($"Porcentaje de gotas recogidas: {fillPercent * 100f}%");
+
+            if (fillPercent < 0.6f)
+            {
+                Debug.Log("El jugador ha fallado al recoger suficiente cerveza.");
+            }
+            else
+            {
+                Debug.Log("El jugador ha recogido suficiente cerveza.");
+               
+               // Da el item al jugador al finalizar el dispensado
+            if (BeerDispenserScript != null && BeerDispenserScript.drinkPrefabs.Length > BeerDispenserScript.selectedDrink)
+            {
+                GameObject selectedPrefab = BeerDispenserScript.drinkPrefabs[BeerDispenserScript.selectedDrink];
+                player.TakeItem(selectedPrefab);
+                Debug.Log("Item entregado al jugador.");
+
+            }
+    
+        }   
         }
         else
         {
