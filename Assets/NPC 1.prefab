@@ -205,11 +205,16 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::SkinLogic
   spriteRenderer: {fileID: 4339189563940496170}
   frontSprite: {fileID: 21300000, guid: b172a163ac957884f88a47795104a974, type: 3}
+  frontLeftSprite: {fileID: 21300000, guid: 04952db15ed44bb45b56a4c3b97bcdfc, type: 3}
+  leftSprite: {fileID: 21300000, guid: f0cc9318e6ca267469d3796a0e2ce888, type: 3}
+  backLeftSprite: {fileID: 21300000, guid: 6622124cadfeaed418a668e5d696c7b5, type: 3}
   backSprite: {fileID: 21300000, guid: 5d2a2cf529a1cc849ae8ca9855aa04de, type: 3}
-  leftSprite: {fileID: 21300000, guid: 48b0e5c7fd83bc847b5c8899c3c8b0ef, type: 3}
-  rightSprite: {fileID: 21300000, guid: f0cc9318e6ca267469d3796a0e2ce888, type: 3}
+  backRightSprite: {fileID: 21300000, guid: e50fdcfb35fe6084baffbae99244a417, type: 3}
+  rightSprite: {fileID: 21300000, guid: 48b0e5c7fd83bc847b5c8899c3c8b0ef, type: 3}
+  frontRightSprite: {fileID: 21300000, guid: 44ccaab2199ee8d43b8f2ffb9d56f21a, type: 3}
   lookTarget: {fileID: 0}
   maxSpriteRotation: 5
+  rotationLerpSpeed: 10
 --- !u!1 &5994039938781673607
 GameObject:
   m_ObjectHideFlags: 0
@@ -236,7 +241,7 @@ Transform:
   m_GameObject: {fileID: 5994039938781673607}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 1, z: 0}
+  m_LocalPosition: {x: 0, y: 0.9, z: 0}
   m_LocalScale: {x: 0.07, y: 0.07, z: 0.07}
   m_ConstrainProportionsScale: 0
   m_Children: []
