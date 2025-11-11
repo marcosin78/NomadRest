@@ -1,43 +1,32 @@
 using System;
 using UnityEngine;
 
-public class BeerDrinkingScript : MonoBehaviour, IInteractable
+public class BeerDrinkingScript : MonoBehaviour
 {
-
     PlayerController player;
     public bool askingBeer = false;
     public event Action OnDestroyed;
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
+
     void Start()
     {
-        
         player = FindObjectOfType<PlayerController>();
+        if (player == null)
+            Debug.LogError("PlayerController not found.");
     }
 
-    // Update is called once per frame
-    void Update()
+    public void GiveBeer()
     {
-
-    }
-    
-    public string GetName()
-    {
-         return gameObject.name; // Opcional: nombre para UI
-    }
- public void OnInteract() //ARREGLAR CONDICIONAL, DEMASIADOS IFS ANIDADOS
-    {
-        // Verifica si el NPC está pidiendo cerveza
+        Debug.Log("GiveBeer called on BeerDrinkingScript for NPC: " + gameObject.name);
         if (askingBeer)
         {
-            // Verifica si el jugador tiene la cerveza en la mano
             if (player != null && player.HoldPoint != null && player.HoldPoint.childCount > 0)
             {
                 Transform heldItem = player.HoldPoint.GetChild(0);
-                if (heldItem.CompareTag("Beer")) // Asegúrate de que el prefab de la cerveza tenga el tag "Beer"
+                if (heldItem.CompareTag("Beer"))
                 {
                     Destroy(gameObject);
                     player.DropItem();
-                    Debug.Log("Interacted with Beer Drinking NPC: " + gameObject.name + " (Beer delivered)");
+                    Debug.Log("Beer delivered to NPC: " + gameObject.name);
                 }
                 else
                 {
@@ -55,10 +44,8 @@ public class BeerDrinkingScript : MonoBehaviour, IInteractable
         }
     }
 
-    //Logica de destruccion de objeto
     void OnDestroy()
     {
-        if (OnDestroyed != null)
-            OnDestroyed.Invoke();
+        OnDestroyed?.Invoke();
     }
 }
