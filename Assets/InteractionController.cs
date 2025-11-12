@@ -38,7 +38,6 @@ public class NPCInteractionController : MonoBehaviour, IInteractable
         Debug.Log("Interacted with NPC for generic dialog: INTERACTION CONTROLLER " + gameObject.name);
     }
 }
-
     public string GetName()
     {
         return gameObject.name;
