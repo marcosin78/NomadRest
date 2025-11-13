@@ -9,35 +9,54 @@ public class NPCInteractionController : MonoBehaviour, IInteractable
     public enum InteractionType { Beer, Dialog }
     public InteractionType currentInteraction;
 
+
+    void Start()
+    {
+        // Inicialización si es necesario
+
+        if(dialogScript.hasSpecialDialog)
+        {
+            currentInteraction = InteractionType.Dialog;
+        }
+        else if(beerDrinkingScript != null)
+        {
+            currentInteraction = InteractionType.Beer;
+        }
+
+    }
     public void OnInteract()
-{
-    // Caso 1: Cerveza
-    if (currentInteraction == InteractionType.Beer &&
-        beerDrinkingScript != null &&
-        beerDrinkingScript.askingBeer)
     {
-        beerDrinkingScript.GiveBeer();
-        Debug.Log("Interacted with NPC for beer: INTERACTION CONTROLLER " + gameObject.name);
-        return;
-    }
+        // Caso 1: Cerveza
+        if (currentInteraction == InteractionType.Beer &&
+            beerDrinkingScript != null &&
+            beerDrinkingScript.askingBeer)
+        {
+            beerDrinkingScript.GiveBeer();
+            Debug.Log("Interacted with NPC for beer: INTERACTION CONTROLLER " + gameObject.name);
+            return;
+        }
 
-    // Caso 2: Diálogo especial
-    if (currentInteraction == InteractionType.Dialog &&
-        dialogScript != null &&
-        dialogScript.hasSpecialDialog)
-    {
-        dialogScript.StartDialog();
-        Debug.Log("Interacted with NPC for special dialog: INTERACTION CONTROLLER " + gameObject.name);
-        return;
-    }
+        // Caso 2: Diálogo especial
+        if (currentInteraction == InteractionType.Dialog &&
+            dialogScript != null &&
+            dialogScript.hasSpecialDialog)
+        {
+            dialogScript.StartDialog();
+            Debug.Log("Interacted with NPC for special dialog: INTERACTION CONTROLLER " + gameObject.name);
+            return;
+        }
 
-    // Caso 3: Diálogo genérico (por defecto)
-    if (genericDialogScript != null)
-    {
-        genericDialogScript.StartGenericDialog();
-        Debug.Log("Interacted with NPC for generic dialog: INTERACTION CONTROLLER " + gameObject.name);
+        // Caso 3: Diálogo genérico (por defecto)
+        if (genericDialogScript != null)
+        {
+            genericDialogScript.StartGenericDialog();
+            Debug.Log("Interacted with NPC for generic dialog: INTERACTION CONTROLLER " + gameObject.name);
+            return;
+        }
+
+        // Si no hay ninguna interacción válida
+        Debug.LogWarning("No valid interaction found for NPC: " + gameObject.name);
     }
-}
     public string GetName()
     {
         return gameObject.name;

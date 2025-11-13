@@ -9,6 +9,7 @@ TagManager:
   - Beer
   - Soda
   - BeerDrop
+  - DialogLookPoint
   layers:
   - Default
   - TransparentFX

@@ -13,6 +13,17 @@ public class DialogScript : MonoBehaviour
     void Start()
     {
         mainCamera = Camera.main;
+
+        // Busca el objeto vacío con el tag "DialogLookPoint"
+        GameObject focusObj = GameObject.FindWithTag("DialogLookPoint");
+        if (focusObj != null)
+        {
+            focusPoint = focusObj.transform;
+        }
+        else
+        {
+            Debug.LogError("No se encontró ningún objeto con el tag 'DialogLookPoint' para focusPoint en " + gameObject.name);
+        }
     }
 
     void Update()
@@ -32,17 +43,38 @@ public class DialogScript : MonoBehaviour
     }
 
     public void StartDialog()
+{
+    Debug.Log("Dialog started with: " + gameObject.name);
+
+    // Rota el GameObject (personaje) para mirar hacia el jugador usando Rigidbody
+    Transform player = GameObject.FindWithTag("Player")?.transform;
+    if (player != null)
+{
+    Vector3 lookDir = player.position - transform.position;
+    lookDir.y = 0; // Solo rota en el eje Y
+    if (lookDir.sqrMagnitude > 0.001f)
     {
-        Debug.Log("Dialog started with: " + gameObject.name);
-        Time.timeScale = 0f;
-        if (mainCamera != null)
-        {
-            originalCamPosition = mainCamera.transform.position;
-            originalCamRotation = mainCamera.transform.rotation;
-        }
-        isDialogActive = true;
+        Quaternion targetRotation = Quaternion.LookRotation(lookDir.normalized);
+        // Aplica la rotación directamente, ignorando Rigidbody si el juego se va a pausar
+        transform.rotation = targetRotation;
+    }
+}
+
+    // Ahora sí, pausa el juego
+    Time.timeScale = 0f;
+
+    if (mainCamera != null && focusPoint != null)
+    {
+        Vector3 offset = focusPoint.forward * 2.5f;
+        originalCamPosition = mainCamera.transform.position;
+        originalCamRotation = mainCamera.transform.rotation;
+
+        mainCamera.transform.position = focusPoint.position + offset;
+        mainCamera.transform.LookAt(focusPoint.position + Vector3.up * 0.5f);
     }
 
+    isDialogActive = true;
+}
     public void EndDialog()
     {
         Time.timeScale = 1f;
