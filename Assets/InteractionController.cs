@@ -41,8 +41,19 @@ public class NPCInteractionController : MonoBehaviour, IInteractable
             dialogScript != null &&
             dialogScript.hasSpecialDialog)
         {
+
+            if(dialogScript.isDialogActive==true)
+            {
+                Debug.Log("Dialog is already active with: " + gameObject.name);
+                return;
+            }
+            else
+            {
             dialogScript.StartDialog();
             Debug.Log("Interacted with NPC for special dialog: INTERACTION CONTROLLER " + gameObject.name);
+
+            }
+
             return;
         }
 
