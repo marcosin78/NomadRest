@@ -4,19 +4,20 @@ using TMPro;
 public class DialogScript : MonoBehaviour
 {
     public Transform focusPoint;
-
     private MeshRenderer playerMeshRenderer;
     private Camera mainCamera;
     private Vector3 originalCamPosition;
     private Quaternion originalCamRotation;
     public bool isDialogActive = false;
-
+    public bool hasDecisions = false;
+    public string[] decisionOptions; // Opcional: textos de las decisiones  
     public float CameraDistance = 2f;
     public bool hasSpecialDialog = false;
 
     // Referencias para el sistema de diálogo
     public TextMeshProUGUI dialogUIText;
     public Canvas dialogCanvas;
+    public Canvas decisionCanvas;
     private IDialogProvider dialogProvider;
     private string[] dialogLines;
     private int currentLine = 0;
@@ -43,6 +44,12 @@ public class DialogScript : MonoBehaviour
         {
             Debug.LogError("No se encontró ningún Canvas con el tag 'DialogCanvas'.");
         }
+        GameObject decisionObj = GameObject.FindWithTag("DecisionCanvas");
+
+    if (decisionObj != null)
+    decisionCanvas = decisionObj.GetComponent<Canvas>();
+
+
     dialogProvider = GetComponentInChildren<IDialogProvider>();
     if (dialogProvider != null)
         dialogLines = dialogProvider.GetDialogLines();
@@ -131,7 +138,7 @@ public void EndDialog()
 
     // Reanuda el tiempo del juego
         Time.timeScale = 1f;
-        
+
     if (mainCamera != null)
     {
         mainCamera.transform.position = originalCamPosition;
@@ -145,6 +152,36 @@ public void EndDialog()
 
     if (dialogCanvas != null)
         dialogCanvas.gameObject.SetActive(false);
+
+        // Si hay decisiones, muestra el canvas de decisiones y libera el ratón
+    if (hasDecisions && decisionCanvas != null)
+    {
+        // Pausa el tiempo de nuevo
+        Time.timeScale = 0f;
+
+        // Muestra el canvas de decisiones
+        decisionCanvas.gameObject.SetActive(true);
+
+        // Libera el cursor
+        Cursor.lockState = CursorLockMode.None;
+        Cursor.visible = true;
+    }
+}
+
+// Llama a este método desde los botones del canvas de decisiones
+public void OnDecisionSelected(int index)
+{
+    // Aquí puedes manejar la lógica según la opción elegida (index)
+    // ...
+
+    // Oculta el canvas de decisiones
+    if (decisionCanvas != null)
+        decisionCanvas.gameObject.SetActive(false);
+
+    // Vuelve a bloquear el cursor y reanuda el tiempo
+    Cursor.lockState = CursorLockMode.Locked;
+    Cursor.visible = false;
+    Time.timeScale = 1f;
 }
     
 }

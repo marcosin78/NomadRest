@@ -11,6 +11,7 @@ TagManager:
   - BeerDrop
   - DialogLookPoint
   - DialogCanvas
+  - DecisionCanvas
   layers:
   - Default
   - TransparentFX
