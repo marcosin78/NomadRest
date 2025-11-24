@@ -15,8 +15,11 @@ public class DialogScript : MonoBehaviour
     private bool pendingChoices = false;
     private DialogChoice[] pendingChoicesArray;
 
+    public UnlockDialogScript unlockDialogScript;
+
     private int currentNodeIndex = 0;
     public bool isDialogActive = false;
+
     private bool hasRotatedToPlayer = false;
 
     public Rigidbody characterRigidbody;
@@ -37,6 +40,15 @@ public class DialogScript : MonoBehaviour
 
     public void StartDialog()
     {
+
+        // Obtén el diálogo desbloqueado para este NPC
+    if (unlockDialogScript != null)
+    {
+        DialogTree unlocked = unlockDialogScript.GetUnlockedDialog();
+        if (unlocked != null)
+            dialogTree = unlocked;
+    }
+
         currentNodeIndex = 0;
         isDialogActive = true;
          // Rota el Rigidbody hacia el jugador antes de pausar el tiempo
@@ -112,6 +124,11 @@ public class DialogScript : MonoBehaviour
     {
         var node = dialogTree.nodes[currentNodeIndex];
         int nextNode = node.choices[choiceIndex].nextNodeIndex;
+
+        // Desbloquea el diálogo si corresponde
+        if (!string.IsNullOrEmpty(node.choices[choiceIndex].unlockKey) && unlockDialogScript != null)
+        unlockDialogScript.UnlockDialog(node.choices[choiceIndex].unlockKey);
+
 
         decisionCanvas.gameObject.SetActive(false);
         Cursor.lockState = CursorLockMode.Locked;

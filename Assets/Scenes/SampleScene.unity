@@ -1090,6 +1090,22 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 836326562027686572, guid: 06d1609cc7925e54f9a9cdfc6ef590cf, type: 3}
+      propertyPath: dialogTree
+      value: 
+      objectReference: {fileID: 11400000, guid: a661f0ad23a58aa438eff4771f4d6431, type: 2}
+    - target: {fileID: 836326562027686572, guid: 06d1609cc7925e54f9a9cdfc6ef590cf, type: 3}
+      propertyPath: unlockDialogScript
+      value: 
+      objectReference: {fileID: 3239458826903092291}
+    - target: {fileID: 5335010192868091132, guid: 06d1609cc7925e54f9a9cdfc6ef590cf, type: 3}
+      propertyPath: dialogLines.Array.size
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 5335010192868091132, guid: 06d1609cc7925e54f9a9cdfc6ef590cf, type: 3}
+      propertyPath: 'dialogLines.Array.data[3]'
+      value: 'Esta es la tercera y ultima, damos paso a la decision:'
+      objectReference: {fileID: 0}
     - target: {fileID: 5343950984890160137, guid: 06d1609cc7925e54f9a9cdfc6ef590cf, type: 3}
       propertyPath: m_LocalPosition.x
       value: 6.1371117
@@ -1137,8 +1153,35 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 8455048933245339754, guid: 06d1609cc7925e54f9a9cdfc6ef590cf, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 3239458826903092291}
   m_SourcePrefab: {fileID: 100100000, guid: 06d1609cc7925e54f9a9cdfc6ef590cf, type: 3}
+--- !u!1 &3239458826903092276 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 8455048933245339754, guid: 06d1609cc7925e54f9a9cdfc6ef590cf, type: 3}
+  m_PrefabInstance: {fileID: 3239458826903092275}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &3239458826903092291
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3239458826903092276}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d4cd4f28ad62b304984c76f65f1542f8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::UnlockDialogScript
+  dialogs:
+  - key: dialog-two
+    dialogTree: {fileID: 11400000, guid: 7d9777319c348514f9014a509ec7c740, type: 2}
+    unlocked: 0
+  - key: dialog-three
+    dialogTree: {fileID: 11400000, guid: e8f44f2eae0558b40a5b24b51dfd7471, type: 2}
+    unlocked: 0
 --- !u!1001 &3825798408005808512
 PrefabInstance:
   m_ObjectHideFlags: 0

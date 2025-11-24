@@ -11,5 +11,6 @@ public class DialogChoice
 {
     public string choiceText;
     public int nextNodeIndex = -1; // -1 si termina el diálogo
-    // Puedes añadir aquí efectos, estadísticas, etc.
+    
+    public string unlockKey; // Clave del diálogo a desbloquear
 }
