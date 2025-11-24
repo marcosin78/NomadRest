@@ -18,6 +18,10 @@ public class NPCWalkingScript : MonoBehaviour
     public float avoidHeight = 0.5f; // spherecast height from ground
 
     public IWaypointProvider provider;
+
+    private Transform leavePoint;
+
+    public bool isLeaving = false;
     Pathfinding pathfinder;
     Rigidbody rb;
 
@@ -33,6 +37,22 @@ public class NPCWalkingScript : MonoBehaviour
         RequestPath();
         
     }
+
+    public void GoToLeavePoint()
+ {
+    GameObject leaveObj = GameObject.FindWithTag("LeavePoint");
+    if (leaveObj != null)
+    {
+        leavePoint = leaveObj.transform;
+        provider = new StaticWaypointProvider(leavePoint); // StaticWaypointProvider implementa IWaypointProvider
+        isLeaving = true;
+    }
+    else
+    {
+        Debug.LogWarning("No LeavePoint found in the scene!");
+    }
+ }
+
 
     void Update()
     {
@@ -122,6 +142,7 @@ public class NPCWalkingScript : MonoBehaviour
     {
         var provider = other.transform.GetComponent<IWaypointProvider>();
 
+        Debug.Log($"Trigger with: {other.gameObject.name}, provider: {provider}, my provider: {this.provider}");
       
         if (provider != null && provider == this.provider)
         {
@@ -129,13 +150,23 @@ public class NPCWalkingScript : MonoBehaviour
             if (provider is WaypointScript ws)
             {
                 ws.SetAvailability(false);
-
                 Debug.Log("NPC ha llegado a su waypoint: " + other.gameObject.name);
-
-
             }
         }
+         // Si es el LeavePoint y estamos saliendo, destruye el NPC
+            if (other.CompareTag("LeavePoint") && isLeaving)
+            {
+                 Debug.Log("NPC destroyed on LeavePoint trigger: " + gameObject.name);
+                Destroy(gameObject);
+                return;
+            }
     }
+    public class StaticWaypointProvider : IWaypointProvider
+{
+    public Transform Waypoint { get; private set; }
+    public bool IsAvailable => true;
+    public StaticWaypointProvider(Transform t) { Waypoint = t; }
+}
 
     void OnDrawGizmosSelected()
     {

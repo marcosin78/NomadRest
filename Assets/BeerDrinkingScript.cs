@@ -5,6 +5,8 @@ public class BeerDrinkingScript : MonoBehaviour
 {
     PlayerController player;
     public bool askingBeer = false;
+
+    public bool beerDelivered = false;
     public event Action OnDestroyed;
 
     void Start()
@@ -24,9 +26,14 @@ public class BeerDrinkingScript : MonoBehaviour
                 Transform heldItem = player.HoldPoint.GetChild(0);
                 if (heldItem.CompareTag("Beer"))
                 {
-                    Destroy(gameObject);
                     player.DropItem();
+                    beerDelivered = true;
                     Debug.Log("Beer delivered to NPC: " + gameObject.name);
+
+                    // Notifica al NPCWalkingScript
+                     var walking = GetComponent<NPCWalkingScript>();
+                    if (walking != null)
+                    walking.GoToLeavePoint();
                 }
                 else
                 {

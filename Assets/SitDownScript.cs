@@ -32,7 +32,7 @@ public class SitDownScript : MonoBehaviour
             if (beerScript != null)
             {
                 beerScript.askingBeer = true;
-                Debug.Log("NPC " + gameObject.name + " is now asking for a beer.");
+ 
             }
         }
 

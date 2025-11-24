@@ -12,6 +12,7 @@ TagManager:
   - DialogLookPoint
   - DialogCanvas
   - DecisionCanvas
+  - LeavePoint
   layers:
   - Default
   - TransparentFX
