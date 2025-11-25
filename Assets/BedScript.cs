@@ -9,7 +9,7 @@ public class BedScript : MonoBehaviour, IInteractable
 
     public void OnInteract()
     {
-            if (ClockScript.Instance != null && ClockScript.Instance.ClosedBarTime)
+            if (ClockScript.Instance != null && ClockScript.Instance.ClosedBarTime && ClockScript.Instance.FallingAsleep)
             ClockScript.Instance.NextDay();
         else
         {

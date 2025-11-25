@@ -32,6 +32,7 @@ public class ClockScript : MonoBehaviour
 
     public int Day => day;
 
+    private bool hasSleptThisNight = false;
     public int Hour => hour;
     public int Minute => minute;
 
@@ -91,21 +92,30 @@ public class ClockScript : MonoBehaviour
             OpenBarTime = false;
         }
 
-        // Si son las 23:00 (11:00 PM) o más tarde, activa ShouldGoToSleep
-        if (hour >= 23)
-        {
-            FallingAsleep = true;
-        }
-        else
-        {
-            FallingAsleep = false;
-        }
+         // Permite dormir solo entre las 17:00 y las 22:00
+    if (hour >= 17 && hour <= 22)
+    {
+        FallingAsleep = true; // Puede dormir manualmente
+    }
+    else
+    {
+        FallingAsleep = false; // No puede dormir manualmente fuera de ese rango
+    }
 
-        if (FallingAsleep)
-        {
-            Debug.Log("It's late, time to go to sleep.");
-            NextDay();
-        }
+    // A las 22:15 se duerme automáticamente y pasa de día (solo una vez)
+    if (hour == 22 && minute == 15 && !hasSleptThisNight)
+    {
+        FallingAsleep = true;
+        Debug.Log("Es 22:15, el personaje se queda dormido automáticamente.");
+        NextDay();
+        hasSleptThisNight = true;
+    }
+
+    // Resetea el flag al empezar un nuevo día
+    if (hour == startHour && minute == startMinute && hasSleptThisNight)
+    {
+        hasSleptThisNight = false;
+    }
     
 
     }
