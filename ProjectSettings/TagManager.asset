@@ -13,6 +13,10 @@ TagManager:
   - DialogCanvas
   - DecisionCanvas
   - LeavePoint
+  - Bed
+  - ClockTime
+  - DayText
+  - PlayerStartPoint
   layers:
   - Default
   - TransparentFX

@@ -6,7 +6,7 @@ public class NpcSpawner : MonoBehaviour
     public GameObject npcPrefab;
     public Transform spawnPoint; //Asignar en el inspector un punto de spawn fijo si se desea
 
-
+    public bool allowSpawning = false;
     private float spawnCooldown = 10f;
     private float lastSpawnTime = -10f; 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
@@ -19,7 +19,20 @@ public class NpcSpawner : MonoBehaviour
     void Update()
     {
 
-        // Solo intenta spawnear si ha pasado el cooldown
+        // Solo permite spawnear si la hora global es 9:00 o más
+        if (ClockScript.Instance != null && ClockScript.Instance.OpenBarTime)
+        {
+            allowSpawning = true;
+
+            
+        }
+        else
+        {
+            allowSpawning = false;
+        }
+
+        if (!allowSpawning) return;
+
         if (Time.time - lastSpawnTime >= spawnCooldown)
         {
             var waypoints = FindObjectsOfType<WaypointScript>();
@@ -29,7 +42,7 @@ public class NpcSpawner : MonoBehaviour
                 {
                     SpawnNpcAtWaypoint(wp);
                     lastSpawnTime = Time.time;
-                    break; // solo uno por ciclo
+                    break;
                 }
             }
         }

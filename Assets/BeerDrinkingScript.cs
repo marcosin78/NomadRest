@@ -50,6 +50,20 @@ public class BeerDrinkingScript : MonoBehaviour
             Debug.Log("NPC " + gameObject.name + " is not asking for a beer.");
         }
     }
+    void Update()
+    {
+            // Si el bar está cerrado y el NPC no se ha ido aún, lo mandamos al LeavePoint
+    if (ClockScript.Instance != null && !ClockScript.Instance.OpenBarTime && !beerDelivered)
+    {
+        var walking = GetComponent<NPCWalkingScript>();
+        if (walking != null)
+        {
+            walking.GoToLeavePoint();
+            beerDelivered = true; // Evita que vuelva a intentarlo
+            Debug.Log("Bar cerrado, NPC se va: " + gameObject.name);
+        }
+    }
+    }
 
     void OnDestroy()
     {
