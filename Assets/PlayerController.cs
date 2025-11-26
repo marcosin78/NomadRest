@@ -17,6 +17,9 @@ public class PlayerController : MonoBehaviour
     public bool availableHands = true;
     public Transform HoldPoint;
 
+    private Rigidbody grabbedRigidbody = null;
+private Vector3 grabOffset;
+
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
@@ -62,6 +65,38 @@ public class PlayerController : MonoBehaviour
             DropItem();
             Debug.Log("Player dropped item with Q key.");
         }
+
+        // Control para agarrar y mover un Rigidbody con M1 (botón izquierdo del ratón)
+    if (Input.GetMouseButtonDown(0))
+    {
+        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+        RaycastHit hit;
+        if (Physics.Raycast(ray, out hit, 3f)) // 3f: distancia máxima de agarre
+        {
+            Rigidbody rb = hit.collider.GetComponent<Rigidbody>();
+            if (rb != null && rb != this.rb) // No agarrar el propio Rigidbody del jugador
+            {
+                grabbedRigidbody = rb;
+                grabOffset = hit.point - rb.transform.position;
+                grabbedRigidbody.useGravity = false;
+            }
+        }
+    }
+
+    if (Input.GetMouseButton(0) && grabbedRigidbody != null)
+    {
+        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+        Vector3 targetPoint = ray.GetPoint(2f); // 2f: distancia delante de la cámara
+        grabbedRigidbody.MovePosition(targetPoint - grabOffset);
+    }
+
+    if (Input.GetMouseButtonUp(0) && grabbedRigidbody != null)
+    {
+        grabbedRigidbody.useGravity = true;
+        grabbedRigidbody = null;
+    }
+
+
 
     }
     void FixedUpdate()

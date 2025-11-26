@@ -20,6 +20,10 @@ public class ClockScript : MonoBehaviour
 
     public TextMeshProUGUI dayText;
 
+    public DirtynessScript dirtynessScript;
+    public int dirtToSpawn = 3;
+    public int stainsToSpawn = 2;   
+
     public Transform playerStartPoint; // Asigna en el Inspector
     public GameObject player; // Asigna el objeto jugador en el Inspector
 
@@ -148,6 +152,17 @@ public class ClockScript : MonoBehaviour
           player.transform.position = playerStartPoint.position;
           player.transform.rotation = playerStartPoint.rotation;
      }
+
+        // Spawnea suciedad y manchas
+        if (dirtynessScript != null)
+        {
+         for (int i = 0; i < dirtToSpawn; i++)
+            dirtynessScript.SpawnRandomDirt();
+
+         for (int i = 0; i < stainsToSpawn; i++)
+            dirtynessScript.SpawnRandomStain();
+        }
+
     }
 
     void UpdateClockUI()

@@ -17,6 +17,9 @@ TagManager:
   - ClockTime
   - DayText
   - PlayerStartPoint
+  - DirtynessManager
+  - TrashBin
+  - Trash
   layers:
   - Default
   - TransparentFX
