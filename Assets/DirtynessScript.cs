@@ -11,6 +11,8 @@ public class DirtynessScript : MonoBehaviour
     public GameObject[] stainPrefabs; // Prefabs de manchas (sprites o planos con sprite)
     public GameObject trashBin; // Contenedor de basura para recoger suciedad
 
+    private int totalDirtSpawned = 0;
+
     private List<GameObject> spawnedDirt = new List<GameObject>();
 
     /// <summary>
@@ -24,6 +26,8 @@ public class DirtynessScript : MonoBehaviour
             trashBin = GameObject.FindWithTag("TrashBin");
         }
 
+        // Debug del porcentaje de limpieza
+        Debug.Log("Porcentaje de limpieza: " + GetCleanPercentage().ToString("F2") + "%");
 
     }
     public void SpawnRandomDirt()
@@ -34,6 +38,7 @@ public class DirtynessScript : MonoBehaviour
         GameObject prefab = dirtPrefabs[Random.Range(0, dirtPrefabs.Length)];
         GameObject dirt = Instantiate(prefab, pos, Quaternion.identity, transform);
         spawnedDirt.Add(dirt);
+        totalDirtSpawned++;
     }
 
     /// <summary>
@@ -48,8 +53,9 @@ public class DirtynessScript : MonoBehaviour
     Quaternion rot = Quaternion.Euler(-90f, 0f, 0f); // Rotación -90 en X
     GameObject stain = Instantiate(prefab, pos, rot, transform);
     spawnedDirt.Add(stain);
+    totalDirtSpawned++;
     }
-
+    
     /// <summary>
     /// Elimina y limpia un objeto de suciedad (llamar desde la fregona).
     /// </summary>
@@ -74,6 +80,11 @@ public class DirtynessScript : MonoBehaviour
         );
     }
 
-
+    public float GetCleanPercentage()
+    {
+        if (totalDirtSpawned == 0) return 100f;
+        float cleaned = totalDirtSpawned - spawnedDirt.Count;
+        return cleaned / totalDirtSpawned * 100f;
+    }
 
 }

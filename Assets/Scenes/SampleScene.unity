@@ -1495,7 +1495,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7779515614692344566, guid: 2c7755cc605975848b07983e04678dfd, type: 3}
       propertyPath: dirtToSpawn
-      value: 20
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 7779515614692344566, guid: 2c7755cc605975848b07983e04678dfd, type: 3}
       propertyPath: startMinute
@@ -1503,7 +1503,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7779515614692344566, guid: 2c7755cc605975848b07983e04678dfd, type: 3}
       propertyPath: stainsToSpawn
-      value: 3
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7779515614692344566, guid: 2c7755cc605975848b07983e04678dfd, type: 3}
       propertyPath: dirtynessScript

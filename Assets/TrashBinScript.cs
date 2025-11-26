@@ -2,13 +2,26 @@ using UnityEngine;
 
 public class TrashBinScript : MonoBehaviour
 {
-     void OnTriggerEnter(Collider other)
+     DirtynessScript dirtyness;
+
+    void Start()
     {
-        // Solo elimina si el objeto es basura (puedes usar tag o componente)
-        if (other.CompareTag("Dirt") || other.CompareTag("Trash"))
+                
+        GameObject dirtynessObj = GameObject.FindObjectOfType<DirtynessScript>()?.gameObject;
+        if (dirtynessObj != null)
         {
-            Destroy(other.gameObject);
-            Debug.Log("Basura eliminada: " + other.gameObject.name);
+            dirtyness = dirtynessObj.GetComponent<DirtynessScript>();
         }
+
     }
+    void OnTriggerEnter(Collider other)
+ {
+    if (other.CompareTag("Dirt") || other.CompareTag("Trash"))
+    {
+        if (dirtyness != null)
+            dirtyness.CleanDirt(other.gameObject);
+
+        // Destroy(other.gameObject); // Ya lo destruye CleanDirt
+    }
+ }
 }
