@@ -11,6 +11,13 @@ public class DirtynessScript : MonoBehaviour
     public GameObject[] stainPrefabs; // Prefabs de manchas (sprites o planos con sprite)
     public GameObject trashBin; // Contenedor de basura para recoger suciedad
 
+    public float cleanTime = 2f; // Segundos necesarios para limpiar la mancha
+    private float cleaningTimer = 0f;
+    private bool isCleaning = false;
+
+
+    private Camera mainCamera;
+
     private int totalDirtSpawned = 0;
 
     private List<GameObject> spawnedDirt = new List<GameObject>();
@@ -19,6 +26,10 @@ public class DirtynessScript : MonoBehaviour
     /// Spawnea un objeto de suciedad aleatorio en la zona.
     /// </summary>
 
+    void Start()
+    {
+        mainCamera = Camera.main;
+    }
     void Update()
     {
         if(trashBin == null)
@@ -26,8 +37,14 @@ public class DirtynessScript : MonoBehaviour
             trashBin = GameObject.FindWithTag("TrashBin");
         }
 
-        // Debug del porcentaje de limpieza
-        Debug.Log("Porcentaje de limpieza: " + GetCleanPercentage().ToString("F2") + "%");
+        if(Input.GetMouseButton(0))
+        {
+            StartCleaning();
+        }else
+        {
+            ResetCleaning();
+        }
+
 
     }
     public void SpawnRandomDirt()
@@ -55,10 +72,9 @@ public class DirtynessScript : MonoBehaviour
     spawnedDirt.Add(stain);
     totalDirtSpawned++;
     }
-    
-    /// <summary>
+  
     /// Elimina y limpia un objeto de suciedad (llamar desde la fregona).
-    /// </summary>
+
     public void CleanDirt(GameObject dirt)
     {
         if (spawnedDirt.Contains(dirt))
@@ -68,9 +84,9 @@ public class DirtynessScript : MonoBehaviour
         }
     }
 
-    /// <summary>
+
     /// Devuelve un punto aleatorio dentro del área de spawn.
-    /// </summary>
+ 
     Vector3 GetRandomPointInBounds(Bounds bounds)
     {
         return new Vector3(
@@ -85,6 +101,42 @@ public class DirtynessScript : MonoBehaviour
         if (totalDirtSpawned == 0) return 100f;
         float cleaned = totalDirtSpawned - spawnedDirt.Count;
         return cleaned / totalDirtSpawned * 100f;
+    }
+
+    void ResetCleaning()
+    {
+        isCleaning = false;
+        cleaningTimer = 0f;
+    }
+
+    void StartCleaning()
+    {
+        Ray ray = mainCamera.ScreenPointToRay(Input.mousePosition);
+            RaycastHit hit;
+            if (Physics.Raycast(ray, out hit, 3f))
+            {
+                //Aqui se puede añadir más lógica para detectar si el objeto es limpiable
+                if (hit.collider.gameObject == GameObject.FindWithTag("Dirt"))
+                {
+                    isCleaning = true;
+                    cleaningTimer += Time.deltaTime;
+                    Debug.Log("Cleaning timer: " + cleaningTimer);
+                    if (cleaningTimer >= cleanTime)
+                    {
+                        CleanDirt(GameObject.FindWithTag("Dirt"));
+                        cleaningTimer = 0f;
+                        isCleaning = false;
+                    }
+                }
+                else
+                {
+                    ResetCleaning();
+                }
+            }
+            else
+            {
+                ResetCleaning();
+            }
     }
 
 }

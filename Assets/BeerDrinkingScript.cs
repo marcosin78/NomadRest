@@ -8,12 +8,23 @@ public class BeerDrinkingScript : MonoBehaviour
 
     public bool beerDelivered = false;
     public event Action OnDestroyed;
+    InventorySystem inventorySystem;    
+
+    DirtynessScript dirtynessScript;
 
     void Start()
     {
         player = FindObjectOfType<PlayerController>();
         if (player == null)
             Debug.LogError("PlayerController not found.");
+
+            // Asume que el PlayerController tiene una referencia pública a InventorySystem
+        inventorySystem = player.GetComponent<InventorySystem>();
+        if (inventorySystem == null)
+        inventorySystem = new InventorySystem(); // Si no existe, crea uno nuevo
+        dirtynessScript = FindObjectOfType<DirtynessScript>();
+        if (dirtynessScript == null)    
+            Debug.LogError("DirtynessScript not found."); 
     }
 
     public void GiveBeer()
@@ -29,7 +40,8 @@ public class BeerDrinkingScript : MonoBehaviour
                     player.DropItem();
                     beerDelivered = true;
                     Debug.Log("Beer delivered to NPC: " + gameObject.name);
-
+                    inventorySystem.AddMoney(2); // Añade dinero al inventario del jugador
+                    inventorySystem.AddMoneyByCleanliness(dirtynessScript.GetCleanPercentage());
                     // Notifica al NPCWalkingScript
                      var walking = GetComponent<NPCWalkingScript>();
                     if (walking != null)
