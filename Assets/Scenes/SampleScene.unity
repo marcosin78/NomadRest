@@ -744,9 +744,9 @@ GameObject:
   - component: {fileID: 1172449372}
   - component: {fileID: 1172449373}
   - component: {fileID: 1172449374}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Plane
-  m_TagString: Untagged
+  m_TagString: Grass
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -911,7 +911,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4375121335132715506, guid: 098a9b4eb4abe7244bb81966a16d1a02, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 21.39
+      value: 9.64
       objectReference: {fileID: 0}
     - target: {fileID: 4375121335132715506, guid: 098a9b4eb4abe7244bb81966a16d1a02, type: 3}
       propertyPath: m_LocalPosition.y
@@ -1722,6 +1722,7 @@ MonoBehaviour:
   destroyDelay: 1
   cooldownTime: 0.05
   directionLerpTime: 0.8
+  cancelDistance: 3
 --- !u!1001 &4435942603620815618
 PrefabInstance:
   m_ObjectHideFlags: 0

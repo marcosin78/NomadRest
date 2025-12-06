@@ -15,7 +15,8 @@ public class BeerThrowerScript : MonoBehaviour
     public int angleOffset = 0;
     public float destroyDelay = 3f; // Segundos antes de eliminar cada cubo
     public float cooldownTime = 0.5f; // Cambia a float para mayor precisión
-    public float directionLerpTime = 0.5f; // Tiempo para interpolar la dirección    
+    public float directionLerpTime = 0.5f; // Tiempo para interpolar la dirección
+    public float cancelDistance = 3f; // Distancia para cancelar el lanzamiento    
 
 
     private Vector3 currentDirection = Vector3.down;
@@ -61,53 +62,53 @@ public class BeerThrowerScript : MonoBehaviour
 
     //Rutina para lanzar la cerveza
     IEnumerator ThrowBeerCoroutine()
+{
+    if (beerLiquidPrefab != null)
     {
-        if (beerLiquidPrefab != null)
+        player.LockCamera();
+        moveArm.ActivateArm();
+        liquidDetector = FindObjectOfType<LiquidDetector>();
+        liquidDetector.setTotalDrops(throwBeerQuantity);
+
+        int thrown = 0;
+        bool cancelled = false;
+
+        while (thrown < throwBeerQuantity)
         {
-
-            //Bloqueando camara
-            player.LockCamera();
-
-            moveArm.ActivateArm();
-
-
-            //Activar el detector de liquidos 
-            liquidDetector = FindObjectOfType<LiquidDetector>();
-            liquidDetector.setTotalDrops(throwBeerQuantity);
-
-            int thrown = 0;
-            
-            while (thrown < throwBeerQuantity)
+            // Comprobar distancia al dispensador
+            float distance = Vector3.Distance(player.transform.position, BeerDispenserScript.transform.position);
+            if (distance > cancelDistance)
             {
-                GameObject beerInstance = Instantiate(beerLiquidPrefab, transform.position, transform.rotation);
-                Rigidbody rb = beerInstance.GetComponent<Rigidbody>();
-
-                if (rb != null)
-                {
-                    rb.AddForce(currentDirection * throwForce, ForceMode.VelocityChange);
-                }
-
-                StartCoroutine(DestroyAfterDelay(beerInstance, destroyDelay));
-                thrown++;
-                yield return new WaitForSeconds(cooldownTime);
+                Debug.Log("Demasiado lejos del dispensador, se cancela el lanzamiento.");
+                cancelled = true;
+                break;
             }
-                
-            // Cuando termina, para la rutina de dirección
-            if (directionRoutine != null)
+
+            GameObject beerInstance = Instantiate(beerLiquidPrefab, transform.position, transform.rotation);
+            Rigidbody rb = beerInstance.GetComponent<Rigidbody>();
+
+            if (rb != null)
             {
-                StopCoroutine(directionRoutine);
-                directionRoutine = null;
+                rb.AddForce(currentDirection * throwForce, ForceMode.VelocityChange);
             }
-            throwRoutine = null;
 
+            StartCoroutine(DestroyAfterDelay(beerInstance, destroyDelay));
+            thrown++;
+            yield return new WaitForSeconds(cooldownTime);
+        }
 
-            //Desactivar brazo
-            moveArm.DeactivateArm();
+        if (directionRoutine != null)
+        {
+            StopCoroutine(directionRoutine);
+            directionRoutine = null;
+        }
+        throwRoutine = null;
 
-            // Desbloquea la cámara al finalizar
-            player.UnlockCamera();
+        moveArm.DeactivateArm();
+        player.UnlockCamera();
 
-            //Entregar el % de gotas recogidas
+        if (!cancelled)
+        {
             float fillPercent = liquidDetector.GetFillPercent();
             Debug.Log($"Porcentaje de gotas recogidas: {fillPercent * 100f}%");
 
@@ -118,23 +119,24 @@ public class BeerThrowerScript : MonoBehaviour
             else
             {
                 Debug.Log("El jugador ha recogido suficiente cerveza.");
-               
-               // Da el item al jugador al finalizar el dispensado
-            if (BeerDispenserScript != null && BeerDispenserScript.drinkPrefabs.Length > BeerDispenserScript.selectedDrink)
-            {
-                GameObject selectedPrefab = BeerDispenserScript.drinkPrefabs[BeerDispenserScript.selectedDrink];
-                player.TakeItem(selectedPrefab);
-                Debug.Log("Item entregado al jugador.");
-
+                if (BeerDispenserScript != null && BeerDispenserScript.drinkPrefabs.Length > BeerDispenserScript.selectedDrink)
+                {
+                    GameObject selectedPrefab = BeerDispenserScript.drinkPrefabs[BeerDispenserScript.selectedDrink];
+                    player.TakeItem(selectedPrefab);
+                    Debug.Log("Item entregado al jugador.");
+                }
             }
-    
-        }   
         }
         else
         {
-            Debug.LogWarning("beerLiquidPrefab is not assigned.");
+            Debug.Log("Lanzamiento cancelado por distancia.");
         }
     }
+    else
+    {
+        Debug.LogWarning("beerLiquidPrefab is not assigned.");
+    }
+}
     
     //Redirecciona la cerveza lanzada cada cierto tiempo
     IEnumerator DirectionCoroutine()
