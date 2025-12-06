@@ -6,68 +6,73 @@ public class ShopSystem : MonoBehaviour, IInteractable
     public InventorySystem playerInventory;
 
     public GameObject shopMenuUI;
-    public ShopItem[] shopItems; // Cada ShopItem tiene un Item y un precio
-    private int[] cantidadesAComprar;
 
-    public UnityEngine.UI.Button[] plusButtons;
-    public UnityEngine.UI.Button[] minusButtons;
-    public TextMeshProUGUI[] cantidadTexts;
+    public ItemScript[] itemPrefabs; // Asigna en el Inspector los objetos ItemScript de la tienda
+    public UnityEngine.UI.Button buyButton; // Asigna el botón de comprar
+
     public void Start()
     {
-        cantidadesAComprar = new int[shopItems.Length];
-        // Busca entre los hijos el objeto con el tag "ShopCanvas"
-    foreach (Transform child in transform)
-    {
-        if (child.CompareTag("ShopCanvas"))
+        shopMenuUI = GameObject.Find("ShopCanvas");
+
+        
+
+        if(buyButton == null)
         {
-            shopMenuUI = child.gameObject;
-            break;
+            buyButton = shopMenuUI.transform.Find("BuyButton").GetComponent<UnityEngine.UI.Button>();
+        }else
+        {
+            Debug.LogError("No se encontró el botón BuyButton en el ShopCanvas.");
         }
+        
+        // Asegúrate de que el menú de la tienda está oculto al inicio
+        if (shopMenuUI != null)
+        {
+            shopMenuUI.SetActive(false);
+        }
+        else
+        {
+            
+            Debug.LogError("No se encontró el objeto ShopCanvas en la escena.");
+        }
+
+        //PlayerInventory
+        if (playerInventory == null)
+        {
+            playerInventory = InventorySystem.Instance;
+        }
+
+        buyButton.onClick.AddListener(BuyItems);
     }
-    // Asegúrate de que el menú de la tienda está oculto al inicio
-    if (shopMenuUI != null)
+    public void Update()
     {
-        shopMenuUI.SetActive(false);
-    }
-
-    for (int i = 0; i < shopItems.Length; i++)
-    {
-    int index = i; // Necesario para lambdas
-
-    plusButtons[i].onClick.AddListener(() =>
-    {
-        cantidadesAComprar[index]++;
-        cantidadTexts[index].text = cantidadesAComprar[index].ToString();
-    });
-
-    minusButtons[i].onClick.AddListener(() =>
-    {
-        cantidadesAComprar[index] = Mathf.Max(0, cantidadesAComprar[index] - 1);
-        cantidadTexts[index].text = cantidadesAComprar[index].ToString();
-    });
-
-    cantidadTexts[i].text = cantidadesAComprar[i].ToString();
-    }
+      if(Input.GetKeyDown(KeyCode.Q) && shopMenuUI.activeSelf)
+      {
+        OnEndInteract();
+      }
     }
     
-    // Este método lo llamas desde el botón "Comprar" (Pendiente de asignar boton)
     public void BuyItems()
 {
     int totalCost = 0;
 
-    for (int i = 0; i < shopItems.Length; i++)
+    for (int i = 0; i < itemPrefabs.Length; i++)
     {
-        totalCost += shopItems[i].price * cantidadesAComprar[i];
+        var itemScript = itemPrefabs[i];
+
+        totalCost += itemScript.price * itemScript.cantidadComprar;
     }
 
     if (playerInventory.money >= totalCost)
     {
-        for (int i = 0; i < shopItems.Length; i++)
+        for (int i = 0; i < itemPrefabs.Length; i++)
         {
-            if (cantidadesAComprar[i] > 0)
+            var itemScript = itemPrefabs[i];
+
+            if (itemScript.cantidadComprar > 0)
             {
-                playerInventory.AddItem(shopItems[i].item, cantidadesAComprar[i]);
-                cantidadesAComprar[i] = 0; // Resetea la cantidad a comprar
+                playerInventory.AddItem(itemScript, itemScript.cantidadComprar);
+                itemScript.cantidadComprar = 0;
+                itemScript.UpdateUI();
             }
         }
         playerInventory.SpendMoney(totalCost);
@@ -77,7 +82,8 @@ public class ShopSystem : MonoBehaviour, IInteractable
     {
         Debug.Log("No tienes suficiente dinero para la compra.");
     }
-}
+
+    }
 
     public string GetName()
     {
@@ -93,11 +99,12 @@ public class ShopSystem : MonoBehaviour, IInteractable
     Cursor.lockState = CursorLockMode.None;
     Cursor.visible = true;
     }
-}
+    public void OnEndInteract()
+    {
+        shopMenuUI.SetActive(false);
 
-[System.Serializable]
-public class ShopItem
-{
-    public Item item;
-    public int price;
+        // Bloquea y oculta el ratón
+        Cursor.lockState = CursorLockMode.Locked;
+        Cursor.visible = false;
+    }
 }

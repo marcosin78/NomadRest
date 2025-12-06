@@ -3,7 +3,7 @@ using UnityEngine;
 public class InventorySystem : MonoBehaviour
 {
     public int money = 0;
-    public Item[] items; // Asume que tienes una clase Item
+    public ItemScript[] items; // Asume que tienes una clase ItemScript
 
     public static InventorySystem Instance;
     internal object shopMenuUI;
@@ -80,18 +80,10 @@ public class InventorySystem : MonoBehaviour
         money -= amount;
         Debug.Log("Dinero gastado: " + amount + ". Total restante: " + money);
     }
-    public void AddItem(Item item, int amount)
+    public void AddItem(ItemScript item, int amount)
     {
     item.cantidadInventario += amount;
     Debug.Log($"Añadido {amount} a {item.name}. Total: {item.cantidadInventario}");
     }
 }
 
-
-[System.Serializable]
-public class Item
-{
-    public string name;
-    public int cantidadInventario = 0; // Cantidad que tienes
-
-}

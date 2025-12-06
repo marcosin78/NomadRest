@@ -22,6 +22,7 @@ TagManager:
   - Trash
   - Dirt
   - ShopCanvas
+  - BuyButtonShop
   layers:
   - Default
   - TransparentFX
