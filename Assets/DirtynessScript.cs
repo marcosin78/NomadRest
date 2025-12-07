@@ -15,7 +15,6 @@ public class DirtynessScript : MonoBehaviour
     private float cleaningTimer = 0f;
     private bool isCleaning = false;
 
-
     private Camera mainCamera;
 
     private int totalDirtSpawned = 0;
@@ -110,33 +109,42 @@ public class DirtynessScript : MonoBehaviour
     }
 
     void StartCleaning()
+{
+    // Comprueba si el jugador tiene la mopa equipada
+    MopScript mop = FindObjectOfType<MopScript>();
+    if (mop == null || !mop.grabbingMop)
     {
-        Ray ray = mainCamera.ScreenPointToRay(Input.mousePosition);
-            RaycastHit hit;
-            if (Physics.Raycast(ray, out hit, 3f))
-            {
-                //Aqui se puede añadir más lógica para detectar si el objeto es limpiable
-                if (hit.collider.gameObject == GameObject.FindWithTag("Dirt"))
-                {
-                    isCleaning = true;
-                    cleaningTimer += Time.deltaTime;
-                    Debug.Log("Cleaning timer: " + cleaningTimer);
-                    if (cleaningTimer >= cleanTime)
-                    {
-                        CleanDirt(GameObject.FindWithTag("Dirt"));
-                        cleaningTimer = 0f;
-                        isCleaning = false;
-                    }
-                }
-                else
-                {
-                    ResetCleaning();
-                }
-            }
-            else
-            {
-                ResetCleaning();
-            }
+        // Si no tiene la mopa, no puede limpiar
+        ResetCleaning();
+        return;
     }
+
+    Ray ray = mainCamera.ScreenPointToRay(Input.mousePosition);
+    RaycastHit hit;
+    if (Physics.Raycast(ray, out hit, 3f))
+    {
+        //Aqui se puede añadir más lógica para detectar si el objeto es limpiable
+        if (hit.collider.gameObject == GameObject.FindWithTag("Dirt"))
+        {
+            isCleaning = true;
+            cleaningTimer += Time.deltaTime;
+            Debug.Log("Cleaning timer: " + cleaningTimer);
+            if (cleaningTimer >= cleanTime)
+            {
+                CleanDirt(GameObject.FindWithTag("Dirt"));
+                cleaningTimer = 0f;
+                isCleaning = false;
+            }
+        }
+        else
+        {
+            ResetCleaning();
+        }
+    }
+    else
+    {
+        ResetCleaning();
+    }
+}
 
 }
