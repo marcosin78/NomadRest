@@ -21,7 +21,6 @@ public class WaypointScript : MonoBehaviour, IWaypointProvider
         if (other.GetComponent<BeerDrinkingScript>() != null)
         {
             SetAvailability(false);
-            Debug.Log("Waypoint " + gameObject.name + " ocupado por " + other.name);
 
             // Suscribirse al evento de destrucción del NPC
             BeerDrinkingScript npc = other.GetComponent<BeerDrinkingScript>();

@@ -91,6 +91,41 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!1 &595800970362888536
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 4047841224908499089}
+  m_Layer: 5
+  m_Name: LicorSlot
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &4047841224908499089
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 595800970362888536}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 5286972634408894756}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: -0.38, y: -0.12}
+  m_SizeDelta: {x: 100, y: 100}
+  m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &1248812720556628633
 GameObject:
   m_ObjectHideFlags: 0
@@ -125,6 +160,7 @@ RectTransform:
   m_Children:
   - {fileID: 2969378688637609096}
   - {fileID: 8425596182125301891}
+  - {fileID: 5286972634408894756}
   m_Father: {fileID: 3613590560370102988}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
@@ -344,6 +380,43 @@ MonoBehaviour:
   m_hasFontAssetChanged: 0
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
+--- !u!1 &4161627413928762242
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 5286972634408894756}
+  m_Layer: 5
+  m_Name: IngredientsPanel
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &5286972634408894756
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4161627413928762242}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 4047841224908499089}
+  - {fileID: 9075040903829890893}
+  m_Father: {fileID: 725734712583249167}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 100, y: 100}
+  m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &5305491795509527358
 GameObject:
   m_ObjectHideFlags: 0
@@ -434,6 +507,41 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!1 &7510816252610404921
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 9075040903829890893}
+  m_Layer: 5
+  m_Name: HierbaSlot
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &9075040903829890893
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7510816252610404921}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 5286972634408894756}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: 0.2, y: -0.12}
+  m_SizeDelta: {x: 100, y: 100}
+  m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &8814958301561472199
 GameObject:
   m_ObjectHideFlags: 0
@@ -469,7 +577,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8814958301561472199}
   serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 6.977642, y: 1.0200019, z: 12.349467}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -555,6 +663,7 @@ MonoBehaviour:
   avoidRadius: 0.3
   avoidWeight: 2
   avoidHeight: 0
+  isLeaving: 0
 --- !u!65 &3760854798848449165
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -628,6 +737,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: '::'
   askingBeer: 0
+  beerDelivered: 0
+  licoresSprites:
+  - {fileID: -1207366125, guid: 6b099afd74c5ec943b2e9909db9ddfdf, type: 3}
+  hierbasSprites:
+  - {fileID: -1207366125, guid: 6b099afd74c5ec943b2e9909db9ddfdf, type: 3}
+  bubbleUI: {fileID: 5305491795509527358}
+  ingredientesPanel: {fileID: 5286972634408894756}
+  npcCanvas: {fileID: 0}
 --- !u!114 &5292791058761616804
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -664,8 +781,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4f312d17c3248a5498575ebbd6bead70, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::DialogScript
-  focusPoint: {fileID: 0}
+  dialogTree: {fileID: 0}
+  dialogCanvas: {fileID: 0}
+  decisionCanvas: {fileID: 0}
+  dialogUIText: {fileID: 0}
+  decisionButtonPrefab: {fileID: 0}
   hasSpecialDialog: 0
+  decisionButtonParent: {fileID: 0}
+  unlockDialogScript: {fileID: 0}
+  isDialogActive: 0
+  characterRigidbody: {fileID: 0}
+  playerTransform: {fileID: 0}
 --- !u!114 &1868578349056101423
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -694,7 +820,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4355b0a1e1eebb447917d762454f4d12, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::GenericDialogScript
-  dialogText: Me gustan las pichurrinas
+  dialogTexts:
+  - Hola Guille.
+  - Hola Toni.
+  - Hola Mundo.
   dialogUIText: {fileID: 2629762573250351939}
   dialogCanvas: {fileID: 8373635711013797341}
   displayTime: 3

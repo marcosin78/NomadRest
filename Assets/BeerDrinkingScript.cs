@@ -5,27 +5,54 @@ public class BeerDrinkingScript : MonoBehaviour
 {
     PlayerController player;
     public bool askingBeer = false;
-
     public bool beerDelivered = false;
     public event Action OnDestroyed;
     InventorySystem inventorySystem;    
-
     DirtynessScript dirtynessScript;
 
-    void Start()
-    {
-        player = FindObjectOfType<PlayerController>();
-        if (player == null)
-            Debug.LogError("PlayerController not found.");
 
-            // Asume que el PlayerController tiene una referencia pública a InventorySystem
-        inventorySystem = player.GetComponent<InventorySystem>();
-        if (inventorySystem == null)
-        inventorySystem = new InventorySystem(); // Si no existe, crea uno nuevo
-        dirtynessScript = FindObjectOfType<DirtynessScript>();
-        if (dirtynessScript == null)    
-            Debug.LogError("DirtynessScript not found."); 
-    }
+    //SISTEMA DE INGREDIENTES PARA CRAFTING DE CERVEZAS
+    [Header("Ingredientes")]
+    public Sprite[] licoresSprites; // Array expandible de licores
+    public Sprite[] hierbasSprites; // Array expandible de hierbas
+
+    public GameObject bubbleUI; // Asigna el Bubble en el Inspector
+    public Transform ingredientesPanel; // Panel hijo del Bubble para las imágenes
+
+    public Canvas npcCanvas; // Asigna el Canvas del NPC en el Inspector
+
+    void Start()
+{
+    player = FindObjectOfType<PlayerController>();
+    if (player == null)
+        Debug.LogError("PlayerController not found.");
+
+    inventorySystem = player.GetComponent<InventorySystem>();
+    if (inventorySystem == null)
+        inventorySystem = new InventorySystem();
+
+    dirtynessScript = FindObjectOfType<DirtynessScript>();
+    if (dirtynessScript == null)    
+        Debug.LogError("DirtynessScript not found."); 
+
+    // Busca el Bubble y el Panel SOLO entre los hijos de este NPC
+    if (bubbleUI == null)
+        bubbleUI = transform.Find("ChatBubble")?.gameObject;
+
+    if (ingredientesPanel == null && bubbleUI != null)
+        ingredientesPanel = bubbleUI.transform.Find("IngredientsPanel");
+
+    if (npcCanvas == null)
+        npcCanvas = GetComponentInChildren<Canvas>();
+
+    if (bubbleUI != null)
+        bubbleUI.SetActive(false);
+
+    if (npcCanvas != null)
+        npcCanvas.gameObject.SetActive(false);
+    else
+        Debug.LogError("NPC Canvas not assigned in BeerDrinkingScript on " + gameObject.name);
+}
 
     public void GiveBeer()
     {
@@ -39,6 +66,7 @@ public class BeerDrinkingScript : MonoBehaviour
                 {
                     player.DropItem();
                     beerDelivered = true;
+                    askingBeer = false;
                     Debug.Log("Beer delivered to NPC: " + gameObject.name);
                     inventorySystem.AddMoney(2); // Añade dinero al inventario del jugador
                     inventorySystem.AddMoneyByCleanliness(dirtynessScript.GetCleanPercentage());
@@ -64,7 +92,7 @@ public class BeerDrinkingScript : MonoBehaviour
     }
     void Update()
     {
-            // Si el bar está cerrado y el NPC no se ha ido aún, lo mandamos al LeavePoint
+           // Si el bar está cerrado y el NPC no se ha ido aún, lo mandamos al LeavePoint
     if (ClockScript.Instance != null && !ClockScript.Instance.OpenBarTime && !beerDelivered)
     {
         var walking = GetComponent<NPCWalkingScript>();
@@ -75,10 +103,76 @@ public class BeerDrinkingScript : MonoBehaviour
             Debug.Log("Bar cerrado, NPC se va: " + gameObject.name);
         }
     }
+
+        // Si deja de pedir cerveza, oculta el canvas y el bubble
+     if (!askingBeer)
+        {
+            if (npcCanvas != null)
+             npcCanvas.gameObject.SetActive(false);
+         if (bubbleUI != null)
+                bubbleUI.SetActive(false);
+     }
     }
 
     void OnDestroy()
     {
         OnDestroyed?.Invoke();
     }
+
+
+    //FUNCIONALIDAD DE PEDIR INGREDIENTES
+
+    // Mostrar ingredientes en el Bubble
+    public void AskIngredients()
+ {
+
+    if (npcCanvas != null)
+        npcCanvas.gameObject.SetActive(true);
+    else
+        Debug.LogError("NPC Canvas not assigned in BeerDrinkingScript on " + gameObject.name);
+
+    if (bubbleUI != null)
+        bubbleUI.SetActive(true);
+    else
+        Debug.LogError("Bubble UI not assigned in BeerDrinkingScript on " + gameObject.name);
+
+    // Limpia los slots
+    Transform licorSlot = ingredientesPanel.Find("LicorSlot");
+    Transform hierbaSlot = ingredientesPanel.Find("HierbaSlot");
+    if (licorSlot != null)
+        foreach (Transform child in licorSlot) Destroy(child.gameObject);
+    if (hierbaSlot != null)
+        foreach (Transform child in hierbaSlot) Destroy(child.gameObject);
+
+    // Elige un licor y una hierba aleatorios
+    Sprite licorElegido = licoresSprites[UnityEngine.Random.Range(0, licoresSprites.Length)];
+    Sprite hierbaElegida = hierbasSprites[UnityEngine.Random.Range(0, hierbasSprites.Length)];
+
+    // Instancia la imagen del licor en su slot
+    if (licorSlot != null)
+    {
+        GameObject licorObj = new GameObject("Licor");
+        licorObj.transform.SetParent(licorSlot, false);
+        var licorImg = licorObj.AddComponent<UnityEngine.UI.Image>();
+        licorImg.sprite = licorElegido;
+        licorObj.GetComponent<RectTransform>().sizeDelta = new Vector2(0.5f, 0.5f); // Ajusta el tamaño
+        }
+        else
+        {
+        Debug.LogError("LicorSlot not found in ingredientesPanel for NPC: " + gameObject.name);
+        }
+
+    // Instancia la imagen de la hierba en su slot
+    if (hierbaSlot != null)
+    {
+        GameObject hierbaObj = new GameObject("Hierba");
+        hierbaObj.transform.SetParent(hierbaSlot, false);
+        var hierbaImg = hierbaObj.AddComponent<UnityEngine.UI.Image>();
+        hierbaImg.sprite = hierbaElegida;
+        hierbaObj.GetComponent<RectTransform>().sizeDelta = new Vector2(0.5f, 0.5f); // Ajusta el tamaño
+    }else{
+
+        Debug.LogError("HierbaSlot not found in ingredientesPanel for NPC: " + gameObject.name);
+    }
+ }
 }

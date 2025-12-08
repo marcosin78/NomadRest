@@ -4,6 +4,8 @@ using UnityEngine.XR;
 public class SitDownScript : MonoBehaviour
 {
 
+
+
     Transform targetSeat; 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -32,7 +34,7 @@ public class SitDownScript : MonoBehaviour
             if (beerScript != null)
             {
                 beerScript.askingBeer = true;
- 
+                beerScript.AskIngredients();
             }
         }
 

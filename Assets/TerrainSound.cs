@@ -47,24 +47,19 @@ public class TerrainSound : MonoBehaviour
         if (Physics.Raycast(ray, out hit, 5f, terrainMask))
         {
             string tag = hit.collider.tag;
-            Debug.Log  ("Hit terrain with tag: " + tag);
             switch (tag)
             {
                 case "Grass":
                     audioSource.PlayOneShot(grassClip);
-                    Debug.Log  ("Playing grass sound");
                     break;
                 case "Wood":
                     audioSource.PlayOneShot(woodClip);
-                    Debug.Log  ("Playing wood sound");
                     break;
                 case "Stone":
                     audioSource.PlayOneShot(stoneClip);
-                    Debug.Log  ("Playing stone sound");
                     break;
                 default:
                     // Sonido por defecto o silencio
-                    Debug.Log  ("Playing default sound or silence");
                     break;
             }
         }
