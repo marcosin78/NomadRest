@@ -738,10 +738,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: '::'
   askingBeer: 0
   beerDelivered: 0
-  licoresSprites:
-  - {fileID: -1207366125, guid: 6b099afd74c5ec943b2e9909db9ddfdf, type: 3}
-  hierbasSprites:
-  - {fileID: -1207366125, guid: 6b099afd74c5ec943b2e9909db9ddfdf, type: 3}
+  licors:
+  - sprite: {fileID: -1207366125, guid: 6b099afd74c5ec943b2e9909db9ddfdf, type: 3}
+    id: 0
+  herbs:
+  - sprite: {fileID: -1207366125, guid: 6b099afd74c5ec943b2e9909db9ddfdf, type: 3}
+    id: 0
   bubbleUI: {fileID: 5305491795509527358}
   ingredientesPanel: {fileID: 5286972634408894756}
   npcCanvas: {fileID: 0}

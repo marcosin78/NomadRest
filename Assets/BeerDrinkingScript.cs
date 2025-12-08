@@ -13,13 +13,16 @@ public class BeerDrinkingScript : MonoBehaviour
 
     //SISTEMA DE INGREDIENTES PARA CRAFTING DE CERVEZAS
     [Header("Ingredientes")]
-    public Sprite[] licoresSprites; // Array expandible de licores
-    public Sprite[] hierbasSprites; // Array expandible de hierbas
+    public LicorData[] licors;
+    public HierbaData[] herbs;
 
     public GameObject bubbleUI; // Asigna el Bubble en el Inspector
     public Transform ingredientesPanel; // Panel hijo del Bubble para las imágenes
-
     public Canvas npcCanvas; // Asigna el Canvas del NPC en el Inspector
+
+        // IDs de los ingredientes pedidos
+        private int licorPedidoID;
+        private int hierbaPedidaID;
 
     void Start()
 {
@@ -145,16 +148,23 @@ public class BeerDrinkingScript : MonoBehaviour
         foreach (Transform child in hierbaSlot) Destroy(child.gameObject);
 
     // Elige un licor y una hierba aleatorios
-    Sprite licorElegido = licoresSprites[UnityEngine.Random.Range(0, licoresSprites.Length)];
-    Sprite hierbaElegida = hierbasSprites[UnityEngine.Random.Range(0, hierbasSprites.Length)];
+    LicorData licorElegido = licors[UnityEngine.Random.Range(0, licors.Length)];
+    HierbaData hierbaElegida = herbs[UnityEngine.Random.Range(0, herbs.Length)];
 
+
+    //Codigos de los ingredientes elegidos
+    
+    licorPedidoID = licorElegido.id;
+    hierbaPedidaID = hierbaElegida.id;
+
+    Debug.Log("NPC " + gameObject.name + " is asking for Licor ID: " + licorPedidoID + " and Hierba ID: " + hierbaPedidaID);
     // Instancia la imagen del licor en su slot
     if (licorSlot != null)
     {
         GameObject licorObj = new GameObject("Licor");
         licorObj.transform.SetParent(licorSlot, false);
         var licorImg = licorObj.AddComponent<UnityEngine.UI.Image>();
-        licorImg.sprite = licorElegido;
+        licorImg.sprite =   licorElegido.sprite;
         licorObj.GetComponent<RectTransform>().sizeDelta = new Vector2(0.5f, 0.5f); // Ajusta el tamaño
         }
         else
@@ -168,7 +178,7 @@ public class BeerDrinkingScript : MonoBehaviour
         GameObject hierbaObj = new GameObject("Hierba");
         hierbaObj.transform.SetParent(hierbaSlot, false);
         var hierbaImg = hierbaObj.AddComponent<UnityEngine.UI.Image>();
-        hierbaImg.sprite = hierbaElegida;
+        hierbaImg.sprite = hierbaElegida.sprite;
         hierbaObj.GetComponent<RectTransform>().sizeDelta = new Vector2(0.5f, 0.5f); // Ajusta el tamaño
     }else{
 
