@@ -104,5 +104,22 @@ public class InventorySystem : MonoBehaviour
             Debug.Log($"{item.itemName} (ID: {item.id}): {count}");
         }
     }
+
+    public void AddMoneyByCleanliness(float cleanPercentage)
+    {
+        // Ajusta el multiplicador según tu economía de juego
+        int maxBonus = 5; // Máximo de monedas extra por limpieza perfecta
+        int bonus = Mathf.RoundToInt((cleanPercentage / 100f) * maxBonus);
+
+        if (bonus > 0)
+        {
+            AddMoney(bonus);
+            Debug.Log($"¡Has recibido {bonus} monedas extra por la limpieza de la tienda! (Limpieza: {cleanPercentage:F1}%)");
+        }
+        else
+        {
+            Debug.Log("La tienda está demasiado sucia para recibir un bono de limpieza.");
+        }
+    }
 }
 

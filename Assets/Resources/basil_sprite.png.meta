@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: 351aaccdda9be664fb7e81d9a7ee13e2
+guid: 83331340d6d46e64f8431ba85159dee8
 TextureImporter:
   internalIDToNameTable: []
   externalObjects: {}
@@ -110,13 +110,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: Menta_0
+      name: Albahaca_0
       rect:
         serializedVersion: 2
         x: 0
-        y: 4
+        y: 0
         width: 500
-        height: 496
+        height: 500
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -125,8 +125,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: ee174673d3056da448582c78fc83506b
-      internalID: 1464841056
+      spriteID: 6b7e61d005b07374599b483e0231a894
+      internalID: -1343903097
       vertices: []
       indices: 
       edges: []
@@ -135,7 +135,7 @@ TextureImporter:
     customData: 
     physicsShape: []
     bones: []
-    spriteID: e257f730b57ed9344a3a7f80aa321b7e
+    spriteID: 5462b01528172e744813f61111b412d0
     internalID: 0
     vertices: []
     indices: 
@@ -145,7 +145,7 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      Menta_0: 1464841056
+      Albahaca_0: -1343903097
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

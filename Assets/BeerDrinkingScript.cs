@@ -78,7 +78,7 @@ public class BeerDrinkingScript : MonoBehaviour
                     askingBeer = false;
                     Debug.Log("Beer delivered to NPC: " + gameObject.name);
                     inventorySystem.AddMoney(2); // Añade dinero al inventario del jugador
-                    //inventorySystem.AddMoneyByCleanliness(dirtynessScript.GetCleanPercentage());
+                    inventorySystem.AddMoneyByCleanliness(dirtynessScript.GetCleanPercentage());
                     // Notifica al NPCWalkingScript
                      var walking = GetComponent<NPCWalkingScript>();
                     if (walking != null)
