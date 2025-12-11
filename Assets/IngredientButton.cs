@@ -1,40 +1,70 @@
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
-using System;
 using TMPro;
 
-public enum IngredientType
-{
-    Licor,
-    Hierba,
-    other
-}
 public class IngredientButton : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler
 {
     public int ingredientID;
-    public IngredientType ingredientType;
     public Image ingredientImage;
-
     public TextMeshProUGUI cantidadText;
 
     private Transform originalParent;
     private Canvas canvas;
 
-    void Awake()
+    void Start()
     {
-        ingredientImage = GetComponent<Image>();
+        // Busca el hijo llamado "IngredientImage" si no está asignado en el inspector
+        if (ingredientImage == null)
+            ingredientImage = transform.Find("IngredientImage")?.GetComponent<Image>();
         canvas = GetComponentInParent<Canvas>();
+        LoadDataFromDatabase();
+    }
+    void Update()
+    {
+        UpdateCantidad();
+
     }
 
-    public void Setup(Sprite sprite, int id, IngredientType type, int cantidad)
+    // Carga los datos del item desde la base de datos y actualiza la UI
+    public void LoadDataFromDatabase()
     {
-        ingredientImage.sprite = sprite;
-        ingredientID = id;
-        ingredientType = type;
-
+        var data = ItemDatabase.Instance.GetItemById(ingredientID);
+        if (data != null)
+        {
+            if (ingredientImage != null)
+            {
+                ingredientImage.sprite = data.spriteName != null ? Resources.Load<Sprite>(data.spriteName) : null;
+                ingredientImage.enabled = true;
+            }
+            UpdateCantidad();
+        }
+        else
+        {
+            Debug.LogWarning($"No se encontró el item con ID {ingredientID} en la base de datos.");
+            if (ingredientImage != null)
+            {
+                ingredientImage.sprite = null;
+                ingredientImage.enabled = false;
+            }
             if (cantidadText != null)
-        cantidadText.text = cantidad.ToString(); 
+                cantidadText.text = "0";
+        }
+    }
+
+    private void UpdateCantidad()
+    {
+        if (InventorySystem.Instance == null)
+        {
+            Debug.LogWarning("InventorySystem.Instance es nulo en IngredientButton.");
+            if (cantidadText != null)
+                cantidadText.text = "0";
+            return;
+        }
+
+        int actualCantidad = InventorySystem.Instance.GetItemCount(ingredientID);
+        if (cantidadText != null)
+            cantidadText.text = actualCantidad.ToString();
     }
 
     public void OnBeginDrag(PointerEventData eventData)
@@ -49,29 +79,26 @@ public class IngredientButton : MonoBehaviour, IBeginDragHandler, IDragHandler, 
     }
 
     public void OnEndDrag(PointerEventData eventData)
-{
-    // Comprueba si se soltó sobre el área de destino
-    var results = new System.Collections.Generic.List<RaycastResult>();
-    EventSystem.current.RaycastAll(eventData, results);
-    foreach (var result in results)
     {
-        var dropArea = result.gameObject.GetComponent<IngredientDropArea>();
-        if (dropArea != null)
+        var results = new System.Collections.Generic.List<RaycastResult>();
+        EventSystem.current.RaycastAll(eventData, results);
+        foreach (var result in results)
         {
-            dropArea.AddIngredient(ingredientID, ingredientImage.sprite);
+            var dropArea = result.gameObject.GetComponent<IngredientDropArea>();
+            if (dropArea != null)
+            {
+                dropArea.AddIngredient(ingredientID, ingredientImage.sprite);
 
-            // Resta uno del inventario
-            int cantidadRestante = InventorySystem.Instance.GetItemCount(gameObject.name) - 1;
-            //InventorySystem.Instance.AddItem(GetComponent<ItemScript>(), -1);
+                // Resta uno del inventario
+                InventorySystem.Instance.AddItem(ingredientID, -1);
 
-            // Elimina el botón solo si ya no quedan ingredientes
-            if (cantidadRestante <= 0)
-                Destroy(gameObject);
+                // Actualiza la cantidad en el botón
+                UpdateCantidad();
 
-            return;
+                return;
+            }
         }
+        // Si no se soltó en el área, vuelve al panel original
+        transform.SetParent(originalParent, true);
     }
-    // Si no se soltó en el área, vuelve al panel original
-    transform.SetParent(originalParent, true);
-}
 }
