@@ -12,14 +12,15 @@ public class ItemScript : MonoBehaviour
     public Button restarButton;
 
     [Header("Datos del item")]
-    public string itemName;
+    public int id; // Solo el ID es público
+
+    private ItemData data;
     public int cantidadInventario = 0;
     public int cantidadComprar = 0;
 
-    public int price; // Precio del item
-
     void Start()
     {
+        data = ItemDatabase.Instance.GetItemById(id);
         UpdateUI();
 
         sumarButton.onClick.AddListener(() =>
@@ -37,10 +38,35 @@ public class ItemScript : MonoBehaviour
 
     public void UpdateUI()
     {
-        itemNameText.text = itemName;
-        cantidadInventarioText.text = cantidadInventario.ToString();
-        cantidadComprarText.text = cantidadComprar.ToString();
-    } 
+        if (data != null)
+        {
+            itemNameText.text = data.itemName;
+            cantidadInventarioText.text = cantidadInventario.ToString();
+            cantidadComprarText.text = cantidadComprar.ToString();
+        }
+    }
 
-    // Puedes añadir métodos para actualizar la cantidad en inventario desde el InventorySystem
+    // Métodos para acceder a los datos del item
+    public int GetPrice() => data?.price ?? 0;
+    public string GetIngredientType() => data?.ingredientType ?? "";
+    public string GetItemName() => data?.itemName ?? "";
+
+    // Métodos para actualizar cantidades desde InventorySystem
+    public void SetCantidadInventario(int cantidad)
+    {
+        cantidadInventario = cantidad;
+        UpdateUI();
+    }
+    public int GetCantidadComprar() => cantidadComprar;
+    public void ResetCantidadComprar()
+    {
+        cantidadComprar = 0;
+        UpdateUI();
+    }
+
+    public void SyncCantidadInventario()
+    {
+        cantidadInventario = InventorySystem.Instance.GetItemCount(id);
+        UpdateUI();
+    }
 }

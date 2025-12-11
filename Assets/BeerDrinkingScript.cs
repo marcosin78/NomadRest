@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using UnityEngine;
 
 public class BeerDrinkingScript : MonoBehaviour
@@ -20,9 +21,14 @@ public class BeerDrinkingScript : MonoBehaviour
     public Transform ingredientesPanel; // Panel hijo del Bubble para las imágenes
     public Canvas npcCanvas; // Asigna el Canvas del NPC en el Inspector
 
-        // IDs de los ingredientes pedidos
-        private int licorPedidoID;
-        private int hierbaPedidaID;
+    // IDs de los ingredientes pedidos
+    private int licorPedidoID;
+    private int hierbaPedidaID;
+
+    // Getters públicos para los IDs de ingredientes pedidos
+    public int GetLicorPedidoID() { return licorPedidoID; }
+    public int GetHierbaPedidaID() { return hierbaPedidaID; }
+
 
     void Start()
 {
@@ -72,7 +78,7 @@ public class BeerDrinkingScript : MonoBehaviour
                     askingBeer = false;
                     Debug.Log("Beer delivered to NPC: " + gameObject.name);
                     inventorySystem.AddMoney(2); // Añade dinero al inventario del jugador
-                    inventorySystem.AddMoneyByCleanliness(dirtynessScript.GetCleanPercentage());
+                    //inventorySystem.AddMoneyByCleanliness(dirtynessScript.GetCleanPercentage());
                     // Notifica al NPCWalkingScript
                      var walking = GetComponent<NPCWalkingScript>();
                     if (walking != null)
@@ -147,42 +153,61 @@ public class BeerDrinkingScript : MonoBehaviour
     if (hierbaSlot != null)
         foreach (Transform child in hierbaSlot) Destroy(child.gameObject);
 
-    // Elige un licor y una hierba aleatorios
-    LicorData licorElegido = licors[UnityEngine.Random.Range(0, licors.Length)];
-    HierbaData hierbaElegida = herbs[UnityEngine.Random.Range(0, herbs.Length)];
+    // Filtra los items por tipo usando ItemDatabase
+    var licores = ItemDatabase.Instance.items.Where(i => i.ingredientType == "Licor").ToList();
+    var hierbas = ItemDatabase.Instance.items.Where(i => i.ingredientType == "Herb").ToList();
 
+    // Selecciona uno aleatorio de cada tipo
+    ItemData licorElegido = licores.Count > 0 ? licores[UnityEngine.Random.Range(0, licores.Count)] : null;
+    ItemData hierbaElegida = hierbas.Count > 0 ? hierbas[UnityEngine.Random.Range(0, hierbas.Count)] : null;
 
-    //Codigos de los ingredientes elegidos
-    
-    licorPedidoID = licorElegido.id;
-    hierbaPedidaID = hierbaElegida.id;
+    licorPedidoID = licorElegido != null ? licorElegido.id : -1;
+    hierbaPedidaID = hierbaElegida != null ? hierbaElegida.id : -1;
 
     Debug.Log("NPC " + gameObject.name + " is asking for Licor ID: " + licorPedidoID + " and Hierba ID: " + hierbaPedidaID);
+
     // Instancia la imagen del licor en su slot
-    if (licorSlot != null)
+    if (licorSlot != null && licorElegido != null)
     {
         GameObject licorObj = new GameObject("Licor");
         licorObj.transform.SetParent(licorSlot, false);
         var licorImg = licorObj.AddComponent<UnityEngine.UI.Image>();
-        licorImg.sprite =   licorElegido.sprite;
-        licorObj.GetComponent<RectTransform>().sizeDelta = new Vector2(0.5f, 0.5f); // Ajusta el tamaño
+        if (licorElegido.sprite != null)
+        {
+            licorImg.sprite = licorElegido.sprite;
         }
         else
         {
-        Debug.LogError("LicorSlot not found in ingredientesPanel for NPC: " + gameObject.name);
+            Debug.LogWarning($"Sprite no encontrado para '{licorElegido.itemName}' (spriteName: {licorElegido.spriteName})");
+            // licorImg.sprite = Resources.Load<Sprite>("default_icon"); // Opcional: sprite por defecto
         }
+        licorObj.GetComponent<RectTransform>().sizeDelta = new Vector2(0.5f, 0.5f);
+    }
+    else
+    {
+        Debug.LogError("LicorSlot not found or no licor available for NPC: " + gameObject.name);
+    }
 
     // Instancia la imagen de la hierba en su slot
-    if (hierbaSlot != null)
+    if (hierbaSlot != null && hierbaElegida != null)
     {
         GameObject hierbaObj = new GameObject("Hierba");
         hierbaObj.transform.SetParent(hierbaSlot, false);
         var hierbaImg = hierbaObj.AddComponent<UnityEngine.UI.Image>();
-        hierbaImg.sprite = hierbaElegida.sprite;
-        hierbaObj.GetComponent<RectTransform>().sizeDelta = new Vector2(0.5f, 0.5f); // Ajusta el tamaño
-    }else{
-
-        Debug.LogError("HierbaSlot not found in ingredientesPanel for NPC: " + gameObject.name);
+        if (hierbaElegida.sprite != null)
+        {
+            hierbaImg.sprite = hierbaElegida.sprite;
+        }
+        else
+        {
+            Debug.LogWarning($"Sprite no encontrado para '{hierbaElegida.itemName}' (spriteName: {hierbaElegida.spriteName})");
+            // hierbaImg.sprite = Resources.Load<Sprite>("default_icon"); // Opcional: sprite por defecto
+        }
+        hierbaObj.GetComponent<RectTransform>().sizeDelta = new Vector2(0.5f, 0.5f);
+    }
+    else
+    {
+        Debug.LogError("HierbaSlot not found or no hierba available for NPC: " + gameObject.name);
     }
  }
 }

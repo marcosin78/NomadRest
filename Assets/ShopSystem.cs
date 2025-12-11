@@ -1,4 +1,6 @@
 using UnityEngine;
+using System.IO;
+using System.Collections.Generic;
 using TMPro;
 
 public class ShopSystem : MonoBehaviour, IInteractable
@@ -7,14 +9,14 @@ public class ShopSystem : MonoBehaviour, IInteractable
 
     public GameObject shopMenuUI;
 
-    public ItemScript[] itemPrefabs; // Asigna en el Inspector los objetos ItemScript de la tienda
-    public UnityEngine.UI.Button buyButton; // Asigna el botón de comprar
+    public UnityEngine.UI.Button buyButton;
+
+    public List<ItemData> itemDataList = new List<ItemData>();
+    public ItemScript[] itemPrefabs; // Prefabs de UI, asignados en el Inspector
 
     public void Start()
     {
         shopMenuUI = GameObject.Find("ShopCanvas");
-
-        
 
         if(buyButton == null)
         {
@@ -24,24 +26,29 @@ public class ShopSystem : MonoBehaviour, IInteractable
             Debug.LogError("No se encontró el botón BuyButton en el ShopCanvas.");
         }
         
-        // Asegúrate de que el menú de la tienda está oculto al inicio
         if (shopMenuUI != null)
         {
             shopMenuUI.SetActive(false);
         }
         else
         {
-            
             Debug.LogError("No se encontró el objeto ShopCanvas en la escena.");
         }
 
-        //PlayerInventory
         if (playerInventory == null)
         {
             playerInventory = InventorySystem.Instance;
         }
 
         buyButton.onClick.AddListener(BuyItems);
+
+        LoadItemsFromJson();
+
+        // Asigna solo el id a cada prefab
+        for (int i = 0; i < itemPrefabs.Length && i < itemDataList.Count; i++)
+        {
+            itemPrefabs[i].UpdateUI();
+        }
     }
     public void Update()
     {
@@ -58,8 +65,7 @@ public class ShopSystem : MonoBehaviour, IInteractable
     for (int i = 0; i < itemPrefabs.Length; i++)
     {
         var itemScript = itemPrefabs[i];
-
-        totalCost += itemScript.price * itemScript.cantidadComprar;
+        totalCost += itemScript.GetPrice() * itemScript.GetCantidadComprar();
     }
 
     if (playerInventory.money >= totalCost)
@@ -68,11 +74,15 @@ public class ShopSystem : MonoBehaviour, IInteractable
         {
             var itemScript = itemPrefabs[i];
 
-            if (itemScript.cantidadComprar > 0)
+            if (itemScript.GetCantidadComprar() > 0)
             {
-                playerInventory.AddItem(itemScript, itemScript.cantidadComprar);
-                itemScript.cantidadComprar = 0;
-                itemScript.UpdateUI();
+                playerInventory.AddItem(itemScript.id, itemScript.GetCantidadComprar());
+                itemScript.ResetCantidadComprar();
+
+                foreach (var item in itemPrefabs)
+                {
+                item.SyncCantidadInventario();
+                }
             }
         }
         playerInventory.SpendMoney(totalCost);
@@ -83,6 +93,26 @@ public class ShopSystem : MonoBehaviour, IInteractable
         Debug.Log("No tienes suficiente dinero para la compra.");
     }
 
+    }
+
+    private void LoadItemsFromJson()
+    {
+        string path = Application.dataPath + "/Data/items.json";
+        if (File.Exists(path))
+        {
+            string json = File.ReadAllText(path);
+            itemDataList = JsonUtility.FromJson<ItemDataListWrapper>("{\"items\":" + json + "}").items;
+        }
+        else
+        {
+            Debug.LogError("No se encontró el archivo items.json en " + path);
+        }
+    }
+
+    [System.Serializable]
+    private class ItemDataListWrapper
+    {
+        public List<ItemData> items;
     }
 
     public string GetName()

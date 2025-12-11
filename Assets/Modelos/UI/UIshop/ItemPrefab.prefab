@@ -317,6 +317,9 @@ MonoBehaviour:
   itemName: ITEM_NAME
   cantidadInventario: 0
   cantidadComprar: 0
+  id: 0
+  price: 0
+  ingredientType: 0
 --- !u!1 &3105009482384752629
 GameObject:
   m_ObjectHideFlags: 0

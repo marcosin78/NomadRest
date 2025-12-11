@@ -1,16 +1,17 @@
 using UnityEngine;
+using System.Collections.Generic;
 
 public class InventorySystem : MonoBehaviour
 {
     public int money = 0;
-    public ItemScript[] items; // Asume que tienes una clase ItemScript
+
+    // Diccionario para almacenar la cantidad de cada item por ID
+    private Dictionary<int, int> itemCounts = new Dictionary<int, int>();
 
     public static InventorySystem Instance;
-    internal object shopMenuUI;
 
     void Awake()
     {
-        // Busca el objeto con el tag "Player" y asigna este InventorySystem si corresponde
         if (CompareTag("Player"))
         {
             Instance = this;
@@ -23,17 +24,26 @@ public class InventorySystem : MonoBehaviour
         }
     }
 
+    void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.G))
+        {
+            PrintAllItemsWithCounts();
+        }
+    }
+
     public void PrintInventory()
     {
         Debug.Log("Inventario:");
-        if (items == null || items.Length == 0)
+        if (itemCounts.Count == 0)
         {
             Debug.Log("No tienes objetos.");
             return;
         }
-        foreach (var item in items)
+        foreach (var kvp in itemCounts)
         {
-            Debug.Log(item != null ? item.name : "Objeto vacío");
+            var data = ItemDatabase.Instance.GetItemById(kvp.Key);
+            Debug.Log($"{data.itemName} (ID: {kvp.Key}): {kvp.Value}");
         }
     }
 
@@ -43,33 +53,6 @@ public class InventorySystem : MonoBehaviour
         Debug.Log("Dinero ganado: " + amount + ". Total: " + money);
     }
 
-     // Nuevo método para calcular la recompensa según el % de limpieza
-    public void AddMoneyByCleanliness(float cleanPercent)
-    {
-        int reward = 0;
-        if (cleanPercent >= 90f)
-            reward = 8;
-        else if (cleanPercent >= 70f)
-            reward = 6;
-        else if (cleanPercent >= 50f)
-            reward = 4;
-        else if (cleanPercent >= 30f)
-            reward = 2;
-        else
-            reward = 1;
-
-        AddMoney(reward);
-        Debug.Log($"Limpieza: {cleanPercent:F2}%. Recompensa: {reward} monedas.");
-    }
-     public int GetItemCount(string itemName)
-    {
-        foreach (var it in items)
-        {
-            if (it.name == itemName)
-                return it.cantidadInventario;
-        }
-        return 0;
-    }
     public void SpendMoney(int amount)
     {
         if (amount > money)
@@ -80,10 +63,46 @@ public class InventorySystem : MonoBehaviour
         money -= amount;
         Debug.Log("Dinero gastado: " + amount + ". Total restante: " + money);
     }
-    public void AddItem(ItemScript item, int amount)
+
+    public void AddItem(int itemID, int amount)
     {
-    item.cantidadInventario += amount;
-    Debug.Log($"Añadido {amount} a {item.name}. Total: {item.cantidadInventario}");
+        if (!itemCounts.ContainsKey(itemID))
+            itemCounts[itemID] = 0;
+        itemCounts[itemID] += amount;
+
+        var data = ItemDatabase.Instance.GetItemById(itemID);
+        Debug.Log($"Añadido {amount} a {data.itemName}. Total: {itemCounts[itemID]}");
+    }
+
+    public int GetItemCount(int itemID)
+    {
+        return itemCounts.ContainsKey(itemID) ? itemCounts[itemID] : 0;
+    }
+
+    public int GetItemCount(string itemName)
+    {
+        foreach (var kvp in itemCounts)
+        {
+            var data = ItemDatabase.Instance.GetItemById(kvp.Key);
+            if (data.itemName == itemName)
+                return kvp.Value;
+        }
+        return 0;
+    }
+
+    public void PrintAllItemsWithCounts()
+    {
+        if (ItemDatabase.Instance == null || ItemDatabase.Instance.items == null)
+        {
+            Debug.LogError("ItemDatabase no está inicializado o no hay items cargados.");
+            return;
+        }
+        Debug.Log("Inventario completo:");
+        foreach (var item in ItemDatabase.Instance.items)
+        {
+            int count = GetItemCount(item.id);
+            Debug.Log($"{item.itemName} (ID: {item.id}): {count}");
+        }
     }
 }
 
