@@ -6,7 +6,7 @@ public class BeerMinigameScript : MonoBehaviour
     [Header("Referencias UI")]
     public GameObject minigameCanvas; // Asigna el Canvas en el Inspector
     public PlayerInteractor playerInteractor; // Asigna en el inspector
-
+    
     void Start()
     {
         if (minigameCanvas != null)
@@ -33,6 +33,20 @@ public class BeerMinigameScript : MonoBehaviour
             {
                 minigameCanvas.SetActive(false);
                 UnlockCameraAndLockCursor();
+
+                // Resetear todos los IngredientButton al cerrar el menú
+                var ingredientButtons = minigameCanvas.GetComponentsInChildren<IngredientButton>(true);
+                foreach (var btn in ingredientButtons)
+                {
+                    btn.ResetButton();
+                }
+
+                // Limpiar todos los IngredientDropArea al cerrar el menú
+                var dropAreas = minigameCanvas.GetComponentsInChildren<IngredientDropArea>(true);
+                foreach (var area in dropAreas)
+                {
+                    area.ClearIngredients();
+                }
             }
         }
     }
