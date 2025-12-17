@@ -15,6 +15,8 @@ public class IngredientDropArea : MonoBehaviour
     private Rigidbody2D rb;
     public float mass = 1.5f; // Peso del cóctel
     public float shakeMultiplier = 0.00005f; // Ajusta la sensibilidad del shake (más bajo = más lento)
+
+    public BeerMinigameScript beerMinigameScript; // Asigna en el inspector
     void Awake()
     {
         rb = GetComponent<Rigidbody2D>();
@@ -82,6 +84,8 @@ public class IngredientDropArea : MonoBehaviour
                     shakeProgress = shakeRequired;
                     isBeingShaken = false;
                     Debug.Log("Cocktail is ready!");
+
+                    beerMinigameScript.OnMinigameComplete(addedIngredientIDs);
                 }
             }
             lastPosition = transform.position;

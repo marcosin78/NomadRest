@@ -12,12 +12,21 @@ public class BeerDispenserScript : MonoBehaviour, IInteractable
     public int[] drinkOptions = new int[2]; //Array de opciones de bebida (Por si en un futuro hay más tipos de bebida)
     public int selectedDrink = 0; //Opción de bebida seleccionada (Por defecto la primera)
 
+    public BeerMinigameScript beerMinigameScript; // Asigna en el inspector
+
     //EN UN FUTURO AÑADIR FUNCION PARA SELECCIONAR BEBIDA DESDE EL JUEGO
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
         player = FindObjectOfType<PlayerController>();
+        beerMinigameScript = FindObjectOfType<BeerMinigameScript>();
+
+        if (beerMinigameScript == null)
+        {
+            Debug.LogWarning("beerMinigameScript no encontrado en la escena.");
+        }
+        
     }
 
     // Update is called once per frame
@@ -27,49 +36,43 @@ public class BeerDispenserScript : MonoBehaviour, IInteractable
     }
     public void OnInteract()
     {
-
-
         if(player!=null && player.availableHands==true)
+    {
+        Debug.Log("Player's hands are available to take a drink.");
+
+        // Lanza el minijuego de ingredientes
+        if (beerMinigameScript != null)
         {
-            Debug.Log("Player's hands are available to take a drink.");
-            
-            isDispensing = true;    
-
-            // Comprueba que el índice seleccionado es válido
-        if (selectedDrink >= 0 && selectedDrink < drinkPrefabs.Length)
-        {
-            GameObject selectedPrefab = drinkPrefabs[selectedDrink];
-
-                Debug.Log("Seleccionando prefab de bebida: " + selectedPrefab.name);
-            
-                // Ejemplo de comparación por tipo (puedes usar tags, nombres, etc.)
-                if (selectedPrefab.CompareTag("Beer"))
-                {
-                    Debug.Log("Giving beer to player");
-                }
-                else if (selectedPrefab.CompareTag("Soda"))
-                {
-                    Debug.Log("Giving soda to player");
-                }
-
+            beerMinigameScript.StartMinigame(this);
         }
         else
         {
-            Debug.LogWarning("Selected drink index is out of range.");
+            Debug.LogWarning("beerMinigameScript no asignado.");
         }
-        }
-        else
-        {
-            Debug.Log("Player's hands are not available to take a drink.");
-
-        }
-        
     }
+    
+    else
+    {
+        Debug.Log("Player's hands are not available to take a drink.");
+    }
+    }
+    public System.Collections.Generic.List<int> lastUsedIngredients; // Puedes usar esto para guardar los ingredientes
+
+public void OnMinigameFinished(System.Collections.Generic.List<int> ingredientIDs)
+{
+    isDispensing = true;
+    lastUsedIngredients = ingredientIDs;
+    // Aquí puedes hacer lógica extra, como validar la receta, etc.
+
+    
+}
 
     public string GetName()
     {
         return "Drink Dispenser";
     }
+
+    
 
    
 }

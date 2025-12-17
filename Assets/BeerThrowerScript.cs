@@ -1,5 +1,6 @@
 using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 public class BeerThrowerScript : MonoBehaviour
 {
     public GameObject beerLiquidPrefab;
@@ -57,6 +58,7 @@ public class BeerThrowerScript : MonoBehaviour
             Debug.Log("Dispensando cerveza...");
         }
 
+    
     }
 
 
@@ -72,6 +74,8 @@ public class BeerThrowerScript : MonoBehaviour
 
         int thrown = 0;
         bool cancelled = false;
+        GameObject beerInstance = null;
+        
 
         while (thrown < throwBeerQuantity)
         {
@@ -84,13 +88,18 @@ public class BeerThrowerScript : MonoBehaviour
                 break;
             }
 
-            GameObject beerInstance = Instantiate(beerLiquidPrefab, transform.position, transform.rotation);
+            beerInstance = Instantiate(beerLiquidPrefab, transform.position, transform.rotation);
             Rigidbody rb = beerInstance.GetComponent<Rigidbody>();
 
             if (rb != null)
             {
                 rb.AddForce(currentDirection * throwForce, ForceMode.VelocityChange);
             }
+
+            // Al instanciar la cerveza en BeerThrowerScript o donde corresponda:
+            var data = beerInstance.AddComponent<BeerCocktailData>();
+            data.ingredientIDs = new List<int>(BeerDispenserScript.lastUsedIngredients); // O la lista que corresponda
+            Debug.Log("Ingredientes que se asignan al BeerCocktailData: " + string.Join(",", BeerDispenserScript.lastUsedIngredients));
 
             StartCoroutine(DestroyAfterDelay(beerInstance, destroyDelay));
             thrown++;
@@ -112,7 +121,7 @@ public class BeerThrowerScript : MonoBehaviour
             float fillPercent = liquidDetector.GetFillPercent();
             Debug.Log($"Porcentaje de gotas recogidas: {fillPercent * 100f}%");
 
-            if (fillPercent < 0.6f)
+            if (fillPercent < 0.2f)
             {
                 Debug.Log("El jugador ha fallado al recoger suficiente cerveza.");
             }
@@ -121,9 +130,22 @@ public class BeerThrowerScript : MonoBehaviour
                 Debug.Log("El jugador ha recogido suficiente cerveza.");
                 if (BeerDispenserScript != null && BeerDispenserScript.drinkPrefabs.Length > BeerDispenserScript.selectedDrink)
                 {
-                    GameObject selectedPrefab = BeerDispenserScript.drinkPrefabs[BeerDispenserScript.selectedDrink];
-                    player.TakeItem(selectedPrefab);
-                    Debug.Log("Item entregado al jugador.");
+                    // Instancia el objeto de cerveza real
+                    GameObject beerObject = Instantiate(
+                        BeerDispenserScript.drinkPrefabs[BeerDispenserScript.selectedDrink],
+                        player.HoldPoint.position, // o la posición que corresponda
+                        Quaternion.identity
+                    );
+
+                    // Añade los ingredientes
+                    var data = beerObject.GetComponent<BeerCocktailData>();
+                    if (data == null)
+                        data = beerObject.AddComponent<BeerCocktailData>();
+                    data.ingredientIDs = new List<int>(BeerDispenserScript.lastUsedIngredients);
+
+                    // Da el objeto al jugador
+                    player.TakeItem(beerObject);
+                    Debug.Log("Cerveza entregada al jugador con ingredientes: " + string.Join(",", data.ingredientIDs));
                 }
             }
         }

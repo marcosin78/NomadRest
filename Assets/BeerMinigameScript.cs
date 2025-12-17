@@ -7,6 +7,7 @@ public class BeerMinigameScript : MonoBehaviour
     public GameObject minigameCanvas; // Asigna el Canvas en el Inspector
     public PlayerInteractor playerInteractor; // Asigna en el inspector
     
+    private BeerDispenserScript currentDispenser;
     void Start()
     {
         if (minigameCanvas != null)
@@ -49,7 +50,38 @@ public class BeerMinigameScript : MonoBehaviour
                 }
             }
         }
+    
     }
+   public void StartMinigame(BeerDispenserScript dispenser)
+{
+    Debug.Log("Starting cocktail minigame...");
+    Debug.Log("minigameCanvas is " + (minigameCanvas == null ? "NULL" : "OK"));
+    currentDispenser = dispenser;
+    if (minigameCanvas != null)
+    {
+        minigameCanvas.SetActive(true);
+        LockCameraAndUnlockCursor();
+        Debug.Log("Minigame canvas activated.");
+    }
+    else
+    {
+        Debug.LogWarning("Minigame canvas is not assigned.");
+    }
+}
+
+    public void OnMinigameComplete(System.Collections.Generic.List<int> ingredientIDs)
+{
+    if (minigameCanvas != null)
+    {
+        minigameCanvas.SetActive(false);
+        UnlockCameraAndLockCursor();
+    }
+    if (currentDispenser != null)
+    {
+        currentDispenser.OnMinigameFinished(ingredientIDs);
+        currentDispenser = null;
+    }
+}
 
     void LockCameraAndUnlockCursor()
     {

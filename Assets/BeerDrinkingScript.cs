@@ -73,6 +73,27 @@ public class BeerDrinkingScript : MonoBehaviour
                 Transform heldItem = player.HoldPoint.GetChild(0);
                 if (heldItem.CompareTag("Beer"))
                 {
+                    // Comprobación de ingredientes
+                    var cocktailData = heldItem.GetComponent<BeerCocktailData>();
+                    if (cocktailData != null)
+                    {
+                        bool licorOK = cocktailData.ingredientIDs.Contains(licorPedidoID);
+                        bool hierbaOK = cocktailData.ingredientIDs.Contains(hierbaPedidaID);
+
+                        if (licorOK && hierbaOK)
+                        {
+                            Debug.Log("¡Ingredientes correctos! El NPC acepta la cerveza.");
+                        }
+                        else
+                        {
+                            Debug.Log("Ingredientes incorrectos. El NPC rechaza la cerveza.");
+                        }
+                    }
+                    else
+                    {
+                        Debug.Log("El objeto entregado no tiene datos de ingredientes.");
+                    }
+
                     player.DropItem();
                     beerDelivered = true;
                     askingBeer = false;
@@ -80,9 +101,9 @@ public class BeerDrinkingScript : MonoBehaviour
                     inventorySystem.AddMoney(2); // Añade dinero al inventario del jugador
                     inventorySystem.AddMoneyByCleanliness(dirtynessScript.GetCleanPercentage());
                     // Notifica al NPCWalkingScript
-                     var walking = GetComponent<NPCWalkingScript>();
+                    var walking = GetComponent<NPCWalkingScript>();
                     if (walking != null)
-                    walking.GoToLeavePoint();
+                        walking.GoToLeavePoint();
                 }
                 else
                 {
