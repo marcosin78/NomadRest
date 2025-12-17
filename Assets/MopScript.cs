@@ -35,7 +35,7 @@ public class MopScript : MonoBehaviour, IGrabbable
     void EquipMop()
  {
     grabbingMop = true;
-    playerController.availableHands = true;
+    playerController.availableHands = false;
 
     // Haz hijo de HoldPoint y coloca la mopa en la mano
     transform.SetParent(playerController.HoldPoint);
@@ -62,7 +62,7 @@ public class MopScript : MonoBehaviour, IGrabbable
     void DropMop()
 {
     grabbingMop = false;
-    playerController.availableHands = false;
+    playerController.availableHands = true;
 
     // Suelta la mopa en la posición actual del jugador
     transform.SetParent(null);

@@ -2012,7 +2012,7 @@ PrefabInstance:
       objectReference: {fileID: 260925285}
     - target: {fileID: 7779515614692344566, guid: 2c7755cc605975848b07983e04678dfd, type: 3}
       propertyPath: startHour
-      value: 9
+      value: 20
       objectReference: {fileID: 0}
     - target: {fileID: 7779515614692344566, guid: 2c7755cc605975848b07983e04678dfd, type: 3}
       propertyPath: dirtToSpawn

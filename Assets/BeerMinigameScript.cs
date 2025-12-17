@@ -27,7 +27,11 @@ public class BeerMinigameScript : MonoBehaviour
             }
         }
 
-        // Cerrar el minijuego con Q
+
+        if(minigameCanvas != null && minigameCanvas.activeSelf)
+        {
+            
+             // Cerrar el minijuego con Q
         if (Input.GetKeyDown(KeyCode.Q))
         {
             if (minigameCanvas != null)
@@ -50,6 +54,9 @@ public class BeerMinigameScript : MonoBehaviour
                 }
             }
         }
+
+        }
+       
     
     }
    public void StartMinigame(BeerDispenserScript dispenser)

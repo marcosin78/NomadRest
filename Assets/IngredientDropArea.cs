@@ -114,14 +114,21 @@ public class IngredientDropArea : MonoBehaviour
     // Devuelve true si se añadió, false si no se puede añadir
     public bool AddIngredient(int id, Sprite sprite)
     {
-        // Obtener el tipo del ingrediente
+        // 1. Comprobar si el jugador tiene al menos 1 de ese ingrediente
+        if (InventorySystem.Instance.GetItemCount(id) < 1)
+        {
+            Debug.Log("No tienes ese ingrediente en el inventario.");
+            return false;
+        }
+
+        // 2. Obtener el tipo del ingrediente
         var data = ItemDatabase.Instance.GetItemById(id);
         if (data == null)
             return false;
 
         string tipo = data.ingredientType; // Usar el campo correcto de ItemData
 
-        // Comprobar si ya hay un ingrediente de ese tipo
+        // 3. Comprobar si ya hay un ingrediente de ese tipo
         foreach (int addedId in addedIngredientIDs)
         {
             var addedData = ItemDatabase.Instance.GetItemById(addedId);
@@ -132,6 +139,7 @@ public class IngredientDropArea : MonoBehaviour
             }
         }
 
+        // 4. Añadir el ingrediente
         addedIngredientIDs.Add(id);
         // Opcional: muestra el sprite en el área
         GameObject imgObj = new GameObject("AddedIngredient");
