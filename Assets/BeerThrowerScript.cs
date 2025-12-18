@@ -67,6 +67,7 @@ public class BeerThrowerScript : MonoBehaviour
 {
     if (beerLiquidPrefab != null)
     {
+        Debug.Log("Iniciando lanzamiento de cerveza.");
         player.LockCamera();
         moveArm.ActivateArm();
         liquidDetector = FindObjectOfType<LiquidDetector>();

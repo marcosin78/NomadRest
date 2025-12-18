@@ -4,17 +4,14 @@ using UnityEngine.XR;
 
 public class BeerDispenserScript : MonoBehaviour, IInteractable
 {
-
     PlayerController player;
     public GameObject[] drinkPrefabs;
-
     public bool isDispensing = false;
     public int[] drinkOptions = new int[2]; //Array de opciones de bebida (Por si en un futuro hay más tipos de bebida)
     public int selectedDrink = 0; //Opción de bebida seleccionada (Por defecto la primera)
 
     public BeerMinigameScript beerMinigameScript; // Asigna en el inspector
 
-    //EN UN FUTURO AÑADIR FUNCION PARA SELECCIONAR BEBIDA DESDE EL JUEGO
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -63,16 +60,13 @@ public void OnMinigameFinished(System.Collections.Generic.List<int> ingredientID
     isDispensing = true;
     lastUsedIngredients = ingredientIDs;
     // Aquí puedes hacer lógica extra, como validar la receta, etc.
+    Debug.Log("Minigame finished, dispensing drink with ingredients: " + string.Join(", ", ingredientIDs));
 
-    
 }
-
     public string GetName()
     {
         return "Drink Dispenser";
     }
-
-    
 
    
 }

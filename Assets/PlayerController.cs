@@ -231,5 +231,4 @@ private Vector3 grabOffset;
                 camVision.enabled = true;
         }
     }
-
 }

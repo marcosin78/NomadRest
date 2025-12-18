@@ -4,7 +4,6 @@ using UnityEngine.EventSystems;
 using TMPro;
 
 public class IngredientButton : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler
-    
 {
     public int ingredientID;
     public Image ingredientImage;
@@ -14,9 +13,10 @@ public class IngredientButton : MonoBehaviour, IBeginDragHandler, IDragHandler, 
     private Vector3 originalLocalPosition;
     private Canvas canvas;
     private int initialCantidad = -1;
+    private int originalSiblingIndex;
+
     void Start()
     {
-        // Busca el hijo llamado "IngredientImage" si no está asignado en el inspector
         if (ingredientImage == null)
             ingredientImage = transform.Find("IngredientImage")?.GetComponent<Image>();
         canvas = GetComponentInParent<Canvas>();
@@ -26,14 +26,11 @@ public class IngredientButton : MonoBehaviour, IBeginDragHandler, IDragHandler, 
     void Update()
     {
         UpdateCantidad();
-
     }
 
-    // Carga los datos del item desde la base de datos y actualiza la UI
     public void LoadDataFromDatabase()
     {
         var data = ItemDatabase.Instance.GetItemById(ingredientID);
-        // Siempre reactiva el botón al cargar datos (reset visual)
         gameObject.SetActive(true);
         if (data != null)
         {
@@ -74,75 +71,62 @@ public class IngredientButton : MonoBehaviour, IBeginDragHandler, IDragHandler, 
 
     public void OnBeginDrag(PointerEventData eventData)
     {
-        originalParent = transform.parent;
+        if (originalParent == null)
+            originalParent = transform.parent;
+        originalSiblingIndex = transform.GetSiblingIndex();
         originalLocalPosition = transform.localPosition;
-        transform.SetParent(canvas.transform, true);
-
-        // Guarda la cantidad inicial al empezar a interactuar (opcional, por si se reabren menús)
-        if (initialCantidad == -1)
-            SaveInitialCantidad();
     }
 
     public void OnDrag(PointerEventData eventData)
     {
-        transform.position = eventData.position;
+        Vector2 pos;
+        RectTransformUtility.ScreenPointToLocalPointInRectangle(
+            canvas.transform as RectTransform,
+            eventData.position,
+            canvas.worldCamera,
+            out pos
+        );
+        transform.position = canvas.transform.TransformPoint(pos);
     }
 
     public void OnEndDrag(PointerEventData eventData)
     {
+        // Detecta el objeto bajo el puntero al soltar
         var results = new System.Collections.Generic.List<RaycastResult>();
         EventSystem.current.RaycastAll(eventData, results);
-        bool droppedOnArea = false;
-        foreach (var result in results)
+
+        foreach (var r in results)
         {
-            var dropArea = result.gameObject.GetComponent<IngredientDropArea>();
+            var dropArea = r.gameObject.GetComponent<IngredientDropArea>();
             if (dropArea != null)
             {
-                // Solo añade si AddIngredient devuelve true
-                bool added = dropArea.AddIngredient(ingredientID, ingredientImage.sprite);
-                if (added)
-                {
-                    // Resta uno del inventario
-                    InventorySystem.Instance.AddItem(ingredientID, -1);
-
-                    // Actualiza la cantidad en el botón
-                    UpdateCantidad();
-
-                    // Oculta el botón al soltarlo correctamente
-                    gameObject.SetActive(false);
-
-                    droppedOnArea = true;
-                }
-                // Si no se pudo añadir, droppedOnArea sigue en false y el botón vuelve a su sitio
+                // Intenta añadir el ingrediente
+                var data = ItemDatabase.Instance.GetItemById(ingredientID);
+                Sprite sprite = data != null ? Resources.Load<Sprite>(data.spriteName) : null;
+                dropArea.AddIngredient(ingredientID, sprite);
                 break;
             }
         }
-        // Si no se soltó en el área, vuelve al panel original y posición original
-        if (!droppedOnArea)
-        {
-            transform.SetParent(originalParent, true);
-            transform.localPosition = originalLocalPosition;
-        }
-    }
-    public void ResetButton()
-    {
-        gameObject.SetActive(true);
-        if (originalParent != null)
-        {
-            transform.SetParent(originalParent, true);
-            transform.localPosition = originalLocalPosition;
-        }
-        RestoreInitialCantidad();
+
+        // SIEMPRE vuelve a su posición original
+        transform.SetParent(originalParent, true);
+        transform.SetSiblingIndex(originalSiblingIndex);
+        transform.localPosition = originalLocalPosition;
     }
 
-    // Guarda la cantidad inicial del inventario para este ingrediente
+    public void ResetButton()
+    {
+        transform.SetParent(originalParent);
+        transform.SetSiblingIndex(originalSiblingIndex);
+        gameObject.SetActive(true);
+    }
+
     public void SaveInitialCantidad()
     {
         if (InventorySystem.Instance != null)
             initialCantidad = InventorySystem.Instance.GetItemCount(ingredientID);
     }
 
-    // Restaura la cantidad inicial del inventario para este ingrediente
     public void RestoreInitialCantidad()
     {
         if (InventorySystem.Instance != null && initialCantidad != -1)

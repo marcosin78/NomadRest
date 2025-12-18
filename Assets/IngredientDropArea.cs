@@ -83,9 +83,17 @@ public class IngredientDropArea : MonoBehaviour
                 {
                     shakeProgress = shakeRequired;
                     isBeingShaken = false;
-                    Debug.Log("Cocktail is ready!");
 
+                    if (beerMinigameScript != null)
+                {
+                    Debug.Log("Llamando a OnMinigameComplete desde IngredientDropArea");
                     beerMinigameScript.OnMinigameComplete(addedIngredientIDs);
+                }
+                    else
+                    {
+                    Debug.LogError("beerMinigameScript no está asignado en IngredientDropArea");
+                    }  
+
                 }
             }
             lastPosition = transform.position;
@@ -110,38 +118,54 @@ public class IngredientDropArea : MonoBehaviour
         return false;
     }
     public System.Collections.Generic.List<int> addedIngredientIDs = new System.Collections.Generic.List<int>();
+    // Estructura para guardar info del botón original
+    [System.Serializable]
+    public class IngredientButtonInfo
+    {
+        public int ingredientId;
+        public Transform buttonTransform;
+        public Transform originalParent;
+        public int originalSiblingIndex;
+    }
+    public System.Collections.Generic.List<IngredientButtonInfo> movedIngredientButtons = new System.Collections.Generic.List<IngredientButtonInfo>();
 
     // Devuelve true si se añadió, false si no se puede añadir
     public bool AddIngredient(int id, Sprite sprite)
     {
-        // 1. Comprobar si el jugador tiene al menos 1 de ese ingrediente
         if (InventorySystem.Instance.GetItemCount(id) < 1)
-        {
-            Debug.Log("No tienes ese ingrediente en el inventario.");
             return false;
-        }
 
-        // 2. Obtener el tipo del ingrediente
         var data = ItemDatabase.Instance.GetItemById(id);
         if (data == null)
             return false;
 
-        string tipo = data.ingredientType; // Usar el campo correcto de ItemData
-
-        // 3. Comprobar si ya hay un ingrediente de ese tipo
+        string tipo = data.ingredientType;
         foreach (int addedId in addedIngredientIDs)
         {
             var addedData = ItemDatabase.Instance.GetItemById(addedId);
             if (addedData != null && addedData.ingredientType == tipo)
-            {
-                // Ya hay uno de este tipo
                 return false;
+        }
+
+        addedIngredientIDs.Add(id);
+
+        IngredientButton[] allButtons = FindObjectsOfType<IngredientButton>(true);
+        foreach (var btn in allButtons)
+        {
+            if (btn.ingredientID == id && btn.transform.parent != this.transform)
+            {
+                movedIngredientButtons.Add(new IngredientButtonInfo {
+                    ingredientId = id,
+                    buttonTransform = btn.transform,
+                    originalParent = btn.transform.parent,
+                    originalSiblingIndex = btn.transform.GetSiblingIndex()
+                });
+                btn.transform.SetParent(this.transform, false);
+                btn.gameObject.SetActive(false);
+                break;
             }
         }
 
-        // 4. Añadir el ingrediente
-        addedIngredientIDs.Add(id);
-        // Opcional: muestra el sprite en el área
         GameObject imgObj = new GameObject("AddedIngredient");
         imgObj.transform.SetParent(transform, false);
         var img = imgObj.AddComponent<Image>();
@@ -154,7 +178,16 @@ public class IngredientDropArea : MonoBehaviour
     public void ClearIngredients()
     {
         addedIngredientIDs.Clear();
-        // Elimina los GameObjects hijos creados para los sprites
+        foreach (var info in movedIngredientButtons)
+        {
+            if (info.buttonTransform != null && info.originalParent != null)
+            {
+                info.buttonTransform.SetParent(info.originalParent, false);
+                info.buttonTransform.SetSiblingIndex(info.originalSiblingIndex);
+                info.buttonTransform.gameObject.SetActive(true);
+            }
+        }
+        movedIngredientButtons.Clear();
         foreach (Transform child in transform)
         {
             if (child.name == "AddedIngredient")
@@ -190,13 +223,14 @@ public class IngredientDropArea : MonoBehaviour
             if (isBeingShaken)
             {
                 shakeProgress += shakeAmount;
-                Debug.Log("Shake Progress: " + shakeProgress);
+                
                 if (shakeProgress >= shakeRequired)
                 {
                     shakeProgress = shakeRequired;
                     isBeingShaken = false;
                     // Aquí puedes lanzar evento de "cóctel listo"
                     Debug.Log("Cocktail is ready!");
+
                 }
             }
         }
