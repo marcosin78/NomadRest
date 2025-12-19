@@ -7,8 +7,8 @@ public class BeerMinigameScript : MonoBehaviour
     public GameObject minigameCanvas; // Asigna el Canvas en el Inspector
     [Header("Minijuego UI Root (solo hijos del minijuego)")]
     public Transform minigameIngredientsRoot; // Asigna el GameObject raíz de los ingredientes del minijuego
-    public PlayerInteractor playerInteractor; // Asigna en el inspector
-    public PlayerController playerController;
+    public PlayerInteractor playerInteractor; // Inspector asignado
+    public PlayerController playerController; // Inspector asignado
     private BeerDispenserScript currentDispenser;
     public IngredientDropArea ingredientDropArea;
 
@@ -16,15 +16,55 @@ public class BeerMinigameScript : MonoBehaviour
     {
         if (minigameCanvas != null)
             minigameCanvas.SetActive(false);
-        UnlockCameraAndLockCursor();
+        HideAndLockCursor();
 
+        // Si no está asignado en el inspector, buscarlo automáticamente
         if (ingredientDropArea == null)
+        {
+            // Busca un IngredientDropArea hijo del minigameIngredientsRoot
+            if (minigameIngredientsRoot != null)
+            {
+                ingredientDropArea = minigameIngredientsRoot.GetComponentInChildren<IngredientDropArea>(true);
+                if (ingredientDropArea == null)
+                {
+                    // Si no existe, lo creamos como hijo
+                    GameObject go = new GameObject("IngredientDropArea", typeof(RectTransform), typeof(IngredientDropArea));
+                    go.transform.SetParent(minigameIngredientsRoot, false);
+                    ingredientDropArea = go.GetComponent<IngredientDropArea>();
+                }
+                Debug.Log("IngredientDropArea asignado por código.");
+            }
+            else
+            {
+                Debug.LogWarning("minigameIngredientsRoot no asignado, no se puede crear IngredientDropArea.");
+            }
+        }
+
+        if (ingredientDropArea != null)
         {
             ingredientDropArea.beerMinigameScript = this;
         }
         else
         {
-            Debug.LogWarning("ingredientDropArea no asignado.");
+            Debug.LogWarning("ingredientDropArea no asignado ni encontrado.");
+        }
+
+        if (playerInteractor == null)
+        {
+            playerInteractor = FindObjectOfType<PlayerInteractor>();
+        }
+        else
+        {
+            Debug.LogWarning("playerInteractor no asignado.");
+        }
+
+        if (playerController == null)
+        {
+            playerController = FindObjectOfType<PlayerController>();
+        }
+        else
+        {
+            Debug.LogWarning("playerController no asignado.");
         }
     }
 
@@ -35,43 +75,43 @@ public class BeerMinigameScript : MonoBehaviour
         {
             if (Input.GetKeyDown(KeyCode.Q))
             {
-                if (minigameCanvas != null)
-                {
-                    minigameCanvas.SetActive(false);
-                    UnlockCameraAndLockCursor();
+                minigameCanvas.SetActive(false);
+                HideAndLockCursor();
 
-                    // Limpiar solo los IngredientDropArea hijos de minigameIngredientsRoot
-                    if (minigameIngredientsRoot != null)
+                // Limpiar solo los IngredientDropArea hijos de minigameIngredientsRoot
+                if (minigameIngredientsRoot != null)
+                {
+                    var dropAreas = minigameIngredientsRoot.GetComponentsInChildren<IngredientDropArea>(true);
+                    foreach (var area in dropAreas)
                     {
-                        var dropAreas = minigameIngredientsRoot.GetComponentsInChildren<IngredientDropArea>(true);
-                        foreach (var area in dropAreas)
-                        {
-                            area.ClearIngredients();
-                        }
-                    }else
-                    {
-                        Debug.LogWarning("minigameIngredientsRoot no asignado.");
+                        area.ClearIngredients();
                     }
+                }else
+                {
+                    Debug.LogWarning("minigameIngredientsRoot no asignado.");
                 }
             }
         }
     }
 
     public void StartMinigame(BeerDispenserScript dispenser)
-{
-    currentDispenser = dispenser;
-    Debug.Log("Minigame started with dispenser: " + dispenser);
-    if (minigameCanvas != null)
     {
-        minigameCanvas.SetActive(true);
-        LockCameraAndUnlockCursor();
+        currentDispenser = dispenser;
+        if (minigameCanvas != null)
+        {
+            minigameCanvas.SetActive(true);
+            ShowAndUnlockCursor();
+        }
     }
-}
 
     public void OnMinigameComplete(System.Collections.Generic.List<int> ingredientIDs)
     {
-        Debug.Log("Minigame complete! Ingredients: " + string.Join(", ", ingredientIDs));
-
+        if (minigameCanvas != null)
+        {
+            minigameCanvas.SetActive(false);
+            HideAndLockCursor();
+            ingredientDropArea.ResetToInitialPosition();
+        }
         if (currentDispenser == null) // Arreglar posible null reference
         {
             currentDispenser = FindObjectOfType<BeerDispenserScript>();
@@ -80,12 +120,6 @@ public class BeerMinigameScript : MonoBehaviour
 
         Debug.Log("currentDispenser: " + currentDispenser);
 
-        if (minigameCanvas != null)
-        {
-            minigameCanvas.SetActive(false);
-            UnlockCameraAndLockCursor();
-            ingredientDropArea.ResetToInitialPosition();
-        }
         if (currentDispenser != null)
         {
             currentDispenser.OnMinigameFinished(ingredientIDs);
@@ -107,26 +141,6 @@ public class BeerMinigameScript : MonoBehaviour
         }
     }
 
-    void LockCameraAndUnlockCursor()
-    {
-        Cursor.lockState = CursorLockMode.None;
-        Cursor.visible = true;
-        if (playerInteractor != null)
-            playerInteractor.enabled = false;
-        if (playerController != null)
-            playerController.LockAll(); // Bloquea movimiento y cámara
-    }
-
-    void UnlockCameraAndLockCursor()
-    {
-        Cursor.lockState = CursorLockMode.Locked;
-        Cursor.visible = false;
-        if (playerInteractor != null)
-            playerInteractor.enabled = true;
-        if (playerController != null)
-            playerController.UnlockAll(); // Desbloquea movimiento y cámara
-    }
-
     // Llama este método desde el botón para sacar todos los ingredientes de los IngredientDropArea del minijuego
     public void RemoveAllIngredientsFromDropAreas()
     {
@@ -141,5 +155,25 @@ public class BeerMinigameScript : MonoBehaviour
             // Resetear la posición de los IngredientDropArea al pulsar el boton
             ingredientDropArea.ResetToInitialPosition();
         }
+    }
+
+    void ShowAndUnlockCursor()
+    {
+        Cursor.lockState = CursorLockMode.None;
+        Cursor.visible = true;
+        if (playerInteractor != null)
+            playerInteractor.enabled = false;
+        if (playerController != null)
+            playerController.LockAll();
+    }
+
+    void HideAndLockCursor()
+    {
+        Cursor.lockState = CursorLockMode.Locked;
+        Cursor.visible = false;
+        if (playerInteractor != null)
+            playerInteractor.enabled = true;
+        if (playerController != null)
+            playerController.UnlockAll();
     }
 }

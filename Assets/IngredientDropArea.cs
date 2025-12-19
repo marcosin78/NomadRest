@@ -30,6 +30,8 @@ public class IngredientDropArea : MonoBehaviour
         rb.constraints = RigidbodyConstraints2D.FreezeRotation;
         rb.linearDamping = 10f; // Alto damping para frenar rápido
         initialPosition = transform.position; // Solo se asigna una vez
+
+        Debug.Log("IngredientDropArea initial position set to: " + initialPosition);
     }
 
     void Update()
@@ -129,6 +131,7 @@ public class IngredientDropArea : MonoBehaviour
         public Transform buttonTransform;
         public Transform originalParent;
         public int originalSiblingIndex;
+        public Vector3 originalLocalPosition;
     }
     public System.Collections.Generic.List<IngredientButtonInfo> movedIngredientButtons = new System.Collections.Generic.List<IngredientButtonInfo>();
 
@@ -136,39 +139,34 @@ public class IngredientDropArea : MonoBehaviour
     public bool AddIngredient(int id, Sprite sprite)
     {
         if (InventorySystem.Instance.GetItemCount(id) < 1)
+        {
+            Debug.Log("No hay suficiente cantidad en el inventario para el ingrediente " + id);
             return false;
+        }
 
         var data = ItemDatabase.Instance.GetItemById(id);
         if (data == null)
+        {
+            Debug.Log("No se encontró el item en la base de datos: " + id);
             return false;
+        }
 
         string tipo = data.ingredientType;
         foreach (int addedId in addedIngredientIDs)
         {
             var addedData = ItemDatabase.Instance.GetItemById(addedId);
             if (addedData != null && addedData.ingredientType == tipo)
+            {
+                Debug.Log("Ya hay un ingrediente de tipo " + tipo + " en el área.");
                 return false;
+            }
         }
 
         addedIngredientIDs.Add(id);
 
-        IngredientButton[] allButtons = FindObjectsOfType<IngredientButton>(true);
-        foreach (var btn in allButtons)
-        {
-            if (btn.ingredientID == id && btn.transform.parent != this.transform)
-            {
-                movedIngredientButtons.Add(new IngredientButtonInfo {
-                    ingredientId = id,
-                    buttonTransform = btn.transform,
-                    originalParent = btn.transform.parent,
-                    originalSiblingIndex = btn.transform.GetSiblingIndex()
-                });
-                btn.transform.SetParent(this.transform, false);
-                btn.gameObject.SetActive(false);
-                break;
-            }
-        }
+        // NO muevas ni ocultes el botón aquí
 
+        // Solo añade el sprite visual al área
         GameObject imgObj = new GameObject("AddedIngredient");
         imgObj.transform.SetParent(transform, false);
         var img = imgObj.AddComponent<Image>();
@@ -189,9 +187,22 @@ public class IngredientDropArea : MonoBehaviour
         {
             if (info.buttonTransform != null && info.originalParent != null)
             {
-                info.buttonTransform.SetParent(info.originalParent, false);
-                info.buttonTransform.SetSiblingIndex(info.originalSiblingIndex);
-                info.buttonTransform.gameObject.SetActive(true);
+                var btn = info.buttonTransform.GetComponent<IngredientButton>();
+                if (btn != null)
+                {
+                    btn.originalParent = info.originalParent;
+                    btn.originalSiblingIndex = info.originalSiblingIndex;
+                    btn.originalLocalPosition = info.originalLocalPosition;
+                    btn.AnimateReturnToOriginal();
+                }
+                else
+                {
+                    // Fallback por si no es un IngredientButton
+                    info.buttonTransform.SetParent(info.originalParent, false);
+                    info.buttonTransform.SetSiblingIndex(info.originalSiblingIndex);
+                    info.buttonTransform.localPosition = info.originalLocalPosition;
+                    info.buttonTransform.gameObject.SetActive(true);
+                }
             }
         }
         movedIngredientButtons.Clear();

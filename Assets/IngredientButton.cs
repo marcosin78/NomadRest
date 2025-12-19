@@ -3,6 +3,7 @@ using UnityEngine.UI;
 using UnityEngine.EventSystems;
 using TMPro;
 using System.Collections;
+using Unity.VisualScripting;
 
 public class IngredientButton : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler
 {
@@ -10,16 +11,15 @@ public class IngredientButton : MonoBehaviour, IBeginDragHandler, IDragHandler, 
     public Image ingredientImage;
     public TextMeshProUGUI cantidadText;
 
-    private Transform originalParent;
-    private Vector3 originalLocalPosition;
+    [HideInInspector] public Transform originalParent;
+    [HideInInspector] public int originalSiblingIndex;
+    [HideInInspector] public Vector3 originalLocalPosition;
     private Canvas canvas;
     private int initialCantidad = -1;
-    private int originalSiblingIndex;
     private Vector3 originalScale;
     private IngredientDropArea currentDropArea;
     private Vector3 targetScale; // Añade esto arriba
     public Image buttonImage; // Añade esta línea arriba para referenciar la imagen del botón
-
     private Coroutine returnRoutine;
 
     void Start()
@@ -33,6 +33,9 @@ public class IngredientButton : MonoBehaviour, IBeginDragHandler, IDragHandler, 
         SaveInitialCantidad();
         originalScale = ingredientImage != null ? ingredientImage.rectTransform.localScale : Vector3.one;
         targetScale = originalScale; // Inicializa targetScale
+
+
+        
     }
     void Update()
     {
@@ -155,6 +158,8 @@ public class IngredientButton : MonoBehaviour, IBeginDragHandler, IDragHandler, 
         var results = new System.Collections.Generic.List<RaycastResult>();
         EventSystem.current.RaycastAll(eventData, results);
 
+        bool added = false;
+
         foreach (var r in results)
         {
             var dropArea = r.gameObject.GetComponent<IngredientDropArea>();
@@ -164,6 +169,7 @@ public class IngredientButton : MonoBehaviour, IBeginDragHandler, IDragHandler, 
                 var data = ItemDatabase.Instance.GetItemById(ingredientID);
                 Sprite sprite = data != null ? Resources.Load<Sprite>(data.spriteName) : null;
                 dropArea.AddIngredient(ingredientID, sprite);
+                added = true;
                 break;
             }
         }
@@ -302,5 +308,15 @@ public class IngredientButton : MonoBehaviour, IBeginDragHandler, IDragHandler, 
         }
         // Puedes poner un umbral si quieres limitar el efecto solo cuando está cerca
         return nearest;
+    }
+    public void AnimateReturnToOriginal()
+    {
+        gameObject.SetActive(true); // Asegura que está activo antes de animar
+        transform.SetParent(originalParent, false);
+        transform.SetSiblingIndex(originalSiblingIndex);
+        transform.localPosition = originalLocalPosition;
+        if (returnRoutine != null)
+            StopCoroutine(returnRoutine);
+        returnRoutine = StartCoroutine(SmoothReturn());
     }
 }

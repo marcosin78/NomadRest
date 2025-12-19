@@ -198,6 +198,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 72fa1f87fef47d3468145514b1596f7f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::DirtynessScript
+--- !u!114 &338947763 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 7439595466430884470, guid: adc4e8888e1bf764492258e04fd7db12, type: 3}
+  m_PrefabInstance: {fileID: 2678688113803821026}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
 --- !u!1 &410087039
 GameObject:
   m_ObjectHideFlags: 0
@@ -336,6 +347,28 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b4274c774a0e0a14f9e2094f56e5e812, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::InventorySystem
+--- !u!114 &618863545 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 1601891153876864297, guid: 098a9b4eb4abe7244bb81966a16d1a02, type: 3}
+  m_PrefabInstance: {fileID: 1224192079}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9d201665aedb2ad41b28be19042cd6ce, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: '::'
+--- !u!114 &618863547 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 6846551615094170078, guid: 098a9b4eb4abe7244bb81966a16d1a02, type: 3}
+  m_PrefabInstance: {fileID: 1224192079}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2edc7b2067dfae0459c9a0a7a76711f6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PlayerController
 --- !u!1001 &636569349
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -778,6 +811,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 592928533619955730, guid: 098a9b4eb4abe7244bb81966a16d1a02, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 603732341298530170, guid: 098a9b4eb4abe7244bb81966a16d1a02, type: 3}
       propertyPath: m_Name
       value: Playersito
@@ -796,7 +833,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4375121335132715506, guid: 098a9b4eb4abe7244bb81966a16d1a02, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 9.64
+      value: 9.55
       objectReference: {fileID: 0}
     - target: {fileID: 4375121335132715506, guid: 098a9b4eb4abe7244bb81966a16d1a02, type: 3}
       propertyPath: m_LocalPosition.y
@@ -843,6 +880,52 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 098a9b4eb4abe7244bb81966a16d1a02, type: 3}
+--- !u!1 &1267147822 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 7324043074479508187, guid: adc4e8888e1bf764492258e04fd7db12, type: 3}
+  m_PrefabInstance: {fileID: 2678688113803821026}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &1412684853 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 161457078478586509, guid: adc4e8888e1bf764492258e04fd7db12, type: 3}
+  m_PrefabInstance: {fileID: 2678688113803821026}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1267147822}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b927527c8c3d8da41b647608c0d4e164, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::IngredientDropArea
+--- !u!114 &1412684856
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1267147822}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
+  m_Material: {fileID: 0}
+  m_Color: {r: 1, g: 1, b: 1, a: 0.16470589}
+  m_RaycastTarget: 1
+  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
+  m_Maskable: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  m_Sprite: {fileID: 0}
+  m_Type: 0
+  m_PreserveAspect: 0
+  m_FillCenter: 1
+  m_FillMethod: 4
+  m_FillAmount: 1
+  m_FillClockwise: 1
+  m_FillOrigin: 0
+  m_UseSpriteMesh: 0
+  m_PixelsPerUnitMultiplier: 1
 --- !u!1 &1455067413
 GameObject:
   m_ObjectHideFlags: 0
@@ -1586,13 +1669,29 @@ PrefabInstance:
       value: BeerDispenser
       objectReference: {fileID: 0}
     - target: {fileID: 2357287563320700938, guid: adc4e8888e1bf764492258e04fd7db12, type: 3}
+      propertyPath: playerController
+      value: 
+      objectReference: {fileID: 618863547}
+    - target: {fileID: 2357287563320700938, guid: adc4e8888e1bf764492258e04fd7db12, type: 3}
+      propertyPath: playerInteractor
+      value: 
+      objectReference: {fileID: 618863545}
+    - target: {fileID: 2357287563320700938, guid: adc4e8888e1bf764492258e04fd7db12, type: 3}
       propertyPath: ingredientDropArea
       value: 
-      objectReference: {fileID: 0}
+      objectReference: {fileID: 1412684853}
+    - target: {fileID: 5192355418075505036, guid: adc4e8888e1bf764492258e04fd7db12, type: 3}
+      propertyPath: playerController
+      value: 
+      objectReference: {fileID: 618863547}
+    - target: {fileID: 5192355418075505036, guid: adc4e8888e1bf764492258e04fd7db12, type: 3}
+      propertyPath: playerInteractor
+      value: 
+      objectReference: {fileID: 618863545}
     - target: {fileID: 7598246677169134058, guid: adc4e8888e1bf764492258e04fd7db12, type: 3}
       propertyPath: m_TargetGraphic
       value: 
-      objectReference: {fileID: 0}
+      objectReference: {fileID: 338947763}
     - target: {fileID: 7956818694531145632, guid: adc4e8888e1bf764492258e04fd7db12, type: 3}
       propertyPath: m_Enabled
       value: 1
@@ -1600,7 +1699,10 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 7324043074479508187, guid: adc4e8888e1bf764492258e04fd7db12, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1412684856}
   m_SourcePrefab: {fileID: 100100000, guid: adc4e8888e1bf764492258e04fd7db12, type: 3}
 --- !u!1001 &2718103969047884974
 PrefabInstance:
@@ -2136,6 +2238,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: PeriodicoComprar
       objectReference: {fileID: 0}
+    - target: {fileID: 2257328520411243141, guid: 934cade1ae7096d4db9dfb3744855a85, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 2558184963708591298, guid: 934cade1ae7096d4db9dfb3744855a85, type: 3}
       propertyPath: id
       value: 10
@@ -2150,7 +2256,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3016382574719760869, guid: 934cade1ae7096d4db9dfb3744855a85, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 3704211729015984424, guid: 934cade1ae7096d4db9dfb3744855a85, type: 3}
       propertyPath: m_Enabled

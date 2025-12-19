@@ -23,6 +23,7 @@ private Vector3 grabOffset;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
+        Debug.Log("Initial camera position:" + initialCameraPosition);
 
         rb = GetComponent<Rigidbody>();
         rb.freezeRotation = true;
@@ -134,12 +135,7 @@ private Vector3 grabOffset;
         cameraLocked = true;
         Debug.Log("Player movement and camera locked.");
 
-
-        // Ejemplo de bloqueo de cursor (puedes añadir tu lógica de cámara aquí)
-        Cursor.lockState = CursorLockMode.Locked;
-        Cursor.visible = false;
-
-         // Desactiva el control de cámara por ratón
+        // Desactiva el control de cámara por ratón
         Camera cam = GetComponentInChildren<Camera>();
         if (cam != null)
         {
@@ -155,9 +151,6 @@ private Vector3 grabOffset;
         movementLocked = false;
         cameraLocked = false;
         Debug.Log("Player movement and camera unlocked.");
-        // Ejemplo de desbloqueo de cursor
-        Cursor.lockState = CursorLockMode.None;
-        Cursor.visible = true;
 
         // Reactiva el control de cámara por ratón
         Camera cam = GetComponentInChildren<Camera>();
@@ -167,11 +160,6 @@ private Vector3 grabOffset;
             if (camVision != null)
                 camVision.enabled = true;
         }
-
-         // Restaura la posición y rotación inicial de la cámara
-            cam.transform.localPosition = initialCameraPosition;
-            cam.transform.localRotation = initialCameraRotation;
-        
     }
     // Bloquea movimiento y coloca la cámara sobre el jugador mirando a un objetivo
     public void LockCameraAboveAndLookAt(Vector3 target)
