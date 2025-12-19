@@ -2,6 +2,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
 using TMPro;
+using System.Collections;
 
 public class IngredientButton : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler
 {
@@ -14,18 +15,46 @@ public class IngredientButton : MonoBehaviour, IBeginDragHandler, IDragHandler, 
     private Canvas canvas;
     private int initialCantidad = -1;
     private int originalSiblingIndex;
+    private Vector3 originalScale;
+    private IngredientDropArea currentDropArea;
+    private Vector3 targetScale; // Añade esto arriba
+    public Image buttonImage; // Añade esta línea arriba para referenciar la imagen del botón
+
+    private Coroutine returnRoutine;
 
     void Start()
     {
         if (ingredientImage == null)
             ingredientImage = transform.Find("IngredientImage")?.GetComponent<Image>();
+        if (buttonImage == null)
+            buttonImage = GetComponent<Image>(); // Obtiene la imagen del propio botón
         canvas = GetComponentInParent<Canvas>();
         LoadDataFromDatabase();
         SaveInitialCantidad();
+        originalScale = ingredientImage != null ? ingredientImage.rectTransform.localScale : Vector3.one;
+        targetScale = originalScale; // Inicializa targetScale
     }
     void Update()
     {
         UpdateCantidad();
+
+        // Animación suave de escala para ambas imágenes
+        if (ingredientImage != null)
+        {
+            ingredientImage.rectTransform.localScale = Vector3.Lerp(
+                ingredientImage.rectTransform.localScale,
+                targetScale,
+                Time.deltaTime * 12f
+            );
+        }
+        if (buttonImage != null)
+        {
+            buttonImage.rectTransform.localScale = Vector3.Lerp(
+                buttonImage.rectTransform.localScale,
+                targetScale,
+                Time.deltaTime * 12f
+            );
+        }
     }
 
     public void LoadDataFromDatabase()
@@ -75,6 +104,20 @@ public class IngredientButton : MonoBehaviour, IBeginDragHandler, IDragHandler, 
             originalParent = transform.parent;
         originalSiblingIndex = transform.GetSiblingIndex();
         originalLocalPosition = transform.localPosition;
+        originalScale = ingredientImage != null ? ingredientImage.rectTransform.localScale : Vector3.one;
+        targetScale = originalScale;
+        // También resetea la escala de la imagen del botón
+        if (buttonImage != null)
+            buttonImage.rectTransform.localScale = originalScale;
+
+        // --- Reproducir audio solo una vez por drag ---
+        var data = ItemDatabase.Instance.GetItemById(ingredientID);
+        if (data != null && !string.IsNullOrEmpty(data.audioName))
+        {
+            var clip = Resources.Load<AudioClip>(data.audioName);
+            if (clip != null)
+                AudioSource.PlayClipAtPoint(clip, Camera.main.transform.position);
+        }
     }
 
     public void OnDrag(PointerEventData eventData)
@@ -87,8 +130,25 @@ public class IngredientButton : MonoBehaviour, IBeginDragHandler, IDragHandler, 
             out pos
         );
         transform.position = canvas.transform.TransformPoint(pos);
+
+        // Escalado dinámico al acercarse a un IngredientDropArea
+        IngredientDropArea nearestArea = FindNearestDropArea();
+        if (nearestArea != null && ingredientImage != null)
+        {
+            float minScale = 0.5f; // Escala mínima al llegar al centro
+            float maxDistance = 200f; // Distancia máxima para empezar a escalar (ajusta según tu UI)
+            float dist = Vector3.Distance(transform.position, nearestArea.transform.position);
+            float t = Mathf.Clamp01(1 - (dist / maxDistance));
+            float scale = Mathf.Lerp(1f, minScale, t);
+            targetScale = Vector3.one * scale; // Solo cambiamos la escala objetivo
+        }
+        else if (ingredientImage != null)
+        {
+            targetScale = originalScale;
+        }
     }
 
+    // Al soltar, restaura la escala
     public void OnEndDrag(PointerEventData eventData)
     {
         // Detecta el objeto bajo el puntero al soltar
@@ -108,10 +168,94 @@ public class IngredientButton : MonoBehaviour, IBeginDragHandler, IDragHandler, 
             }
         }
 
-        // SIEMPRE vuelve a su posición original
+        // Inicia animación de retorno suave
+        if (returnRoutine != null)
+            StopCoroutine(returnRoutine);
+        returnRoutine = StartCoroutine(SmoothReturn());
+    }
+
+    // Corrutina para volver suavemente a la posición y escala original
+    private IEnumerator SmoothReturn()
+    {
+        float duration = 0.25f; // Duración de la animación
+        float elapsed = 0f;
+
+        Vector3 startPos = transform.position;
+        Vector3 endPos = originalParent.TransformPoint(originalLocalPosition);
+
+        Vector3 startScale = ingredientImage != null ? ingredientImage.rectTransform.localScale : Vector3.one;
+        Vector3 endScale = originalScale;
+
+        Vector3 startBtnScale = buttonImage != null ? buttonImage.rectTransform.localScale : Vector3.one;
+
         transform.SetParent(originalParent, true);
         transform.SetSiblingIndex(originalSiblingIndex);
-        transform.localPosition = originalLocalPosition;
+
+        while (elapsed < duration)
+        {
+            float t = elapsed / duration;
+            transform.position = Vector3.Lerp(startPos, endPos, t);
+
+            if (ingredientImage != null)
+                ingredientImage.rectTransform.localScale = Vector3.Lerp(startScale, endScale, t);
+            if (buttonImage != null)
+                buttonImage.rectTransform.localScale = Vector3.Lerp(startBtnScale, endScale, t);
+
+            elapsed += Time.unscaledDeltaTime;
+            yield return null;
+        }
+
+        transform.position = endPos;
+        if (ingredientImage != null)
+            ingredientImage.rectTransform.localScale = endScale;
+        if (buttonImage != null)
+            buttonImage.rectTransform.localScale = endScale;
+
+        targetScale = originalScale;
+        returnRoutine = null;
+
+        // --- Animación de rebote/expansión ---
+        yield return StartCoroutine(BounceEffect());
+    }
+
+    private IEnumerator BounceEffect()
+    {
+        float bounceDuration = 0.12f;
+        float elapsed = 0f;
+        float bounceScale = 1.15f;
+
+        Vector3 overshoot = originalScale * bounceScale;
+
+        // Expande
+        while (elapsed < bounceDuration / 2f)
+        {
+            float t = elapsed / (bounceDuration / 2f);
+            if (ingredientImage != null)
+                ingredientImage.rectTransform.localScale = Vector3.Lerp(originalScale, overshoot, t);
+            if (buttonImage != null)
+                buttonImage.rectTransform.localScale = Vector3.Lerp(originalScale, overshoot, t);
+            elapsed += Time.unscaledDeltaTime;
+            yield return null;
+        }
+
+        // Contrae
+        elapsed = 0f;
+        while (elapsed < bounceDuration / 2f)
+        {
+            float t = elapsed / (bounceDuration / 2f);
+            if (ingredientImage != null)
+                ingredientImage.rectTransform.localScale = Vector3.Lerp(overshoot, originalScale, t);
+            if (buttonImage != null)
+                buttonImage.rectTransform.localScale = Vector3.Lerp(overshoot, originalScale, t);
+            elapsed += Time.unscaledDeltaTime;
+            yield return null;
+        }
+
+        // Asegura escala final
+        if (ingredientImage != null)
+            ingredientImage.rectTransform.localScale = originalScale;
+        if (buttonImage != null)
+            buttonImage.rectTransform.localScale = originalScale;
     }
 
     public void ResetButton()
@@ -139,5 +283,24 @@ public class IngredientButton : MonoBehaviour, IBeginDragHandler, IDragHandler, 
                 UpdateCantidad();
             }
         }
+    }
+
+    // Encuentra el IngredientDropArea más cercano al botón
+    private IngredientDropArea FindNearestDropArea()
+    {
+        IngredientDropArea[] areas = GameObject.FindObjectsOfType<IngredientDropArea>();
+        IngredientDropArea nearest = null;
+        float minDist = float.MaxValue;
+        foreach (var area in areas)
+        {
+            float d = Vector3.Distance(transform.position, area.transform.position);
+            if (d < minDist)
+            {
+                minDist = d;
+                nearest = area;
+            }
+        }
+        // Puedes poner un umbral si quieres limitar el efecto solo cuando está cerca
+        return nearest;
     }
 }

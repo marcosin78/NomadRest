@@ -843,22 +843,6 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 098a9b4eb4abe7244bb81966a16d1a02, type: 3}
---- !u!224 &1412684850 stripped
-RectTransform:
-  m_CorrespondingSourceObject: {fileID: 4799149410511925763, guid: adc4e8888e1bf764492258e04fd7db12, type: 3}
-  m_PrefabInstance: {fileID: 2678688113803821026}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &1412684853 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 161457078478586509, guid: adc4e8888e1bf764492258e04fd7db12, type: 3}
-  m_PrefabInstance: {fileID: 2678688113803821026}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b927527c8c3d8da41b647608c0d4e164, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::IngredientDropArea
 --- !u!1 &1455067413
 GameObject:
   m_ObjectHideFlags: 0
@@ -1378,11 +1362,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bd2d78d33c1a5ef4ca63ea91ed985f3b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: '::'
---- !u!4 &1955360861 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 7479575653275978206, guid: adc4e8888e1bf764492258e04fd7db12, type: 3}
-  m_PrefabInstance: {fileID: 2678688113803821026}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &208165620900880087
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1610,18 +1589,14 @@ PrefabInstance:
       propertyPath: ingredientDropArea
       value: 
       objectReference: {fileID: 0}
-    - target: {fileID: 2357287563320700938, guid: adc4e8888e1bf764492258e04fd7db12, type: 3}
-      propertyPath: minigameIngredientsRoot
+    - target: {fileID: 7598246677169134058, guid: adc4e8888e1bf764492258e04fd7db12, type: 3}
+      propertyPath: m_TargetGraphic
       value: 
-      objectReference: {fileID: 1955360861}
-    - target: {fileID: 5192355418075505036, guid: adc4e8888e1bf764492258e04fd7db12, type: 3}
-      propertyPath: ingredientDropArea
-      value: 
-      objectReference: {fileID: 1412684853}
-    - target: {fileID: 5192355418075505036, guid: adc4e8888e1bf764492258e04fd7db12, type: 3}
-      propertyPath: minigameIngredientsRoot
-      value: 
-      objectReference: {fileID: 1412684850}
+      objectReference: {fileID: 0}
+    - target: {fileID: 7956818694531145632, guid: adc4e8888e1bf764492258e04fd7db12, type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -2175,7 +2150,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3016382574719760869, guid: 934cade1ae7096d4db9dfb3744855a85, type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3704211729015984424, guid: 934cade1ae7096d4db9dfb3744855a85, type: 3}
       propertyPath: m_Enabled
