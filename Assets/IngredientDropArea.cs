@@ -4,14 +4,15 @@ using UnityEngine.UI;
 
 public class IngredientDropArea : MonoBehaviour
 {
-
-
+    
     //SCRIPT PARA EL ÁREA DONDE SE SUELTAN LOS INGREDIENTES Y SE AGITA EL CÓCTEL
     //PENDIENTE DE MODIFICAR EL COCTEL SE CREA MUY RAPIDO.
 
     private bool isDragging = false;
     private Vector3 offset;
     private Vector3 lastPosition;
+
+    private Vector3 initialPosition;
     private Rigidbody2D rb;
     public float mass = 1.5f; // Peso del cóctel
     public float shakeMultiplier = 0.00005f; // Ajusta la sensibilidad del shake (más bajo = más lento)
@@ -28,6 +29,7 @@ public class IngredientDropArea : MonoBehaviour
         rb.gravityScale = 0f;
         rb.constraints = RigidbodyConstraints2D.FreezeRotation;
         rb.linearDamping = 10f; // Alto damping para frenar rápido
+        initialPosition = transform.position; // Solo se asigna una vez
     }
 
     void Update()
@@ -83,6 +85,7 @@ public class IngredientDropArea : MonoBehaviour
                 {
                     shakeProgress = shakeRequired;
                     isBeingShaken = false;
+                    isDragging = false;
 
                     if (beerMinigameScript != null)
                 {
@@ -177,6 +180,10 @@ public class IngredientDropArea : MonoBehaviour
     // Limpia los ingredientes y sprites visuales del área
     public void ClearIngredients()
     {
+
+            isDragging = false;
+            addedIngredientIDs.Clear();
+
         addedIngredientIDs.Clear();
         foreach (var info in movedIngredientButtons)
         {
@@ -214,6 +221,7 @@ public class IngredientDropArea : MonoBehaviour
                 isBeingShaken = true;
                 shakeProgress = 0f;
                 lastPosition = transform.position;
+                // initialPosition ya no se reasigna aquí
             }
         }
 
@@ -223,15 +231,32 @@ public class IngredientDropArea : MonoBehaviour
             if (isBeingShaken)
             {
                 shakeProgress += shakeAmount;
-                
+
                 if (shakeProgress >= shakeRequired)
                 {
                     shakeProgress = shakeRequired;
                     isBeingShaken = false;
-                    // Aquí puedes lanzar evento de "cóctel listo"
-                    Debug.Log("Cocktail is ready!");
 
+                    // Vuelve a la posición inicial
+                    transform.position = initialPosition;
+                    rb.linearVelocity = Vector2.zero; 
                 }
             }
         }
+
+         // Recoloca el área en su posición inicial
+    public void ResetToInitialPosition()
+    {
+        transform.position = initialPosition;
+        if (rb != null)
+        {
+            rb.linearVelocity = Vector2.zero;
+            rb.angularVelocity = 0f;
+            Debug.Log("Reset IngredientDropArea to initial position and zeroed velocities.");
+        }
+        else
+        {
+            Debug.Log("Reset IngredientDropArea to initial position. no Rigidbody found.");
+        }
+    }
 }

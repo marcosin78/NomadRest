@@ -58,7 +58,7 @@ public class BeerDispenserScript : MonoBehaviour, IInteractable
 public void OnMinigameFinished(System.Collections.Generic.List<int> ingredientIDs)
 {
     isDispensing = true;
-    lastUsedIngredients = ingredientIDs;
+    lastUsedIngredients = new System.Collections.Generic.List<int>(ingredientIDs); // COPIA, no referencia
     // Aquí puedes hacer lógica extra, como validar la receta, etc.
     Debug.Log("Minigame finished, dispensing drink with ingredients: " + string.Join(", ", ingredientIDs));
 

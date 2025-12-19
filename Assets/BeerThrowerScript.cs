@@ -100,8 +100,10 @@ public class BeerThrowerScript : MonoBehaviour
             // Al instanciar la cerveza en BeerThrowerScript o donde corresponda:
             var data = beerInstance.AddComponent<BeerCocktailData>();
             data.ingredientIDs = new List<int>(BeerDispenserScript.lastUsedIngredients); // O la lista que corresponda
-            Debug.Log("Ingredientes que se asignan al BeerCocktailData: " + string.Join(",", BeerDispenserScript.lastUsedIngredients));
+            // Debug de los ingredientes asignados
 
+
+            
             StartCoroutine(DestroyAfterDelay(beerInstance, destroyDelay));
             thrown++;
             yield return new WaitForSeconds(cooldownTime);
@@ -113,7 +115,7 @@ public class BeerThrowerScript : MonoBehaviour
             directionRoutine = null;
         }
         throwRoutine = null;
-
+        Debug.Log("Ingredientes que se asignan al BeerCocktailData: " + string.Join(",", BeerDispenserScript.lastUsedIngredients));
         moveArm.DeactivateArm();
         player.UnlockCamera();
 

@@ -10,12 +10,22 @@ public class BeerMinigameScript : MonoBehaviour
     public PlayerInteractor playerInteractor; // Asigna en el inspector
     public PlayerController playerController;
     private BeerDispenserScript currentDispenser;
+    public IngredientDropArea ingredientDropArea;
 
     void Start()
     {
         if (minigameCanvas != null)
             minigameCanvas.SetActive(false);
         UnlockCameraAndLockCursor();
+
+        if (ingredientDropArea == null)
+        {
+            ingredientDropArea.beerMinigameScript = this;
+        }
+        else
+        {
+            Debug.LogWarning("ingredientDropArea no asignado.");
+        }
     }
 
     void Update()
@@ -38,6 +48,9 @@ public class BeerMinigameScript : MonoBehaviour
                         {
                             area.ClearIngredients();
                         }
+                    }else
+                    {
+                        Debug.LogWarning("minigameIngredientsRoot no asignado.");
                     }
                 }
             }
@@ -57,12 +70,12 @@ public class BeerMinigameScript : MonoBehaviour
 
     public void OnMinigameComplete(System.Collections.Generic.List<int> ingredientIDs)
     {
-        
         Debug.Log("Minigame complete! Ingredients: " + string.Join(", ", ingredientIDs));
-        if (currentDispenser == null)
+
+        if (currentDispenser == null) // Arreglar posible null reference
         {
-        currentDispenser = FindObjectOfType<BeerDispenserScript>();
-        Debug.LogWarning("currentDispenser era null, se ha reasignado automáticamente.");
+            currentDispenser = FindObjectOfType<BeerDispenserScript>();
+            Debug.LogWarning("currentDispenser era null, se ha reasignado automáticamente.");
         }
 
         Debug.Log("currentDispenser: " + currentDispenser);
@@ -71,11 +84,26 @@ public class BeerMinigameScript : MonoBehaviour
         {
             minigameCanvas.SetActive(false);
             UnlockCameraAndLockCursor();
+            ingredientDropArea.ResetToInitialPosition();
         }
         if (currentDispenser != null)
         {
             currentDispenser.OnMinigameFinished(ingredientIDs);
             Debug.Log("Notified dispenser of minigame completion.");
+        }
+        
+        // Limpiar solo los IngredientDropArea hijos de minigameIngredientsRoot
+        if (minigameIngredientsRoot != null)
+        {
+            var dropAreas = minigameIngredientsRoot.GetComponentsInChildren<IngredientDropArea>(true);
+            foreach (var area in dropAreas)
+            {
+                area.ClearIngredients();
+            }
+        }
+        else
+        {
+            Debug.LogWarning("minigameIngredientsRoot no asignado.");
         }
     }
 
@@ -110,6 +138,8 @@ public class BeerMinigameScript : MonoBehaviour
             {
                 area.ClearIngredients();
             }
+            // Resetear la posición de los IngredientDropArea al pulsar el boton
+            ingredientDropArea.ResetToInitialPosition();
         }
     }
 }
