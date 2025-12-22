@@ -10,6 +10,16 @@ public class PlayerController : MonoBehaviour
         private Vector3 initialCameraPosition;
         private Quaternion initialCameraRotation;
 
+        [SerializeField] private float cameraTiltAmount = 5f; // Grados máximos de inclinación
+        [SerializeField] private float cameraTiltSpeed = 1.5f;   // Velocidad de interpolación
+        private float currentTilt = 0f;
+
+        private bool showGrabPoint = false;
+        private Color grabPointColor = Color.green;
+
+        private bool showInteractablePoint = false;
+        private Color interactablePointColor = Color.blue;
+
     int movementSpeed = 5;
     Vector3 movement;
     private Rigidbody rb;
@@ -74,8 +84,10 @@ private Vector3 grabOffset;
         RaycastHit hit;
         if (Physics.Raycast(ray, out hit, 3f)) // 3f: distancia máxima de agarre
         {
+            // Solo agarra si implementa IGrabbable
+            var grabbable = hit.collider.GetComponent<Grabbable>();
             Rigidbody rb = hit.collider.GetComponent<Rigidbody>();
-            if (rb != null && rb != this.rb) // No agarrar el propio Rigidbody del jugador
+            if (grabbable != null && rb != null && rb != this.rb) // No agarrar el propio Rigidbody del jugador
             {
                 grabbedRigidbody = rb;
                 grabOffset = hit.point - rb.transform.position;
@@ -97,7 +109,52 @@ private Vector3 grabOffset;
         grabbedRigidbody = null;
     }
 
+    //TILT DE CÁMARA
 
+    Camera cam = GetComponentInChildren<Camera>();
+    if (cam != null && !cameraLocked)
+    {
+    float mouseX = Input.GetAxis("Mouse X");
+    float targetTilt = Mathf.Clamp(-mouseX * cameraTiltAmount, -cameraTiltAmount, cameraTiltAmount);
+
+    // Si el ratón se mueve, interpola hacia el tilt, si no, interpola hacia 0
+    if (Mathf.Abs(mouseX) > 0.01f)
+        currentTilt = Mathf.Lerp(currentTilt, targetTilt, Time.deltaTime * cameraTiltSpeed);
+    else
+        currentTilt = Mathf.Lerp(currentTilt, 0f, Time.deltaTime * cameraTiltSpeed);
+
+    // Aplica el tilt (roll) manteniendo la rotación original
+    Vector3 euler = cam.transform.localEulerAngles;
+    euler.z = currentTilt;
+    cam.transform.localEulerAngles = euler;
+    }
+
+    // --- Mostrar punto si hay objeto agarrable ---
+    showGrabPoint = false;
+    Ray centerRay = Camera.main.ScreenPointToRay(new Vector3(Screen.width / 2, Screen.height / 2));
+    RaycastHit centerHit;
+    if (Physics.Raycast(centerRay, out centerHit, 3f))
+    {
+        var grabbable = centerHit.collider.GetComponent<Grabbable>();
+        Rigidbody rb = centerHit.collider.GetComponent<Rigidbody>();
+        if (grabbable != null && rb != null && rb != this.rb)
+        {
+            showGrabPoint = true;
+        }
+    }
+
+
+    // --- Mostrar punto si hay objeto con tag Interactable ---
+    showInteractablePoint = false;
+    Ray interactableRay = Camera.main.ScreenPointToRay(new Vector3(Screen.width / 2, Screen.height / 2));
+    RaycastHit interactableHit;
+    if (Physics.Raycast(interactableRay, out interactableHit, 3f))
+    {
+        if (interactableHit.collider.CompareTag("Interactable"))
+        {
+            showInteractablePoint = true;
+        }
+    }
 
     }
     void FixedUpdate()
@@ -133,7 +190,6 @@ private Vector3 grabOffset;
     {
         movementLocked = true;
         cameraLocked = true;
-        Debug.Log("Player movement and camera locked.");
 
         // Desactiva el control de cámara por ratón
         Camera cam = GetComponentInChildren<Camera>();
@@ -150,7 +206,6 @@ private Vector3 grabOffset;
     {
         movementLocked = false;
         cameraLocked = false;
-        Debug.Log("Player movement and camera unlocked.");
 
         // Reactiva el control de cámara por ratón
         Camera cam = GetComponentInChildren<Camera>();
@@ -219,4 +274,26 @@ private Vector3 grabOffset;
                 camVision.enabled = true;
         }
     }
+
+    void OnGUI()
+{
+    if (showGrabPoint)
+    {
+        float size = 16f;
+        Rect rect = new Rect((Screen.width - size) / 2, (Screen.height - size) / 2, size, size);
+        Color prevColor = GUI.color;
+        GUI.color = grabPointColor;
+        GUI.DrawTexture(rect, Texture2D.whiteTexture);
+        GUI.color = prevColor;
+    }
+    if (showInteractablePoint)
+    {
+        float size = 16f;
+        Rect rect = new Rect((Screen.width - size) / 2, (Screen.height - size) / 2, size, size);
+        Color prevColor = GUI.color;
+        GUI.color = interactablePointColor;
+        GUI.DrawTexture(rect, Texture2D.whiteTexture);
+        GUI.color = prevColor;
+    }
+}
 }

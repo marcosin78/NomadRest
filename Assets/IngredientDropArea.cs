@@ -18,6 +18,12 @@ public class IngredientDropArea : MonoBehaviour
     public float shakeMultiplier = 0.00005f; // Ajusta la sensibilidad del shake (más bajo = más lento)
 
     public BeerMinigameScript beerMinigameScript; // Asigna en el inspector
+
+    //Logica de Sprites
+    public Sprite closedShakerSprite;
+    public Sprite openShakerSprite;
+
+    public GameObject shakerSprite;
     void Awake()
     {
         rb = GetComponent<Rigidbody2D>();
@@ -28,10 +34,8 @@ public class IngredientDropArea : MonoBehaviour
         rb.mass = mass;
         rb.gravityScale = 0f;
         rb.constraints = RigidbodyConstraints2D.FreezeRotation;
-        rb.linearDamping = 10f; // Alto damping para frenar rápido
-        initialPosition = transform.position; // Solo se asigna una vez
-
-        Debug.Log("IngredientDropArea initial position set to: " + initialPosition);
+        rb.linearDamping = 10f;
+        initialPosition = transform.position;
     }
 
     void Update()
@@ -103,6 +107,40 @@ public class IngredientDropArea : MonoBehaviour
             }
             lastPosition = transform.position;
         }
+
+        // --- Cambia el sprite según si hay un IngredientButton cerca ---
+    bool ingredientNear = false;
+    float checkRadius = 100f; // Ajusta según tu escala de UI
+
+    // Busca todos los IngredientButton activos en la escena
+    var allButtons = FindObjectsOfType<IngredientButton>();
+    Debug.Log("Número de IngredientButtons encontrados: " + allButtons.Length);
+    Vector2 dropAreaScreenPos = RectTransformUtility.WorldToScreenPoint(null, transform.position);
+
+    foreach (var btn in allButtons)
+    {
+        if (btn != null && btn.gameObject.activeInHierarchy)
+        {
+            Vector2 btnScreenPos = RectTransformUtility.WorldToScreenPoint(null, btn.transform.position);
+            float dist = Vector2.Distance(btnScreenPos, dropAreaScreenPos);
+            if (dist < checkRadius)
+            {
+                ingredientNear = true;
+                Debug.Log("Ingrediente cercano detectado: " + btn.name);
+                break;
+            }
+        }
+    }
+
+        if (shakerSprite != null)
+        {
+       var img = shakerSprite.GetComponent<Image>();
+        if (img != null)
+        {
+            img.sprite = ingredientNear ? openShakerSprite : closedShakerSprite;
+        }
+        }
+    
     }
 
     // Comprueba si el puntero está sobre este UI (DropArea)
@@ -193,7 +231,7 @@ public class IngredientDropArea : MonoBehaviour
                     btn.originalParent = info.originalParent;
                     btn.originalSiblingIndex = info.originalSiblingIndex;
                     btn.originalLocalPosition = info.originalLocalPosition;
-                    btn.AnimateReturnToOriginal();
+                    btn.AnimateReturnToOriginal(true); // <-- instantáneo
                 }
                 else
                 {
@@ -270,4 +308,26 @@ public class IngredientDropArea : MonoBehaviour
             Debug.Log("Reset IngredientDropArea to initial position. no Rigidbody found.");
         }
     }
+
+    /*void OnGUI()  //VER EL RADIO DE DETECCIÓN DE INGREDIENTES CERCANOS
+{
+    // Visualiza el radio de detección en pantalla
+    float checkRadius = 100f; // Usa el mismo valor que en Update
+    Vector2 dropAreaScreenPos = RectTransformUtility.WorldToScreenPoint(null, transform.position);
+
+    // Ajusta el círculo para que esté centrado
+    Rect rect = new Rect(dropAreaScreenPos.x - checkRadius, 
+                         Screen.height - dropAreaScreenPos.y - checkRadius, 
+                         checkRadius * 2, 
+                         checkRadius * 2);
+
+    // Color y transparencia del círculo
+    Color prevColor = GUI.color;
+    GUI.color = new Color(0, 1, 0, 0.2f); // Verde translúcido
+
+    // Dibuja el círculo (realmente es una textura cuadrada, pero sirve para debug)
+    GUI.DrawTexture(rect, Texture2D.whiteTexture);
+
+    GUI.color = prevColor;
+}*/
 }

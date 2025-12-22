@@ -11,6 +11,8 @@ public class IngredientButton : MonoBehaviour, IBeginDragHandler, IDragHandler, 
     public Image ingredientImage;
     public TextMeshProUGUI cantidadText;
 
+    
+
     [HideInInspector] public Transform originalParent;
     [HideInInspector] public int originalSiblingIndex;
     [HideInInspector] public Vector3 originalLocalPosition;
@@ -21,6 +23,8 @@ public class IngredientButton : MonoBehaviour, IBeginDragHandler, IDragHandler, 
     private Vector3 targetScale; // Añade esto arriba
     public Image buttonImage; // Añade esta línea arriba para referenciar la imagen del botón
     private Coroutine returnRoutine;
+
+    public bool IsReturning => returnRoutine != null;
 
     void Start()
     {
@@ -199,6 +203,14 @@ public class IngredientButton : MonoBehaviour, IBeginDragHandler, IDragHandler, 
 
         while (elapsed < duration)
         {
+            // --- NUEVO: Si el objeto se desactiva, sal de la corrutina ---
+            if (!gameObject.activeInHierarchy)
+            {
+                Debug.Log("IngredientButton desactivado durante la animación de retorno. Saliendo de la corrutina.");
+                yield break;
+            }
+                
+
             float t = elapsed / duration;
             transform.position = Vector3.Lerp(startPos, endPos, t);
 
@@ -309,14 +321,41 @@ public class IngredientButton : MonoBehaviour, IBeginDragHandler, IDragHandler, 
         // Puedes poner un umbral si quieres limitar el efecto solo cuando está cerca
         return nearest;
     }
-    public void AnimateReturnToOriginal()
+    public void AnimateReturnToOriginal(bool instant = false)
     {
         gameObject.SetActive(true); // Asegura que está activo antes de animar
+
+        // Detén cualquier animación pendiente
+        if (returnRoutine != null)
+        {
+            StopCoroutine(returnRoutine);
+            returnRoutine = null;
+        }
+
+        // Cambia el padre antes de ajustar la posición local
         transform.SetParent(originalParent, false);
         transform.SetSiblingIndex(originalSiblingIndex);
+
+        // Coloca la posición y escala originales
         transform.localPosition = originalLocalPosition;
+        if (ingredientImage != null)
+            ingredientImage.rectTransform.localScale = originalScale;
+        if (buttonImage != null)
+            buttonImage.rectTransform.localScale = originalScale;
+        targetScale = originalScale;
+
+        // No inicies animación si es instantáneo
+        if (!instant)
+            returnRoutine = StartCoroutine(SmoothReturn());
+    }
+
+    void OnDisable()
+    {
         if (returnRoutine != null)
+        {
             StopCoroutine(returnRoutine);
-        returnRoutine = StartCoroutine(SmoothReturn());
+            Debug.Log("IngredientButton desactivado. Corrutina de retorno detenida.");
+            returnRoutine = null;
+        }
     }
 }

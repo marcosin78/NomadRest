@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class MopScript : MonoBehaviour, IGrabbable
+public class MopScript : MonoBehaviour
 {
     public bool grabbingMop = false;
     PlayerController playerController;
@@ -89,8 +89,4 @@ public class MopScript : MonoBehaviour, IGrabbable
         float distance = Vector3.Distance(transform.position, playerController.transform.position);
         return distance < 2f;
     }
-}
-
-internal interface IGrabbable
-{
 }

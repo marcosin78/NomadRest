@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -70,26 +71,47 @@ public class BeerMinigameScript : MonoBehaviour
 
     void Update()
     {
-        // Cerrar el minijuego con Q
         if (minigameCanvas != null && minigameCanvas.activeSelf)
         {
             if (Input.GetKeyDown(KeyCode.Q))
             {
-                minigameCanvas.SetActive(false);
-                HideAndLockCursor();
-
-                // Limpiar solo los IngredientDropArea hijos de minigameIngredientsRoot
-                if (minigameIngredientsRoot != null)
+                StartCoroutine(CloseMinigameWhenButtonsFinish());
+            }
+        }
+    }
+    
+    private IEnumerator CloseMinigameWhenButtonsFinish()
+    {
+        if (minigameIngredientsRoot != null)
+        {
+            var dropAreas = minigameIngredientsRoot.GetComponentsInChildren<IngredientDropArea>(true);
+            foreach (var area in dropAreas)
+            {
+                foreach (var info in area.movedIngredientButtons)
                 {
-                    var dropAreas = minigameIngredientsRoot.GetComponentsInChildren<IngredientDropArea>(true);
-                    foreach (var area in dropAreas)
+                    if (info.buttonTransform != null)
                     {
-                        area.ClearIngredients();
+                        var btn = info.buttonTransform.GetComponent<IngredientButton>();
+                        if (btn != null)
+                            btn.AnimateReturnToOriginal(); // Animación normal
                     }
-                }else
-                {
-                    Debug.LogWarning("minigameIngredientsRoot no asignado.");
                 }
+            }
+        }
+
+        // Espera a que todas las animaciones terminen
+        yield return StartCoroutine(WaitForAllIngredientButtonsToFinish());
+
+        // Ahora sí, desactiva el canvas y limpia
+        minigameCanvas.SetActive(false);
+        HideAndLockCursor();
+
+        if (minigameIngredientsRoot != null)
+        {
+            var dropAreas = minigameIngredientsRoot.GetComponentsInChildren<IngredientDropArea>(true);
+            foreach (var area in dropAreas)
+            {
+                area.ClearIngredients();
             }
         }
     }
@@ -176,4 +198,59 @@ public class BeerMinigameScript : MonoBehaviour
         if (playerController != null)
             playerController.UnlockAll();
     }
+    private IEnumerator WaitForAllIngredientButtonsToFinish()
+{
+    bool anyRunning = false;
+
+    if (minigameIngredientsRoot != null)
+    {
+        var dropAreas = minigameIngredientsRoot.GetComponentsInChildren<IngredientDropArea>(true);
+        foreach (var area in dropAreas)
+        {
+            foreach (var info in area.movedIngredientButtons)
+            {
+                if (info.buttonTransform != null)
+                {
+                    var btn = info.buttonTransform.GetComponent<IngredientButton>();
+                    if (btn != null && btn.IsReturning)
+                    {
+                        anyRunning = true;
+                        break;
+                    }
+                }
+            }
+            if (anyRunning) break;
+        }
+    }
+
+    // Solo entra al bucle si hay alguno retornando
+    while (anyRunning)
+    {
+        Debug.Log("Esperando a que todos los IngredientButton terminen sus corrutinas de retorno...");
+        anyRunning = false;
+        if (minigameIngredientsRoot != null)
+        {
+            var dropAreas = minigameIngredientsRoot.GetComponentsInChildren<IngredientDropArea>(true);
+            foreach (var area in dropAreas)
+            {
+                foreach (var info in area.movedIngredientButtons)
+                {
+                    if (info.buttonTransform != null)
+                    {
+                        var btn = info.buttonTransform.GetComponent<IngredientButton>();
+                        if (btn != null && btn.IsReturning)
+                        {
+                            anyRunning = true;
+                            break;
+                        }
+                    }
+                }
+                if (anyRunning) break;
+            }
+        }
+        if (anyRunning)
+            yield return null; // Espera un frame
+    }
+}
+
 }
