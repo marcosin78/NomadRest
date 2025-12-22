@@ -119,11 +119,6 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
---- !u!1 &141680160 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 5228591866897996986, guid: adc4e8888e1bf764492258e04fd7db12, type: 3}
-  m_PrefabInstance: {fileID: 2678688113803821026}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &170716092
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -420,6 +415,113 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 1e60ae27b0a56da4798c936b8c0afaa3, type: 3}
+--- !u!1 &654987628 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 8830523114304513272, guid: 098a9b4eb4abe7244bb81966a16d1a02, type: 3}
+  m_PrefabInstance: {fileID: 1224192079}
+  m_PrefabAsset: {fileID: 0}
+--- !u!82 &654987636
+AudioSource:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 654987628}
+  m_Enabled: 1
+  serializedVersion: 4
+  OutputAudioMixerGroup: {fileID: 0}
+  m_audioClip: {fileID: 0}
+  m_Resource: {fileID: 8300000, guid: 8555ce3400d876345a7b412dddb3183d, type: 3}
+  m_PlayOnAwake: 0
+  m_Volume: 1
+  m_Pitch: 1
+  Loop: 0
+  Mute: 0
+  Spatialize: 0
+  SpatializePostEffects: 0
+  Priority: 128
+  DopplerLevel: 1
+  MinDistance: 1
+  MaxDistance: 500
+  Pan2D: 0
+  rolloffMode: 0
+  BypassEffects: 0
+  BypassListenerEffects: 0
+  BypassReverbZones: 0
+  rolloffCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 1
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  panLevelCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  spreadCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  reverbZoneMixCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+--- !u!82 &660046991 stripped
+AudioSource:
+  m_CorrespondingSourceObject: {fileID: 2771853718822666674, guid: 098a9b4eb4abe7244bb81966a16d1a02, type: 3}
+  m_PrefabInstance: {fileID: 1224192079}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &832575517
 GameObject:
   m_ObjectHideFlags: 0
@@ -865,6 +967,14 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 4724239550157619625, guid: 098a9b4eb4abe7244bb81966a16d1a02, type: 3}
+      propertyPath: insideAudioSource
+      value: 
+      objectReference: {fileID: 654987636}
+    - target: {fileID: 4724239550157619625, guid: 098a9b4eb4abe7244bb81966a16d1a02, type: 3}
+      propertyPath: outsideAudioSource
+      value: 
+      objectReference: {fileID: 0}
     - target: {fileID: 4818371246567232927, guid: 098a9b4eb4abe7244bb81966a16d1a02, type: 3}
       propertyPath: m_TagString
       value: DayText
@@ -880,19 +990,22 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 8830523114304513272, guid: 098a9b4eb4abe7244bb81966a16d1a02, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 654987636}
   m_SourcePrefab: {fileID: 100100000, guid: 098a9b4eb4abe7244bb81966a16d1a02, type: 3}
---- !u!114 &1412684853 stripped
+--- !u!114 &1412684856 stripped
 MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 161457078478586509, guid: adc4e8888e1bf764492258e04fd7db12, type: 3}
+  m_CorrespondingSourceObject: {fileID: 5395277241149489953, guid: adc4e8888e1bf764492258e04fd7db12, type: 3}
   m_PrefabInstance: {fileID: 2678688113803821026}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b927527c8c3d8da41b647608c0d4e164, type: 3}
+  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::IngredientDropArea
+  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
 --- !u!1 &1455067413
 GameObject:
   m_ObjectHideFlags: 0
@@ -1609,21 +1722,13 @@ PrefabInstance:
     m_TransformParent: {fileID: 0}
     m_Modifications:
     - target: {fileID: 161457078478586509, guid: adc4e8888e1bf764492258e04fd7db12, type: 3}
-      propertyPath: mass
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 161457078478586509, guid: adc4e8888e1bf764492258e04fd7db12, type: 3}
-      propertyPath: shakerSprite
+      propertyPath: playerAudioSource
       value: 
-      objectReference: {fileID: 141680160}
+      objectReference: {fileID: 660046991}
     - target: {fileID: 161457078478586509, guid: adc4e8888e1bf764492258e04fd7db12, type: 3}
-      propertyPath: openShakerSprite
+      propertyPath: shakerFillSoundClip
       value: 
-      objectReference: {fileID: 2093960670, guid: 9d036ea60476b884f8c5e45f780e9c77, type: 3}
-    - target: {fileID: 161457078478586509, guid: adc4e8888e1bf764492258e04fd7db12, type: 3}
-      propertyPath: closedShakerSprite
-      value: 
-      objectReference: {fileID: 1873389345, guid: 4c3cd742f9ef3cf419fe8f4ffdf8585e, type: 3}
+      objectReference: {fileID: 8300000, guid: d513fe0749e283348a32b2d7dd488421, type: 3}
     - target: {fileID: 593885174453655255, guid: adc4e8888e1bf764492258e04fd7db12, type: 3}
       propertyPath: m_SizeDelta.x
       value: 200
@@ -1676,34 +1781,42 @@ PrefabInstance:
       propertyPath: m_Name
       value: BeerDispenser
       objectReference: {fileID: 0}
-    - target: {fileID: 2015390349249515627, guid: adc4e8888e1bf764492258e04fd7db12, type: 3}
-      propertyPath: m_TagString
-      value: Interactable
+    - target: {fileID: 2357287563320700938, guid: adc4e8888e1bf764492258e04fd7db12, type: 3}
+      propertyPath: playerController
+      value: 
+      objectReference: {fileID: 618863547}
+    - target: {fileID: 2357287563320700938, guid: adc4e8888e1bf764492258e04fd7db12, type: 3}
+      propertyPath: playerInteractor
+      value: 
+      objectReference: {fileID: 618863545}
+    - target: {fileID: 5192355418075505036, guid: adc4e8888e1bf764492258e04fd7db12, type: 3}
+      propertyPath: playerController
+      value: 
+      objectReference: {fileID: 618863547}
+    - target: {fileID: 5192355418075505036, guid: adc4e8888e1bf764492258e04fd7db12, type: 3}
+      propertyPath: playerInteractor
+      value: 
+      objectReference: {fileID: 618863545}
+    - target: {fileID: 7598246677169134058, guid: adc4e8888e1bf764492258e04fd7db12, type: 3}
+      propertyPath: m_TargetGraphic
+      value: 
+      objectReference: {fileID: 1412684856}
+    - target: {fileID: 8104512058143660585, guid: adc4e8888e1bf764492258e04fd7db12, type: 3}
+      propertyPath: m_Size.x
+      value: 1.7031372
       objectReference: {fileID: 0}
-    - target: {fileID: 2357287563320700938, guid: adc4e8888e1bf764492258e04fd7db12, type: 3}
-      propertyPath: playerController
-      value: 
-      objectReference: {fileID: 618863547}
-    - target: {fileID: 2357287563320700938, guid: adc4e8888e1bf764492258e04fd7db12, type: 3}
-      propertyPath: playerInteractor
-      value: 
-      objectReference: {fileID: 618863545}
-    - target: {fileID: 2357287563320700938, guid: adc4e8888e1bf764492258e04fd7db12, type: 3}
-      propertyPath: ingredientDropArea
-      value: 
-      objectReference: {fileID: 1412684853}
-    - target: {fileID: 5192355418075505036, guid: adc4e8888e1bf764492258e04fd7db12, type: 3}
-      propertyPath: playerController
-      value: 
-      objectReference: {fileID: 618863547}
-    - target: {fileID: 5192355418075505036, guid: adc4e8888e1bf764492258e04fd7db12, type: 3}
-      propertyPath: playerInteractor
-      value: 
-      objectReference: {fileID: 618863545}
-    - target: {fileID: 7439595466430884470, guid: adc4e8888e1bf764492258e04fd7db12, type: 3}
-      propertyPath: m_Sprite
-      value: 
-      objectReference: {fileID: 1873389345, guid: 4c3cd742f9ef3cf419fe8f4ffdf8585e, type: 3}
+    - target: {fileID: 8104512058143660585, guid: adc4e8888e1bf764492258e04fd7db12, type: 3}
+      propertyPath: m_Size.z
+      value: 3.883233
+      objectReference: {fileID: 0}
+    - target: {fileID: 8104512058143660585, guid: adc4e8888e1bf764492258e04fd7db12, type: 3}
+      propertyPath: m_Center.x
+      value: 0.8201331
+      objectReference: {fileID: 0}
+    - target: {fileID: 8104512058143660585, guid: adc4e8888e1bf764492258e04fd7db12, type: 3}
+      propertyPath: m_Center.z
+      value: -1.1276612
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -1909,7 +2022,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: '::'
   beerLiquidPrefab: {fileID: 3116334735027170204, guid: c238606fcb4ca044b9f9e54b0dc34ef3, type: 3}
   throwForce: 1.5
-  throwBeerQuantity: 100
+  throwBeerQuantity: 150
   angleRange: 40
   angleOffset: 10
   destroyDelay: 1

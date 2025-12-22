@@ -7,7 +7,6 @@ public class IngredientDropArea : MonoBehaviour
     
     //SCRIPT PARA EL ÁREA DONDE SE SUELTAN LOS INGREDIENTES Y SE AGITA EL CÓCTEL
     //PENDIENTE DE MODIFICAR EL COCTEL SE CREA MUY RAPIDO.
-
     private bool isDragging = false;
     private Vector3 offset;
     private Vector3 lastPosition;
@@ -22,8 +21,10 @@ public class IngredientDropArea : MonoBehaviour
     //Logica de Sprites
     public Sprite closedShakerSprite;
     public Sprite openShakerSprite;
-
     public GameObject shakerSprite;
+
+    public AudioSource playerAudioSource;
+    public AudioClip shakerFillSoundClip;
     void Awake()
     {
         rb = GetComponent<Rigidbody2D>();
@@ -36,6 +37,7 @@ public class IngredientDropArea : MonoBehaviour
         rb.constraints = RigidbodyConstraints2D.FreezeRotation;
         rb.linearDamping = 10f;
         initialPosition = transform.position;
+
     }
 
     void Update()
@@ -114,7 +116,6 @@ public class IngredientDropArea : MonoBehaviour
 
     // Busca todos los IngredientButton activos en la escena
     var allButtons = FindObjectsOfType<IngredientButton>();
-    Debug.Log("Número de IngredientButtons encontrados: " + allButtons.Length);
     Vector2 dropAreaScreenPos = RectTransformUtility.WorldToScreenPoint(null, transform.position);
 
     foreach (var btn in allButtons)
@@ -126,7 +127,6 @@ public class IngredientDropArea : MonoBehaviour
             if (dist < checkRadius)
             {
                 ingredientNear = true;
-                Debug.Log("Ingrediente cercano detectado: " + btn.name);
                 break;
             }
         }
@@ -189,6 +189,10 @@ public class IngredientDropArea : MonoBehaviour
             return false;
         }
 
+            // --- Reproducir sonido al añadir ingrediente ---
+        if (playerAudioSource != null && shakerFillSoundClip != null)
+        playerAudioSource.PlayOneShot(shakerFillSoundClip);
+
         string tipo = data.ingredientType;
         foreach (int addedId in addedIngredientIDs)
         {
@@ -203,6 +207,9 @@ public class IngredientDropArea : MonoBehaviour
         addedIngredientIDs.Add(id);
 
         // NO muevas ni ocultes el botón aquí
+
+        if (playerAudioSource != null && shakerFillSoundClip != null)
+        playerAudioSource.PlayOneShot(shakerFillSoundClip);
 
         // Solo añade el sprite visual al área
         GameObject imgObj = new GameObject("AddedIngredient");

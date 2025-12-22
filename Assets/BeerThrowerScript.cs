@@ -5,9 +5,7 @@ public class BeerThrowerScript : MonoBehaviour
 {
     public GameObject beerLiquidPrefab;
     BeerDispenserScript BeerDispenserScript;
-
     LiquidDetector liquidDetector;
-
     PlayerController player;
     MoveArmScript moveArm;
     public float throwForce = 0.3f;

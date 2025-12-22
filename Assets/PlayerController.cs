@@ -244,7 +244,6 @@ private Vector3 grabOffset;
     public void LockCamera()
     {
         cameraLocked = true;
-        Debug.Log("Camera locked.");
 
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
@@ -261,7 +260,6 @@ private Vector3 grabOffset;
     public void UnlockCamera()
     {
         cameraLocked = false;
-        Debug.Log("Camera unlocked.");
 
         Cursor.lockState = CursorLockMode.None;
         Cursor.visible = false;
