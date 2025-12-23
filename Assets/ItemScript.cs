@@ -14,6 +14,10 @@ public class ItemScript : MonoBehaviour
     [Header("Datos del item")]
     public int id; // Solo el ID es público
 
+        [Header("Audio")]
+    public AudioSource audioSource;
+    public AudioClip botonAudioClip;
+
     private ItemData data;
     public int cantidadInventario = 0;
     public int cantidadComprar = 0;
@@ -27,15 +31,23 @@ public class ItemScript : MonoBehaviour
         {
             cantidadComprar++;
             UpdateUI();
+            PlayButtonAudio();
         });
 
         restarButton.onClick.AddListener(() =>
         {
             cantidadComprar = Mathf.Max(0, cantidadComprar - 1);
             UpdateUI();
+            PlayButtonAudio();
         });
     }
-
+        private void PlayButtonAudio()
+    {
+        if (audioSource != null && botonAudioClip != null)
+        {
+            audioSource.PlayOneShot(botonAudioClip);
+        }
+    }
     public void UpdateUI()
     {
         if (data != null)

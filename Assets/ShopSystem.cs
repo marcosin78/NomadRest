@@ -14,6 +14,10 @@ public class ShopSystem : MonoBehaviour, IInteractable
     public List<ItemData> itemDataList = new List<ItemData>();
     public ItemScript[] itemPrefabs; // Prefabs de UI, asignados en el Inspector
 
+        [Header("Audio")]
+    public AudioClip interactAudioClip;
+    public AudioClip endInteractAudioClip;
+
     public void Start()
     {
         shopMenuUI = GameObject.Find("ShopCanvas");
@@ -128,6 +132,8 @@ public class ShopSystem : MonoBehaviour, IInteractable
     // Desbloquea y muestra el ratón
     Cursor.lockState = CursorLockMode.None;
     Cursor.visible = true;
+
+    AudioManager.Instance.PlaySound(interactAudioClip);
     }
     public void OnEndInteract()
     {
@@ -136,5 +142,9 @@ public class ShopSystem : MonoBehaviour, IInteractable
         // Bloquea y oculta el ratón
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
+
+        AudioManager.Instance.PlaySound(endInteractAudioClip);
+
     }
+
 }
