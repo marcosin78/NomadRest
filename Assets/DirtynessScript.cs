@@ -11,6 +11,15 @@ public class DirtynessScript : MonoBehaviour
     public GameObject[] stainPrefabs; // Prefabs de manchas (sprites o planos con sprite)
     public GameObject trashBin; // Contenedor de basura para recoger suciedad
 
+
+    [Header("Partícula de limpieza")]
+    public ParticleSystem cleanParticlePrefab; // Asigna un prefab de partícula de polvo
+
+    [Header("Sonidos de limpieza")]
+
+    public AudioClip cleanSoundClip; // Asigna un clip de sonido de limpieza
+
+
     public float cleanTime = 2f; // Segundos necesarios para limpiar la mancha
     private float cleaningTimer = 0f;
     private bool isCleaning = false;
@@ -110,11 +119,9 @@ public class DirtynessScript : MonoBehaviour
 
     void StartCleaning()
 {
-    // Comprueba si el jugador tiene la mopa equipada
     MopScript mop = FindObjectOfType<MopScript>();
     if (mop == null || !mop.grabbingMop)
     {
-        // Si no tiene la mopa, no puede limpiar
         ResetCleaning();
         return;
     }
@@ -123,15 +130,23 @@ public class DirtynessScript : MonoBehaviour
     RaycastHit hit;
     if (Physics.Raycast(ray, out hit, 3f))
     {
-        //Aqui se puede añadir más lógica para detectar si el objeto es limpiable
-        if (hit.collider.gameObject == GameObject.FindWithTag("Dirt"))
+        if (hit.collider.CompareTag("Dirt"))
         {
+            if (!isCleaning)
+            {
+                AudioManager.Instance.PlaySound(cleanSoundClip); // Solo al empezar
+                ParticleSystem particle = Instantiate(cleanParticlePrefab, hit.point, Quaternion.identity);
+                particle.Play();
+            }
+
             isCleaning = true;
             cleaningTimer += Time.deltaTime;
+
             Debug.Log("Cleaning timer: " + cleaningTimer);
+
             if (cleaningTimer >= cleanTime)
             {
-                CleanDirt(GameObject.FindWithTag("Dirt"));
+                CleanDirt(hit.collider.gameObject);
                 cleaningTimer = 0f;
                 isCleaning = false;
             }

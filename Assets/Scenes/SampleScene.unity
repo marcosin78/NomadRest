@@ -2081,6 +2081,14 @@ PrefabInstance:
       propertyPath: m_SizeDelta.y
       value: 200
       objectReference: {fileID: 0}
+    - target: {fileID: 1181174570513844584, guid: adc4e8888e1bf764492258e04fd7db12, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0.49384582
+      objectReference: {fileID: 0}
+    - target: {fileID: 1181174570513844584, guid: adc4e8888e1bf764492258e04fd7db12, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0.6711278
+      objectReference: {fileID: 0}
     - target: {fileID: 1203528127695080145, guid: adc4e8888e1bf764492258e04fd7db12, type: 3}
       propertyPath: m_LocalPosition.x
       value: 8.43499
@@ -2411,11 +2419,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7748661827531447389, guid: 3195a4a53b786a546a318eaad9478727, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 11.51
+      value: 10.98
       objectReference: {fileID: 0}
     - target: {fileID: 7748661827531447389, guid: 3195a4a53b786a546a318eaad9478727, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0.5
+      value: 0.42
       objectReference: {fileID: 0}
     - target: {fileID: 7748661827531447389, guid: 3195a4a53b786a546a318eaad9478727, type: 3}
       propertyPath: m_LocalPosition.z
@@ -2665,6 +2673,14 @@ PrefabInstance:
       propertyPath: trashBin
       value: 
       objectReference: {fileID: 1938569193}
+    - target: {fileID: 2840075974264383132, guid: c0b17b8a2b8919842bfbd23c49ebdce3, type: 3}
+      propertyPath: cleanSoundClip
+      value: 
+      objectReference: {fileID: 8300000, guid: 1bacab1e2bae89342bb32d4d06ca1f7e, type: 3}
+    - target: {fileID: 2840075974264383132, guid: c0b17b8a2b8919842bfbd23c49ebdce3, type: 3}
+      propertyPath: cleanParticlePrefab
+      value: 
+      objectReference: {fileID: 2388585936150607532, guid: 7919ecd74d260fd4ab414e4a472822a8, type: 3}
     - target: {fileID: 2840075974264383132, guid: c0b17b8a2b8919842bfbd23c49ebdce3, type: 3}
       propertyPath: 'stainPrefabs.Array.data[0]'
       value: 

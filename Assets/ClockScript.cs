@@ -30,7 +30,7 @@ public class ClockScript : MonoBehaviour
     private int hour;
     private int minute;
     private float timer;
-    private int day = 1;
+    private int day = 0;
 
     public bool FallingAsleep { get; private set; } = false;
 
