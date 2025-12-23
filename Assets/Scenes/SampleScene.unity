@@ -2130,6 +2130,10 @@ PrefabInstance:
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 2357287563320700938, guid: adc4e8888e1bf764492258e04fd7db12, type: 3}
+      propertyPath: openingAudioClip
+      value: 
+      objectReference: {fileID: 8300000, guid: 8f30bb0515f3d934cbcd4d0a4d37913f, type: 3}
+    - target: {fileID: 2357287563320700938, guid: adc4e8888e1bf764492258e04fd7db12, type: 3}
       propertyPath: playerController
       value: 
       objectReference: {fileID: 618863547}
@@ -2165,6 +2169,10 @@ PrefabInstance:
       propertyPath: m_Center.z
       value: -1.1276612
       objectReference: {fileID: 0}
+    - target: {fileID: 8216163552544231150, guid: adc4e8888e1bf764492258e04fd7db12, type: 3}
+      propertyPath: openingAudioClip
+      value: 
+      objectReference: {fileID: 8300000, guid: 8f30bb0515f3d934cbcd4d0a4d37913f, type: 3}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []

@@ -13,6 +13,9 @@ public class BeerDispenserScript : MonoBehaviour, IInteractable
     public BeerMinigameScript beerMinigameScript; // Asigna en el inspector
 
 
+        [Header("Audio")]
+        public AudioClip openingAudioClip;
+
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
@@ -41,6 +44,7 @@ public class BeerDispenserScript : MonoBehaviour, IInteractable
         if (beerMinigameScript != null)
         {
             beerMinigameScript.StartMinigame(this);
+            AudioManager.Instance.PlaySound(openingAudioClip);
         }
         else
         {
