@@ -16,6 +16,7 @@ MonoBehaviour:
   - text: TEXTITO
     choices: []
     nextNodeIndex: 1
+    nextDialogTree: {fileID: 0}
   - text: 
     choices:
     - choiceText: Opcion1
@@ -25,12 +26,16 @@ MonoBehaviour:
       nextNodeIndex: 3
       unlockKey: 
     nextNodeIndex: 1
+    nextDialogTree: {fileID: 0}
   - text: Seleccionada Opcion1 finalizando texto
     choices: []
     nextNodeIndex: 1
+    nextDialogTree: {fileID: 0}
   - text: Seleccionada Opcion2 finalizando texto
     choices: []
     nextNodeIndex: 5
+    nextDialogTree: {fileID: 0}
   - text: Fin de texto
     choices: []
     nextNodeIndex: -1
+    nextDialogTree: {fileID: 11400000, guid: 307b70a5816df194596fba2922b1dad9, type: 2}

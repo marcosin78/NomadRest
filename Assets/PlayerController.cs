@@ -276,7 +276,7 @@ private Vector3 grabOffset;
 
     //DIALOG CAMERA INDICATORS
 
-    private float originalSensitivity = 500f;
+    private float originalSensitivity = CamaraVision.sensibilidad;
     private float dialogSensitivity = 0.05f; // Sensibilidad muy baja para diálogos
 
     public void UnlockCursorAndLowerSensitivity()
@@ -293,9 +293,9 @@ private Vector3 grabOffset;
         {
             // Guarda la sensibilidad original solo la primera vez
             if (Mathf.Approximately(originalSensitivity, 1f))
-                originalSensitivity = camVision.sensibilidad;
+                originalSensitivity = CamaraVision.sensibilidad;
 
-            camVision.sensibilidad = dialogSensitivity;
+            CamaraVision.sensibilidad = dialogSensitivity;
         }
     }
 }
@@ -312,7 +312,7 @@ public void LockCursorAndRestoreSensitivity()
         var camVision = cam.GetComponent<CamaraVision>();
         if (camVision != null)
         {
-            camVision.sensibilidad = originalSensitivity;
+            CamaraVision.sensibilidad = originalSensitivity;
         }
     }
 }

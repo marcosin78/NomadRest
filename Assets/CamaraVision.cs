@@ -3,7 +3,7 @@ using UnityEngine;
 public class CamaraVision : MonoBehaviour
 {
 
-    public float sensibilidad=500f;
+    public static float sensibilidad=400f;
     public Transform playerBody; // Assign the player object in the inspector
     float xRotation = 0f;
     float yRotation = 0f;

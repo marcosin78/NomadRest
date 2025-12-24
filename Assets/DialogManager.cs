@@ -1,16 +1,15 @@
 using UnityEngine;
 using TMPro;
 using UnityEngine.UI;
+using System.Collections;
 
 public class DialogManager : MonoBehaviour, IInteractable
 {
 
     private static PlayerController playerController;
     public DialogTree dialogTree;
-
     private static Canvas dialogCanvas;
     private static TextMeshProUGUI dialogText;
-
     private int currentNodeIndex = 0;
     private bool isDialogActive = false;
 
@@ -19,9 +18,15 @@ public class DialogManager : MonoBehaviour, IInteractable
     public float maxDialogDistance = 5f;
     public float maxDialogAngle = 70f;
 
+    private Coroutine typingCoroutine;
+    public float typingSpeed = 0.03f; // Tiempo entre letras
+
     // Cambios aquí: static y búsqueda automática
     public static Transform decisionButtonsParent;
     public static Button[] decisionButtons;
+
+    private bool isTyping = false;
+    private string currentFullText = "";
 
     void Start()
     {
@@ -52,7 +57,6 @@ public class DialogManager : MonoBehaviour, IInteractable
             }
 
         }
-            
 
         // Busca los botones hijos solo si el parent fue encontrado
         if (decisionButtons == null && decisionButtonsParent != null)
@@ -90,6 +94,7 @@ public class DialogManager : MonoBehaviour, IInteractable
                 playerTransform = playerObj.transform;
         }
     }
+
     void Awake()
     {
       
@@ -113,8 +118,15 @@ public class DialogManager : MonoBehaviour, IInteractable
         if (dialogTree != null && dialogTree.nodes != null && currentNodeIndex < dialogTree.nodes.Length)
         {
             var node = dialogTree.nodes[currentNodeIndex];
+
             if (dialogText != null)
-                dialogText.text = node.text;
+            {
+                // Detén cualquier corutina anterior
+                if (typingCoroutine != null)
+                    StopCoroutine(typingCoroutine);
+
+                typingCoroutine = StartCoroutine(TypeTextEffect(node.text));
+            }
 
             // Si hay decisiones, muestra los botones
             if (node.choices != null && node.choices.Length > 0 && decisionButtons != null)
@@ -143,11 +155,20 @@ public class DialogManager : MonoBehaviour, IInteractable
                 playerController.LockCursorAndRestoreSensitivity();
 
             }
+
+            // --- NUEVO: Si el nodo tiene un siguiente DialogTree, lo carga ---
+            if (node.nextDialogTree != null)
+            {
+                Debug.Log("Cargando nuevo DialogTree desde el nodo...");
+                StartDialog(node.nextDialogTree, interactingEntity);
+                return; // Importante: evita mostrar el nodo actual, ya que cambiamos de árbol
+            }
         }
         else
         {
             EndDialog();
-            playerController.LockCursorAndRestoreSensitivity();
+            if (playerController != null)
+                playerController.LockCursorAndRestoreSensitivity();
             Debug.Log("Dialog ended: no more nodes.");
         }
     }
@@ -193,10 +214,21 @@ public class DialogManager : MonoBehaviour, IInteractable
             }
         }
 
-        // Solo avanza con click si NO hay decisiones en el nodo actual
         if (Input.GetMouseButtonDown(0))
         {
             var node = dialogTree.nodes[currentNodeIndex];
+
+            // Si está escribiendo, salta el efecto y muestra el texto completo
+            if (isTyping)
+            {
+                isTyping = false;
+                if (typingCoroutine != null)
+                    StopCoroutine(typingCoroutine);
+                dialogText.text = currentFullText;
+                return;
+            }
+
+            // Solo avanza con click si NO hay decisiones en el nodo actual
             if (node.choices == null || node.choices.Length == 0)
             {
                 currentNodeIndex++;
@@ -230,5 +262,26 @@ public class DialogManager : MonoBehaviour, IInteractable
     public string GetName()
     {
         throw new System.NotImplementedException();
+    }
+
+    public void SetDialogTree(DialogTree newTree)
+    {
+        dialogTree = newTree;
+    }
+
+    // Añade esta corutina en la clase
+    private IEnumerator TypeTextEffect(string fullText)
+    {
+        isTyping = true;
+        currentFullText = fullText;
+        dialogText.text = "";
+        foreach (char c in fullText)
+        {
+            dialogText.text += c;
+            yield return new WaitForSeconds(typingSpeed);
+            if (!isTyping) // Si se ha cancelado la escritura, termina la corutina
+                yield break;
+        }
+        isTyping = false;
     }
 }

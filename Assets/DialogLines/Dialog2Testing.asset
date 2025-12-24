@@ -13,9 +13,11 @@ MonoBehaviour:
   m_Name: Dialog2Testing
   m_EditorClassIdentifier: Assembly-CSharp::DialogTree
   nodes:
-  - text: Esto es el segundo dialogo
+  - text: Porfin has llegado
     choices: []
     nextNodeIndex: 1
+    nextDialogTree: {fileID: 0}
   - text: Fin  del segundo dialogo
     choices: []
     nextNodeIndex: -1
+    nextDialogTree: {fileID: 0}
