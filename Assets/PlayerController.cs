@@ -223,8 +223,9 @@ private Vector3 grabOffset;
         cameraLocked = true;
         Debug.Log("Player movement and camera locked above, looking at target.");
 
-        Cursor.lockState = CursorLockMode.Locked;
-        Cursor.visible = false;
+        // Desbloquea el ratón
+        Cursor.lockState = CursorLockMode.None;
+        Cursor.visible = true;
 
         // Coloca la cámara sobre el jugador y la orienta al objetivo
         Camera cam = GetComponentInChildren<Camera>();
@@ -273,6 +274,50 @@ private Vector3 grabOffset;
         }
     }
 
+    //DIALOG CAMERA INDICATORS
+
+    private float originalSensitivity = 500f;
+    private float dialogSensitivity = 0.05f; // Sensibilidad muy baja para diálogos
+
+    public void UnlockCursorAndLowerSensitivity()
+{
+    Cursor.lockState = CursorLockMode.None;
+    Cursor.visible = true;
+
+    // Si tienes un script de cámara con sensibilidad, ajústalo aquí
+    Camera cam = GetComponentInChildren<Camera>();
+    if (cam != null)
+    {
+        var camVision = cam.GetComponent<CamaraVision>();
+        if (camVision != null)
+        {
+            // Guarda la sensibilidad original solo la primera vez
+            if (Mathf.Approximately(originalSensitivity, 1f))
+                originalSensitivity = camVision.sensibilidad;
+
+            camVision.sensibilidad = dialogSensitivity;
+        }
+    }
+}
+
+// Llama a esto para volver a bloquear el ratón y restaurar la sensibilidad
+public void LockCursorAndRestoreSensitivity()
+{
+    Cursor.lockState = CursorLockMode.Locked;
+    Cursor.visible = false;
+
+    Camera cam = GetComponentInChildren<Camera>();
+    if (cam != null)
+    {
+        var camVision = cam.GetComponent<CamaraVision>();
+        if (camVision != null)
+        {
+            camVision.sensibilidad = originalSensitivity;
+        }
+    }
+}
+
+// Dibuja puntos en el centro de la pantalla para indicar objetos agarrables o interactuables
     void OnGUI()
 {
     if (showGrabPoint)

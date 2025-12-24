@@ -28,6 +28,8 @@ TagManager:
   - Stone
   - GrabbingMob
   - Interactable
+  - PlayerDialogCanvas
+  - DecisionButtonsParent
   layers:
   - Default
   - TransparentFX

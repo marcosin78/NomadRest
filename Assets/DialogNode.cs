@@ -1,16 +1,18 @@
+using UnityEngine;
+
 [System.Serializable]
 public class DialogNode
 {
+    [TextArea]
     public string text;
-    public DialogChoice[] choices;
+    public DialogChoice[] choices; // Opciones de decisión para este nodo
     public int nextNodeIndex = -1; // -1 para terminar el diálogo
 }
 
 [System.Serializable]
 public class DialogChoice
 {
-    public string choiceText;
+    public string choiceText;      // Texto que aparece en el botón
     public int nextNodeIndex = -1; // -1 si termina el diálogo
-    
-    public string unlockKey; // Clave del diálogo a desbloquear
+    public string unlockKey;       // Clave del diálogo a desbloquear (opcional)
 }
