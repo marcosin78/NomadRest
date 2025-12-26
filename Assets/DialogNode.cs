@@ -9,6 +9,8 @@ public class DialogNode
     public DialogChoice[] choices; // Opciones de decisión para este nodo
     public int nextNodeIndex = -1; // -1 para terminar el diálogo
     public DialogTree nextDialogTree; // Nuevo árbol de diálogo para cambiar
+
+    public string setNpcStateIfCondition; // Nuevo estado del NPC si se cumple la condición
 }
 
 [System.Serializable]

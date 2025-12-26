@@ -102,12 +102,13 @@ public class DialogManager : MonoBehaviour, IInteractable
 
     public void StartDialog(DialogTree tree, Transform entity = null)
     {
+        Debug.Log($"[StartDialog] Llamado con tree: {tree?.name}, entity: {entity?.name}");
         dialogTree = tree;
         currentNodeIndex = 0;
         isDialogActive = true;
         if (dialogCanvas != null)
             dialogCanvas.gameObject.SetActive(true);
-        interactingEntity = entity;
+        interactingEntity = entity; // <-- Aquí entity debe ser el NPC
         ShowCurrentNode();
     }
 
@@ -118,6 +119,24 @@ public class DialogManager : MonoBehaviour, IInteractable
         if (dialogTree != null && dialogTree.nodes != null && currentNodeIndex < dialogTree.nodes.Length)
         {
             var node = dialogTree.nodes[currentNodeIndex];
+
+            // --- INTEGRACIÓN DE CONDICIONES Y ESTADO ---
+            if (!string.IsNullOrEmpty(node.setNpcStateIfCondition) && interactingEntity != null)
+            {
+                // Comprueba si la condición se cumple
+                if (GameConditions.Instance.HasCondition(node.setNpcStateIfCondition))
+                {
+                    var npcIdentity = interactingEntity.GetComponent<NpcIdentity>();
+                    if (npcIdentity != null)
+                    {
+                        npcIdentity.SetState(node.setNpcStateIfCondition); // Cambia el estado del NPC
+                        Debug.Log($"Estado del NPC cambiado a: {node.setNpcStateIfCondition}");
+
+                        // Opcional: marca la condición como activa
+                        GameConditions.Instance.SetCondition(node.setNpcStateIfCondition);
+                    }
+                }
+            }
 
             if (dialogText != null)
             {
@@ -154,7 +173,7 @@ public class DialogManager : MonoBehaviour, IInteractable
                 if (playerController != null)
                 playerController.LockCursorAndRestoreSensitivity();
 
-            }
+            }   
 
             // --- NUEVO: Si el nodo tiene un siguiente DialogTree, lo carga ---
             if (node.nextDialogTree != null)
@@ -193,6 +212,10 @@ public class DialogManager : MonoBehaviour, IInteractable
     {
         if (!isDialogActive) return;
 
+        // --- Previene el error de índice fuera de rango ---
+        if (dialogTree == null || dialogTree.nodes == null || currentNodeIndex < 0 || currentNodeIndex >= dialogTree.nodes.Length)
+            return;
+
         if (interactingEntity != null && playerTransform != null)
         {
             float distance = Vector3.Distance(playerTransform.position, interactingEntity.position);
@@ -218,7 +241,6 @@ public class DialogManager : MonoBehaviour, IInteractable
         {
             var node = dialogTree.nodes[currentNodeIndex];
 
-            // Si está escribiendo, salta el efecto y muestra el texto completo
             if (isTyping)
             {
                 isTyping = false;
@@ -228,11 +250,9 @@ public class DialogManager : MonoBehaviour, IInteractable
                 return;
             }
 
-            // Solo avanza con click si NO hay decisiones en el nodo actual
             if (node.choices == null || node.choices.Length == 0)
             {
-                currentNodeIndex++;
-                ShowCurrentNode();
+                AdvanceDialogNode();
             }
         }
 
@@ -250,11 +270,26 @@ public class DialogManager : MonoBehaviour, IInteractable
         if (dialogText != null)
             dialogText.text = "";
         HideAllDecisionButtons();
+
         interactingEntity = null;
     }
 
     public void OnInteract()
     {
+        // Ejemplo de integración con NpcIdentity y NpcStageScript
+        var npcIdentity = GetComponent<NpcIdentity>();
+        if (npcIdentity != null)
+        {
+            // Busca el NpcStageScript en la escena
+            var npcStage = FindObjectOfType<NpcStageScript>();
+            if (npcStage != null)
+            {
+                npcStage.StartNpcDialog(npcIdentity.npcType, npcIdentity.currentState, this.transform);
+                Debug.Log($"Dialog started for {npcIdentity.npcType} in state {npcIdentity.currentState}");
+                return;
+            }
+        }
+        // Si no hay NpcIdentity, usa el sistema antiguo
         StartDialog(dialogTree, this.transform);
         Debug.Log("Dialog started.");
     }
@@ -283,5 +318,43 @@ public class DialogManager : MonoBehaviour, IInteractable
                 yield break;
         }
         isTyping = false;
+    }
+
+    void AdvanceDialogNode()
+    {
+        if (dialogTree != null && dialogTree.nodes != null && currentNodeIndex < dialogTree.nodes.Length)
+        {
+            var node = dialogTree.nodes[currentNodeIndex];
+
+            // Activa la condición si está definida en el nodo
+            if (!string.IsNullOrEmpty(node.setNpcStateIfCondition))
+            {
+                GameConditions.Instance.SetCondition(node.setNpcStateIfCondition, true);
+                Debug.Log($"Condición activada: {node.setNpcStateIfCondition}");
+
+                // Cambia el estado del NPC si existe
+                var npcIdentity = interactingEntity != null ? interactingEntity.GetComponent<NpcIdentity>() : null;
+                if (npcIdentity != null)
+                {
+                    npcIdentity.SetState(node.setNpcStateIfCondition);
+                }
+            }
+
+            // Avanza al siguiente nodo
+            currentNodeIndex = node.nextNodeIndex;
+
+            // Si termina el diálogo normalmente
+            if (currentNodeIndex < 0 || currentNodeIndex >= dialogTree.nodes.Length)
+            {
+                EndDialog();
+                return;
+            }
+
+            ShowCurrentNode();
+        }
+        else
+        {
+            EndDialog();
+        }
     }
 }

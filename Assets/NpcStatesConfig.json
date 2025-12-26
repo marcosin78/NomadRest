@@ -1,0 +1,34 @@
+{
+  "npcTypes": [
+    {
+      "npcType": "TutorialBird",
+      "states": [
+        {
+          "state": "NotTalkedTo",
+          "conditions": ["PlayerNotTalkedToTutorialBird"],
+          "dialogTreeName": "TutorialBirdIdleDialog"
+        },
+        {
+          "state": "Talked",
+          "conditions": ["PlayerHasTalkedToTutorialBird"],
+          "dialogTreeName": "TutorialBirdTalkedDialog"
+        }
+      ]
+    },
+    {
+      "npcType": "Customer",
+      "states": [
+        {
+          "state": "Waiting",
+          "conditions": [],
+          "dialogTreeName": "CustomerWaitingDialog"
+        },
+        {
+          "state": "Served",
+          "conditions": ["playerServedCustomer"],
+          "dialogTreeName": "CustomerServedDialog"
+        }
+      ]
+    }
+  ]
+}

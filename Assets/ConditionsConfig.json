@@ -1,0 +1,9 @@
+{
+  "conditions": [
+    {
+      "key": "PlayerHasTalkedToTutorialBird",
+      "description": "El jugador ha hablado por primera vez con el pájaro tutorial.",
+      "active": false
+    }
+  ]
+}
