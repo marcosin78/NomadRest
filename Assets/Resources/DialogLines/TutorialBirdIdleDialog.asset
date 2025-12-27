@@ -13,15 +13,18 @@ MonoBehaviour:
   m_Name: TutorialBirdIdleDialog
   m_EditorClassIdentifier: Assembly-CSharp::DialogTree
   nodes:
-  - text: 'Buenas, este es el dialogo si no has hablado conmigo
-
-'
+  - text: Otra vez en el punto de partida... verdad?
     choices: []
     nextNodeIndex: 1
     nextDialogTree: {fileID: 0}
     setNpcStateIfCondition: 
-  - text: Fin de dialogo, cargando el dialogo 2
+  - text: "En fin, que le vamos a hacer si los Dioses lo quieren as\xED?"
     choices: []
     nextNodeIndex: 2
+    nextDialogTree: {fileID: 0}
+    setNpcStateIfCondition: 
+  - text: "Deber\xEDas descansar..."
+    choices: []
+    nextNodeIndex: 3
     nextDialogTree: {fileID: 0}
     setNpcStateIfCondition: PlayerHasTalkedToTutorialBird

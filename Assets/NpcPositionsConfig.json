@@ -5,7 +5,9 @@
       "states": [
         { "state": "NotTalkedTo", "positions": [0] },
         { "state": "Talked", "positions": [0] },
-        { "state": "SleepedFirstTime", "positions": [1] }
+        { "state": "SleepedFirstTime", "positions": [1] },
+        { "state": "GoingToSaloon", "positions": [2] },
+        { "state": "PendingOfCleaningSaloon", "positions": [2] }
       ]
     },
     {

@@ -4,17 +4,49 @@
       "key": "PlayerNotTalkedToTutorialBird",
       "description": "El jugador no ha hablado aún con el pájaro tutorial.",
       "active": true
+
     },
     {
       "key": "PlayerHasTalkedToTutorialBird",
       "description": "El jugador ha hablado por primera vez con el pájaro tutorial.",
       "active": false
+
     }
     ,
     {
       "key": "PlayerHasSleeptWithTutorialBird",
       "description": "El jugador ha dormido por primera vez con el pájaro tutorial.",
       "active": false
+
+    },
+    {
+      "key": "PlayerGoingToSaloonWithTutorialBird",
+      "description": "El jugador está yendo al salón con el pájaro tutorial.",
+      "active": false
+
+    },
+    {
+      "key": "PlayerPendingOfCleaningSaloonWithTutorialBird",
+      "description": "El jugador está pendiente de limpiar el salón con el pájaro tutorial.",
+      "active": false
+
+    },{
+      "key": "PlayerHasCleanedSaloonWithTutorialBird",
+      "description": "El jugador ha limpiado el salón con el pájaro tutorial.",
+      "active": false
+
+    },
+    {
+      "key": "PlayerHasTalkedToBandoler",
+      "description": "El jugador ha hablado con el bandido.",
+      "active": false
+
+    },
+    {
+      "key": "PlayerHasNotTalkedToBandoler",
+      "description": "El jugador no ha hablado con el bandido.",
+      "active": false
+
     }
   ]
 }

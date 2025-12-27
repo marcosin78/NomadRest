@@ -1,0 +1,39 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 90ed0434704aef648b1253746ede729a, type: 3}
+  m_Name: GoingToSaloonDialog
+  m_EditorClassIdentifier: Assembly-CSharp::DialogTree
+  nodes:
+  - text: "Tu est\xE1s viendo la porqueria de bar que tienes?"
+    choices: []
+    nextNodeIndex: 1
+    nextDialogTree: {fileID: 0}
+    setNpcStateIfCondition: 
+  - text: "As\xED no va a venir nadie a tomarse nada, y vamos a tener que volver
+      a empe\xF1ar al enano aquel..."
+    choices: []
+    nextNodeIndex: 2
+    nextDialogTree: {fileID: 0}
+    setNpcStateIfCondition: 
+  - text: "Recoge toda la suciedad con \"Mouse 1\" y tirala dentro de la basura,
+      recuerda que para el polvo tienes que coger esa fregona de all\xED con \"E\"
+      y con ella equipada pulsar \"Mouse 1\" para limpiarla."
+    choices: []
+    nextNodeIndex: 2
+    nextDialogTree: {fileID: 0}
+    setNpcStateIfCondition: PlayerPendingOfCleaningSaloonWithTutorialBird
+  - text: Cuando termines de fregar, puedes utilizar la Tecla "Q" para soltar la
+      fregona.
+    choices: []
+    nextNodeIndex: 3
+    nextDialogTree: {fileID: 0}
+    setNpcStateIfCondition: 

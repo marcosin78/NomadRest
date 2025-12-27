@@ -20,21 +20,36 @@
           "priority": 2,
           "conditions": ["PlayerHasSleeptWithTutorialBird"],
           "dialogTreeName": "TutorialBirdFirstSleepDialog"
+        },{
+          "state": "GoingToSaloon",
+          "priority": 3,
+          "conditions": ["PlayerGoingToSaloonWithTutorialBird"],
+          "dialogTreeName": "GoingToSaloonDialog"
+        },{
+          "state": "PendingOfCleaningSaloon",
+          "priority": 4,
+          "conditions": ["PlayerPendingOfCleaningSaloonWithTutorialBird"],
+          "dialogTreeName": "PendingOfCleaningSaloonDialog"
+        },{
+          "state": "HasCleanedSaloon",
+          "priority": 5,
+          "conditions": ["PlayerHasCleanedSaloonWithTutorialBird"],
+          "dialogTreeName": "HasCleanedSaloonDialog"
         }
       ]
     },
     {
-      "npcType": "Customer",
+      "npcType": "Bandolero",
       "states": [
         {
-          "state": "Waiting",
-          "conditions": [],
-          "dialogTreeName": "CustomerWaitingDialog"
+          "state": "NotTalkedTo",
+          "conditions": ["PlayerHasNotTalkedToBandoler"],
+          "dialogTreeName": "BandoleroWaitingDialog"
         },
         {
-          "state": "Served",
-          "conditions": ["playerServedCustomer"],
-          "dialogTreeName": "CustomerServedDialog"
+          "state": "TalkedToBandoler",
+          "conditions": ["PlayerHasTalkedToBandoler"],
+          "dialogTreeName": "TalkedBandoleroDialog"
         }
       ]
     }

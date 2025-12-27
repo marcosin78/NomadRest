@@ -13,13 +13,9 @@ MonoBehaviour:
   m_Name: TutorialBirdTalkedDialog
   m_EditorClassIdentifier: Assembly-CSharp::DialogTree
   nodes:
-  - text: Iniciando segundo Dialogo del condicional
+  - text: "Es complicado despues de estar tanto tiempo en letargo... \nPero deberias
+      descansar"
     choices: []
     nextNodeIndex: 1
-    nextDialogTree: {fileID: 0}
-    setNpcStateIfCondition: 
-  - text: Fin de dialogo
-    choices: []
-    nextNodeIndex: 2
     nextDialogTree: {fileID: 0}
     setNpcStateIfCondition: 

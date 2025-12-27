@@ -126,7 +126,7 @@ public class ShopSystem : MonoBehaviour, IInteractable
 
     public void OnInteract()
     {
-
+        
     shopMenuUI.SetActive(true);
 
     // Desbloquea y muestra el ratón

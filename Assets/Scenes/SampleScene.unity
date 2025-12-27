@@ -129,7 +129,7 @@ GameObject:
   m_Component:
   - component: {fileID: 14688719}
   m_Layer: 0
-  m_Name: Pos1
+  m_Name: DespiertasDelLetargo
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1660,7 +1660,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1117086269}
   m_Layer: 0
-  m_Name: Pos2
+  m_Name: AlLadoDeLaCama
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1867,6 +1867,7 @@ Transform:
   m_Children:
   - {fileID: 14688719}
   - {fileID: 1117086269}
+  - {fileID: 1283953297}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &1224192079
@@ -1899,7 +1900,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4375121335132715506, guid: 098a9b4eb4abe7244bb81966a16d1a02, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -18.07
+      value: -18.12
       objectReference: {fileID: 0}
     - target: {fileID: 4375121335132715506, guid: 098a9b4eb4abe7244bb81966a16d1a02, type: 3}
       propertyPath: m_LocalPosition.y
@@ -2104,6 +2105,37 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1247656902}
   m_CullTransparentMesh: 1
+--- !u!1 &1283953296
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1283953297}
+  m_Layer: 0
+  m_Name: Saloon
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1283953297
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1283953296}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 8, y: 0, z: 4}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1173249188}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1412684856 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 5395277241149489953, guid: adc4e8888e1bf764492258e04fd7db12, type: 3}
@@ -3791,7 +3823,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5269243808963569557, guid: 4640ae208db576c4ab4c47a55ce34d87, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 0.9966974
+      value: 0.83
       objectReference: {fileID: 0}
     - target: {fileID: 5269243808963569557, guid: 4640ae208db576c4ab4c47a55ce34d87, type: 3}
       propertyPath: m_LocalPosition.y

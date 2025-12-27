@@ -10,24 +10,11 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 90ed0434704aef648b1253746ede729a, type: 3}
-  m_Name: TutorialBirdFirstSleepDialog
+  m_Name: PendingOfCleaningSaloonDialog
   m_EditorClassIdentifier: Assembly-CSharp::DialogTree
   nodes:
-  - text: Por fin te has despertado...
+  - text: Hmmm, no veo que hayas terminado...
     choices: []
     nextNodeIndex: 1
     nextDialogTree: {fileID: 0}
     setNpcStateIfCondition: 
-  - text: 'Que tal has dormido?
-
-'
-    choices: []
-    nextNodeIndex: 2
-    nextDialogTree: {fileID: 0}
-    setNpcStateIfCondition: 
-  - text: "En fin, no me importa. Tienes esto hecho una porquer\xEDa, sigueme hasta
-      el sal\xF3n\n"
-    choices: []
-    nextNodeIndex: 3
-    nextDialogTree: {fileID: 0}
-    setNpcStateIfCondition: PlayerGoingToSaloonWithTutorialBird
