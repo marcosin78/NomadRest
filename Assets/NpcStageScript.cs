@@ -79,9 +79,11 @@ public class NpcStageScript : MonoBehaviour
     public void StartNpcDialog(string npcType, string state, Transform npcTransform)
     {
         string dialogTreeName = GetDialogTreeName(npcType, state);
+        Debug.Log($"[NpcStageScript] Para {npcType} en estado '{state}', dialogTreeName es '{dialogTreeName}'");
         if (!string.IsNullOrEmpty(dialogTreeName))
         {
             DialogTree dialogTree = FindDialogTreeByName(dialogTreeName);
+            Debug.Log($"[NpcStageScript] DialogTree encontrado: {(dialogTree != null ? dialogTree.name : "NULO")}");
             if (dialogTree != null)
             {
                 DialogManager dialogManager = FindObjectOfType<DialogManager>();
@@ -96,15 +98,20 @@ public class NpcStageScript : MonoBehaviour
 
     DialogTree FindDialogTreeByName(string name)
     {
-        // Esto es solo un ejemplo. Puedes buscar en recursos, en la escena, etc.
-        DialogTree[] allTrees = Resources.FindObjectsOfTypeAll<DialogTree>();
-        foreach (var tree in allTrees)
+        // Busca en Resources/DialogLines
+        DialogTree tree = Resources.Load<DialogTree>("DialogLines/" + name);
+        if (tree != null)
+            return tree;
+
+        // Opcional: busca en la escena si no lo encuentra en Resources
+        DialogTree[] allTrees = FindObjectsOfType<DialogTree>();
+        foreach (var t in allTrees)
         {
-            if (tree.name == name)
-                return tree;
+            if (t.name == name)
+                return t;
         }
         return null;
-    }
+    }   
 
     public DialogTree GetDialogTreeForNpc(string npcType, string state)
     {

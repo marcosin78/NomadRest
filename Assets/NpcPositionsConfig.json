@@ -1,0 +1,19 @@
+{
+  "npcPositions": [
+    {
+      "npcType": "TutorialBird",
+      "states": [
+        { "state": "NotTalkedTo", "positions": [0] },
+        { "state": "Talked", "positions": [0] },
+        { "state": "SleepedFirstTime", "positions": [1] }
+      ]
+    },
+    {
+      "npcType": "Customer",
+      "states": [
+        { "state": "Waiting", "positions": [0] },
+        { "state": "Served", "positions": [1] }
+      ]
+    }
+  ]
+}

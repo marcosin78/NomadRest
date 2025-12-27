@@ -196,7 +196,6 @@ public class DialogManager : MonoBehaviour, IInteractable
     {
         if (decisionButtons != null)
         {
-            Debug.Log("Hiding decision buttons.");
             foreach (var btn in decisionButtons)
                 btn.gameObject.SetActive(false);
         }
@@ -284,11 +283,12 @@ public class DialogManager : MonoBehaviour, IInteractable
             {
                 string currentState = npcStage.GetCurrentStateForNpc(npcIdentity.npcType);
                 npcStage.StartNpcDialog(npcIdentity.npcType, currentState, this.transform);
-                Debug.Log($"Dialog started for {npcIdentity.npcType} in state {currentState}");
+                Debug.Log($"Dialog started for {npcIdentity.npcType} in state {currentState} ///////////");
             }
+        }else{
+            Debug.LogWarning("NpcIdentity no encontrado en este GameObject.");
         }
-        StartDialog(dialogTree, this.transform);
-        Debug.Log("Dialog started.");
+        Debug.Log("DialogManager OnInteract called.");
     }
 
     public string GetName()
@@ -327,15 +327,14 @@ public class DialogManager : MonoBehaviour, IInteractable
             if (!string.IsNullOrEmpty(node.setNpcStateIfCondition))
             {
                 GameConditions.Instance.SetCondition(node.setNpcStateIfCondition, true);
-                Debug.Log($"Condición activada: {node.setNpcStateIfCondition}");
 
-                // Cambia el estado del NPC si existe
                 var npcIdentity = interactingEntity != null ? interactingEntity.GetComponent<NpcIdentity>() : null;
                 if (npcIdentity != null)
                 {
-                    npcIdentity.SetState(node.setNpcStateIfCondition);
+                    // Llama a RefreshState() para actualizar el estado según las condiciones
+                    npcIdentity.RefreshState();
 
-                    // --- CORREGIDO: Usa GetDialogTreeForNpc ---
+                    // Ahora busca el nuevo árbol usando el estado actualizado
                     var npcStage = FindObjectOfType<NpcStageScript>();
                     if (npcStage != null)
                     {
@@ -343,7 +342,6 @@ public class DialogManager : MonoBehaviour, IInteractable
                         DialogTree newTree = npcStage.GetDialogTreeForNpc(npcIdentity.npcType, newState);
                         if (newTree != null && newTree != dialogTree)
                         {
-                            Debug.Log($"Actualizando DialogTree por estado: {newState}");
                             dialogTree = newTree;
                             currentNodeIndex = 0;
                             ShowCurrentNode();

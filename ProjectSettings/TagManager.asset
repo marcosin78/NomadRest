@@ -30,6 +30,7 @@ TagManager:
   - Interactable
   - PlayerDialogCanvas
   - DecisionButtonsParent
+  - PositionsParent
   layers:
   - Default
   - TransparentFX

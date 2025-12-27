@@ -20,10 +20,20 @@ public class BedScript : MonoBehaviour, IInteractable
             
 
             // Al dormir por primera vez y verificar si es dia 1, establecer la condición
-            if (!GameConditions.Instance.HasCondition("PlayerHasSleeptWithTutorialBird") && ClockScript.Instance.Day == 1)
+            if (!GameConditions.Instance.HasCondition("PlayerHasSleeptWithTutorialBird") && ClockScript.Instance.Day == 0)
             {
                 GameConditions.Instance.SetCondition("PlayerHasSleeptWithTutorialBird", true);
                 Debug.Log("[BedScript] Condición 'PlayerHasSleeptWithTutorialBird' establecida a true.");
+
+                var tutorialBird = GameObject.FindWithTag("TutorialBird");
+                if (tutorialBird != null)
+                {
+                    var npcIdentity = tutorialBird.GetComponent<NpcIdentity>();
+                    if (npcIdentity != null)
+                    {
+                        npcIdentity.RefreshState();
+                    }
+                }
             }
         }
         else
