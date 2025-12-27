@@ -24,4 +24,4 @@ MonoBehaviour:
     choices: []
     nextNodeIndex: 2
     nextDialogTree: {fileID: 0}
-    setNpcStateIfCondition: Talked
+    setNpcStateIfCondition: PlayerHasTalkedToTutorialBird

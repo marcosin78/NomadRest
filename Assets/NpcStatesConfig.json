@@ -5,13 +5,21 @@
       "states": [
         {
           "state": "NotTalkedTo",
+          "priority": 0,
           "conditions": ["PlayerNotTalkedToTutorialBird"],
           "dialogTreeName": "TutorialBirdIdleDialog"
         },
         {
           "state": "Talked",
+          "priority": 1,
           "conditions": ["PlayerHasTalkedToTutorialBird"],
           "dialogTreeName": "TutorialBirdTalkedDialog"
+        },
+        {
+          "state": "SleepedFirstTime",
+          "priority": 2,
+          "conditions": ["PlayerHasSleeptWithTutorialBird"],
+          "dialogTreeName": "TutorialBirdFirstSleepDialog"
         }
       ]
     },

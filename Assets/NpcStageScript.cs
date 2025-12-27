@@ -19,6 +19,7 @@ public class NpcTypeConfig
 public class NpcStateConfig
 {
     public string state;
+    public int priority = 0;
     public List<string> conditions;
     public string dialogTreeName;
 }
@@ -120,6 +121,82 @@ public class NpcStageScript : MonoBehaviour
             if (tree.name == stateConfig.dialogTreeName)
                 return tree;
         }
+        return null;
+    }
+
+    public string GetCurrentStateForNpc(string npcType)
+    {
+        var states = GetStatesForNpcType(npcType);
+        if (states == null)
+        {
+            Debug.LogWarning($"[GetCurrentStateForNpc] No se encontraron estados para el NPC '{npcType}'.");
+            return null;
+        }
+
+        NpcStateConfig bestState = null;
+        int bestPriority = int.MinValue;
+
+        Debug.Log($"[GetCurrentStateForNpc] Evaluando estados para '{npcType}': {states.Count} estados encontrados.");
+
+        foreach (var state in states)
+        {
+            if (string.IsNullOrEmpty(state.state))
+            {
+                Debug.LogWarning($"[GetCurrentStateForNpc] Estado sin 'state' definido, ignorando.");
+                continue;
+            }
+
+            bool allMet = true;
+            if (state.conditions != null && state.conditions.Count > 0)
+            {
+                foreach (var cond in state.conditions)
+                {
+                    bool condMet = GameConditions.Instance.HasCondition(cond);
+                    Debug.Log($"[GetCurrentStateForNpc] Estado '{state.state}' requiere condición '{cond}': {(condMet ? "CUMPLIDA" : "NO CUMPLIDA")}");
+                    if (!condMet)
+                    {
+                        allMet = false;
+                        break;
+                    }
+                }
+            }
+            else
+            {
+                Debug.Log($"[GetCurrentStateForNpc] Estado '{state.state}' no tiene condiciones.");
+            }
+
+            if (allMet)
+            {
+                Debug.Log($"[GetCurrentStateForNpc] Estado '{state.state}' cumple condiciones con prioridad {state.priority}.");
+                if (state.priority > bestPriority)
+                {
+                    bestState = state;
+                    bestPriority = state.priority;
+                    Debug.Log($"[GetCurrentStateForNpc] Nuevo mejor estado: '{state.state}' (prioridad {state.priority})");
+                }
+                else if (state.priority == bestPriority)
+                {
+                    // Si quieres que el primero tenga prioridad en empate, no actualices bestState aquí
+                    bestState = state;
+                    Debug.Log($"[GetCurrentStateForNpc] Empate de prioridad, se selecciona el último encontrado: '{state.state}'");
+                }
+            }
+        }
+
+        if (bestState != null)
+        {
+            Debug.Log($"[GetCurrentStateForNpc] Estado seleccionado para '{npcType}': '{bestState.state}' (prioridad {bestState.priority})");
+            return bestState.state;
+        }
+
+        var defaultState = states.Find(s => (s.conditions == null || s.conditions.Count == 0) && !string.IsNullOrEmpty(s.state));
+        if (defaultState != null)
+        {
+            Debug.Log($"[GetCurrentStateForNpc] No se cumplieron condiciones, usando estado por defecto: '{defaultState.state}'");
+            return defaultState.state;
+        }
+
+        Debug.LogWarning($"[GetCurrentStateForNpc] No se encontró un estado válido para '{npcType}'.");
         return null;
     }
 }

@@ -100,7 +100,7 @@ public class DialogManager : MonoBehaviour, IInteractable
       
     }
 
-    public void StartDialog(DialogTree tree, Transform entity = null)
+    public void StartDialog(DialogTree tree, Transform entity)
     {
         Debug.Log($"[StartDialog] Llamado con tree: {tree?.name}, entity: {entity?.name}");
         dialogTree = tree;
@@ -119,6 +119,14 @@ public class DialogManager : MonoBehaviour, IInteractable
         if (dialogTree != null && dialogTree.nodes != null && currentNodeIndex < dialogTree.nodes.Length)
         {
             var node = dialogTree.nodes[currentNodeIndex];
+
+            // --- CAMBIO DE DIALOGTREE ANTES DE MOSTRAR EL NODO ---
+            if (node.nextDialogTree != null)
+            {
+                Debug.Log("Cambiando a nuevo DialogTree antes de mostrar el nodo...");
+                StartDialog(node.nextDialogTree, interactingEntity);
+                return; // Importante: evita mostrar el nodo actual, ya que cambiamos de árbol
+            }
 
             // --- INTEGRACIÓN DE CONDICIONES Y ESTADO ---
             if (!string.IsNullOrEmpty(node.setNpcStateIfCondition) && interactingEntity != null)
@@ -174,14 +182,6 @@ public class DialogManager : MonoBehaviour, IInteractable
                 playerController.LockCursorAndRestoreSensitivity();
 
             }   
-
-            // --- NUEVO: Si el nodo tiene un siguiente DialogTree, lo carga ---
-            if (node.nextDialogTree != null)
-            {
-                Debug.Log("Cargando nuevo DialogTree desde el nodo...");
-                StartDialog(node.nextDialogTree, interactingEntity);
-                return; // Importante: evita mostrar el nodo actual, ya que cambiamos de árbol
-            }
         }
         else
         {
@@ -276,20 +276,17 @@ public class DialogManager : MonoBehaviour, IInteractable
 
     public void OnInteract()
     {
-        // Ejemplo de integración con NpcIdentity y NpcStageScript
         var npcIdentity = GetComponent<NpcIdentity>();
         if (npcIdentity != null)
         {
-            // Busca el NpcStageScript en la escena
             var npcStage = FindObjectOfType<NpcStageScript>();
             if (npcStage != null)
             {
-                npcStage.StartNpcDialog(npcIdentity.npcType, npcIdentity.currentState, this.transform);
-                Debug.Log($"Dialog started for {npcIdentity.npcType} in state {npcIdentity.currentState}");
-                return;
+                string currentState = npcStage.GetCurrentStateForNpc(npcIdentity.npcType);
+                npcStage.StartNpcDialog(npcIdentity.npcType, currentState, this.transform);
+                Debug.Log($"Dialog started for {npcIdentity.npcType} in state {currentState}");
             }
         }
-        // Si no hay NpcIdentity, usa el sistema antiguo
         StartDialog(dialogTree, this.transform);
         Debug.Log("Dialog started.");
     }
@@ -337,6 +334,22 @@ public class DialogManager : MonoBehaviour, IInteractable
                 if (npcIdentity != null)
                 {
                     npcIdentity.SetState(node.setNpcStateIfCondition);
+
+                    // --- CORREGIDO: Usa GetDialogTreeForNpc ---
+                    var npcStage = FindObjectOfType<NpcStageScript>();
+                    if (npcStage != null)
+                    {
+                        string newState = npcIdentity.currentState;
+                        DialogTree newTree = npcStage.GetDialogTreeForNpc(npcIdentity.npcType, newState);
+                        if (newTree != null && newTree != dialogTree)
+                        {
+                            Debug.Log($"Actualizando DialogTree por estado: {newState}");
+                            dialogTree = newTree;
+                            currentNodeIndex = 0;
+                            ShowCurrentNode();
+                            return;
+                        }
+                    }
                 }
             }
 

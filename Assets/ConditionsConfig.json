@@ -1,8 +1,19 @@
 {
   "conditions": [
     {
+      "key": "PlayerNotTalkedToTutorialBird",
+      "description": "El jugador no ha hablado aún con el pájaro tutorial.",
+      "active": true
+    },
+    {
       "key": "PlayerHasTalkedToTutorialBird",
       "description": "El jugador ha hablado por primera vez con el pájaro tutorial.",
+      "active": false
+    }
+    ,
+    {
+      "key": "PlayerHasSleeptWithTutorialBird",
+      "description": "El jugador ha dormido por primera vez con el pájaro tutorial.",
       "active": false
     }
   ]

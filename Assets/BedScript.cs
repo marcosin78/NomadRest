@@ -17,6 +17,14 @@ public class BedScript : MonoBehaviour, IInteractable
         if (ClockScript.Instance != null && ClockScript.Instance.ClosedBarTime && ClockScript.Instance.FallingAsleep)
         {
             StartCoroutine(SleepSequence());
+            
+
+            // Al dormir por primera vez y verificar si es dia 1, establecer la condición
+            if (!GameConditions.Instance.HasCondition("PlayerHasSleeptWithTutorialBird") && ClockScript.Instance.Day == 1)
+            {
+                GameConditions.Instance.SetCondition("PlayerHasSleeptWithTutorialBird", true);
+                Debug.Log("[BedScript] Condición 'PlayerHasSleeptWithTutorialBird' establecida a true.");
+            }
         }
         else
         {
