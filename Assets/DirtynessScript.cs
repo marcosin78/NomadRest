@@ -30,6 +30,8 @@ public class DirtynessScript : MonoBehaviour
 
     private List<GameObject> spawnedDirt = new List<GameObject>();
 
+    private bool barCleanedOnce = false;
+
     /// <summary>
     /// Spawnea un objeto de suciedad aleatorio en la zona.
     /// </summary>
@@ -48,6 +50,17 @@ public class DirtynessScript : MonoBehaviour
         if(Input.GetMouseButton(0))
         {
             StartCleaning();
+
+        // Check if bar is cleaned 100% for the first time and the pending condition is true
+        if (!barCleanedOnce && GetCleanPercentage() >= 100f && totalDirtSpawned > 0)
+        {
+            if (GameConditions.Instance != null && GameConditions.Instance.HasCondition("PlayerPendingOfCleaningSaloonWithTutorialBird"))
+            {
+                barCleanedOnce = true;
+                GameConditions.Instance.SetCondition("PlayerHasCleanedSaloonWithTutorialBird", true);
+                Debug.Log("Bar cleaned 100% for the first time. Condition activated.");
+            }
+        }
         }else
         {
             ResetCleaning();

@@ -1,0 +1,41 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 90ed0434704aef648b1253746ede729a, type: 3}
+  m_Name: HasCheckedCocktailsDialog
+  m_EditorClassIdentifier: Assembly-CSharp::DialogTree
+  nodes:
+  - text: "Te habr\xE1s dado cuenta, que no tienes ningun tipo de ingredientes, eso
+      es porque los tenemos que comprar..."
+    choices: []
+    nextNodeIndex: 1
+    nextDialogTree: {fileID: 0}
+    setNpcStateIfCondition: 
+  - text: Que?
+    choices: []
+    nextNodeIndex: 2
+    nextDialogTree: {fileID: 0}
+    setNpcStateIfCondition: 
+  - text: Pensabas que las cosas eran gratis, o aparecian del aire o que?
+    choices: []
+    nextNodeIndex: 3
+    nextDialogTree: {fileID: 0}
+    setNpcStateIfCondition: 
+  - text: "Est\xE1 la cosa muy mal para ir regalando por ahi..."
+    choices: []
+    nextNodeIndex: 4
+    nextDialogTree: {fileID: 0}
+    setNpcStateIfCondition: 
+  - text: "Sigueme hasta tu habitaci\xF3n"
+    choices: []
+    nextNodeIndex: 5
+    nextDialogTree: {fileID: 0}
+    setNpcStateIfCondition: BirdShowingTheShop

@@ -1,0 +1,25 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 90ed0434704aef648b1253746ede729a, type: 3}
+  m_Name: HasCleanedSaloonDialog
+  m_EditorClassIdentifier: Assembly-CSharp::DialogTree
+  nodes:
+  - text: "Hmm, los he visto mas limpios... pero deber\xEDa servir."
+    choices: []
+    nextNodeIndex: 1
+    nextDialogTree: {fileID: 0}
+    setNpcStateIfCondition: 
+  - text: "Ahora te mostrar\xE9 como hacer la bebida para los clientes... Sigueme!"
+    choices: []
+    nextNodeIndex: 2
+    nextDialogTree: {fileID: 0}
+    setNpcStateIfCondition: PlayerShowingTheCocktailsWithTutorialBird

@@ -35,6 +35,36 @@
           "priority": 5,
           "conditions": ["PlayerHasCleanedSaloonWithTutorialBird"],
           "dialogTreeName": "HasCleanedSaloonDialog"
+        },{
+          "state": "ShowingTheCocktails",
+          "priority": 6,
+          "conditions": ["PlayerShowingTheCocktailsWithTutorialBird"],
+          "dialogTreeName": "ShowingTheCocktailsDialog"
+        },{
+          "state": "PendingOfCheckCocktails",
+          "priority": 7,
+          "conditions": ["PlayerPendingOfCheckCocktailsWithTutorialBird"],
+          "dialogTreeName": "PendingOfCheckCocktailsDialog"
+        },{
+          "state": "HasCheckedCocktails",
+          "priority": 8,
+          "conditions": ["PlayerHasCheckedCocktailsWithTutorialBird"],
+          "dialogTreeName": "HasCheckedCocktailsDialog"
+        },{
+          "state": "ShowingTheShop",
+          "priority": 9,
+          "conditions": ["BirdShowingTheShop"],
+          "dialogTreeName": "ShowingTheShopDialog"
+        },{
+          "state": "PendingOfCheckShop",
+          "priority": 10,
+          "conditions": ["PendingOfCheckShop"],
+          "dialogTreeName": "PendingOfCheckShopDialog"
+        },{
+          "state": "HasCheckedShop",
+          "priority": 11,
+          "conditions": ["PlayerHasCheckedShop"],
+          "dialogTreeName": "HasCheckedShopDialog"
         }
       ]
     },

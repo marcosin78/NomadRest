@@ -1,0 +1,30 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 90ed0434704aef648b1253746ede729a, type: 3}
+  m_Name: ShowingTheShopDialog
+  m_EditorClassIdentifier: Assembly-CSharp::DialogTree
+  nodes:
+  - text: Bueno, y por ultimo esta es la tienda...
+    choices: []
+    nextNodeIndex: 1
+    nextDialogTree: {fileID: 0}
+    setNpcStateIfCondition: 
+  - text: Seleccionas la cantidad que quieras, y lo compras, facil, no?
+    choices: []
+    nextNodeIndex: 2
+    nextDialogTree: {fileID: 0}
+    setNpcStateIfCondition: 
+  - text: Hechale un ojo...
+    choices: []
+    nextNodeIndex: 3
+    nextDialogTree: {fileID: 0}
+    setNpcStateIfCondition: PendingOfCheckShop

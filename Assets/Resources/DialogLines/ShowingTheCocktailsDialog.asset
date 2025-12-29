@@ -1,0 +1,39 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 90ed0434704aef648b1253746ede729a, type: 3}
+  m_Name: ShowingTheCocktailsDialog
+  m_EditorClassIdentifier: Assembly-CSharp::DialogTree
+  nodes:
+  - text: Bueno... Esto es la coctelera
+    choices: []
+    nextNodeIndex: 1
+    nextDialogTree: {fileID: 0}
+    setNpcStateIfCondition: 
+  - text: 'El mecanismo es muy sencilo: Arrastras 1 tipo de hierba, y 1 tipo de alcohol
+      dentro de la coctelera.'
+    choices: []
+    nextNodeIndex: 2
+    nextDialogTree: {fileID: 0}
+    setNpcStateIfCondition: 
+  - text: "Una vez est\xE9n dentro, mantenlo pulsado con M1 y muevelo para que se
+      mezcle bien"
+    choices: []
+    nextNodeIndex: 3
+    nextDialogTree: {fileID: 0}
+    setNpcStateIfCondition: 
+  - text: "Si lo mueves lo suficiente, el dispensador comenzar\xE1 a soltar tu mezcla,
+      asegurate de que la mayoria caiga dentro del recipiente... Si quieres algo
+      para darle a tus clientes, claro."
+    choices: []
+    nextNodeIndex: 4
+    nextDialogTree: {fileID: 0}
+    setNpcStateIfCondition: PendingOfCheckCocktails

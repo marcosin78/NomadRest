@@ -7,7 +7,14 @@
         { "state": "Talked", "positions": [0] },
         { "state": "SleepedFirstTime", "positions": [1] },
         { "state": "GoingToSaloon", "positions": [2] },
-        { "state": "PendingOfCleaningSaloon", "positions": [2] }
+        { "state": "PendingOfCleaningSaloon", "positions": [2] },
+        { "state": "HasCleanedSaloon", "positions": [2] },
+        { "state": "ShowingTheCocktails", "positions": [3] },
+        { "state": "PendingOfCheckCocktails", "positions": [3] },
+        { "state": "HasCheckedCocktails", "positions": [3] },
+        { "state": "ShowingTheShop", "positions": [1] },
+        { "state": "PendingOfCheckShop", "positions": [1] },
+        { "state": "HasCheckedShop", "positions": [1] }
       ]
     },
     {

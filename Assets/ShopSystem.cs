@@ -124,16 +124,27 @@ public class ShopSystem : MonoBehaviour, IInteractable
         throw new System.NotImplementedException();
     }
 
+    private bool hasCheckedShop = false;
     public void OnInteract()
     {
-        
-    shopMenuUI.SetActive(true);
+        // Solo la primera vez que se abre la tienda y si HasCheckedCocktails es true
+        if (!hasCheckedShop)
+        {
+            if (GameConditions.Instance != null && GameConditions.Instance.HasCondition("PlayerHasCheckedCocktailsWithTutorialBird"))
+            {
+                hasCheckedShop = true;
+                GameConditions.Instance.SetCondition("PlayerHasCheckedShop", true);
+                Debug.Log("PlayerHasCheckedShop activada por primera vez.");
+            }
+        }
 
-    // Desbloquea y muestra el ratón
-    Cursor.lockState = CursorLockMode.None;
-    Cursor.visible = true;
+        shopMenuUI.SetActive(true);
 
-    AudioManager.Instance.PlaySound(interactAudioClip);
+        // Desbloquea y muestra el ratón
+        Cursor.lockState = CursorLockMode.None;
+        Cursor.visible = true;
+
+        AudioManager.Instance.PlaySound(interactAudioClip);
     }
     public void OnEndInteract()
     {

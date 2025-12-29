@@ -35,6 +35,36 @@
       "description": "El jugador ha limpiado el salón con el pájaro tutorial.",
       "active": false
 
+    },{
+      "key": "PlayerShowingTheCocktailsWithTutorialBird",
+      "description": "El jugador está mostrando los cócteles con el pájaro tutorial.",
+      "active": false
+
+    },{
+      "key": "BirdShowingTheShop",
+      "description": "El jugador está mostrando la tienda con el pájaro tutorial.",
+      "active": false
+
+    },{
+      "key": "PendingOfCheckShop",
+      "description": "El jugador está pendiente de chequear la tienda con el pájaro tutorial.",
+      "active": false
+    },{
+      "key": "PlayerHasCheckedShop",
+      "description": "El jugador ha chequeado la tienda con el pájaro tutorial.",
+      "active": false
+
+    }
+    ,{
+      "key": "PlayerPendingOfCheckCocktailsWithTutorialBird",
+      "description": "El jugador queda pendiente de checkear los cócteles con el pájaro tutorial.",
+      "active": false
+
+    },{
+      "key": "PlayerHasCheckedCocktailsWithTutorialBird",
+      "description": "El jugador ha chequeado los cócteles con el pájaro tutorial.",
+      "active": false
+
     },
     {
       "key": "PlayerHasTalkedToBandoler",

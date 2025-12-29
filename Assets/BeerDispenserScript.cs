@@ -34,28 +34,39 @@ public class BeerDispenserScript : MonoBehaviour, IInteractable
     {
 
     }
+    private bool hasCheckedCocktails = false;
     public void OnInteract()
     {
         if(player!=null && player.availableHands==true)
-    {
-        Debug.Log("Player's hands are available to take a drink.");
-
-        // Lanza el minijuego de ingredientes
-        if (beerMinigameScript != null)
         {
-            beerMinigameScript.StartMinigame(this);
-            AudioManager.Instance.PlaySound(openingAudioClip);
+            Debug.Log("Player's hands are available to take a drink.");
+
+            // Solo la primera vez que se abre la interfaz y si la condición de limpieza está activa
+            if (!hasCheckedCocktails)
+            {
+                if (GameConditions.Instance != null && GameConditions.Instance.HasCondition("PlayerHasCleanedSaloonWithTutorialBird"))
+                {
+                    hasCheckedCocktails = true;
+                    GameConditions.Instance.SetCondition("PlayerHasCheckedCocktailsWithTutorialBird", true);
+                    Debug.Log("PlayerHasCheckedCocktailsWithTutorialBird activada por primera vez.");
+                }
+            }
+
+            // Lanza el minijuego de ingredientes
+            if (beerMinigameScript != null)
+            {
+                beerMinigameScript.StartMinigame(this);
+                AudioManager.Instance.PlaySound(openingAudioClip);
+            }
+            else
+            {
+                Debug.LogWarning("beerMinigameScript no asignado.");
+            }
         }
         else
         {
-            Debug.LogWarning("beerMinigameScript no asignado.");
+            Debug.Log("Player's hands are not available to take a drink.");
         }
-    }
-    
-    else
-    {
-        Debug.Log("Player's hands are not available to take a drink.");
-    }
     }
     public System.Collections.Generic.List<int> lastUsedIngredients; // Puedes usar esto para guardar los ingredientes
 
