@@ -51,17 +51,18 @@ public class DirtynessScript : MonoBehaviour
         {
             StartCleaning();
 
-        // Check if bar is cleaned 100% for the first time and the pending condition is true
-        if (!barCleanedOnce && GetCleanPercentage() >= 100f && totalDirtSpawned > 0)
-        {
-            if (GameConditions.Instance != null && GameConditions.Instance.HasCondition("PlayerPendingOfCleaningSaloonWithTutorialBird"))
+            // Check if bar is cleaned 40% for the first time and the pending condition is true
+            if (!barCleanedOnce && GetCleanPercentage() >= 40f && totalDirtSpawned > 0)
             {
-                barCleanedOnce = true;
-                GameConditions.Instance.SetCondition("PlayerHasCleanedSaloonWithTutorialBird", true);
-                Debug.Log("Bar cleaned 100% for the first time. Condition activated.");
+                if (GameConditions.Instance != null && GameConditions.Instance.HasCondition("PlayerPendingOfCleaningSaloonWithTutorialBird"))
+                {
+                    barCleanedOnce = true;
+                    GameConditions.Instance.SetCondition("PlayerHasCleanedSaloonWithTutorialBird", true);
+                    Debug.Log("Bar cleaned 40% for the first time. Condition activated.");
+                }
             }
         }
-        }else
+        else
         {
             ResetCleaning();
         }

@@ -14,7 +14,8 @@
         { "state": "HasCheckedCocktails", "positions": [3] },
         { "state": "ShowingTheShop", "positions": [1] },
         { "state": "PendingOfCheckShop", "positions": [1] },
-        { "state": "HasCheckedShop", "positions": [1] }
+        { "state": "HasCheckedShop", "positions": [1] },
+        { "state": "HasFinishedTutorial", "positions": [0] }
       ]
     },
     {

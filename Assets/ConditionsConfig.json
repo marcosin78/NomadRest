@@ -64,9 +64,12 @@
       "key": "PlayerHasCheckedCocktailsWithTutorialBird",
       "description": "El jugador ha chequeado los cócteles con el pájaro tutorial.",
       "active": false
+    },{
+      "key": "PlayerHasFinishedTutorial",
+      "description": "El jugador ha terminado el tutorial.",
+      "active": false
+    },{
 
-    },
-    {
       "key": "PlayerHasTalkedToBandoler",
       "description": "El jugador ha hablado con el bandido.",
       "active": false

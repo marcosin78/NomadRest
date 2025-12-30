@@ -34,4 +34,4 @@ MonoBehaviour:
     choices: []
     nextNodeIndex: 4
     nextDialogTree: {fileID: 0}
-    setNpcStateIfCondition: 
+    setNpcStateIfCondition: PlayerHasFinishedTutorial

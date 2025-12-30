@@ -65,6 +65,12 @@
           "priority": 11,
           "conditions": ["PlayerHasCheckedShop"],
           "dialogTreeName": "HasCheckedShopDialog"
+        },{
+          "state": "HasFinishedTutorial",
+          "priority": 12,
+          "conditions": ["PlayerHasFinishedTutorial"],
+          "dialogTreeName": "HasFinishedTutorialDialog"
+
         }
       ]
     },

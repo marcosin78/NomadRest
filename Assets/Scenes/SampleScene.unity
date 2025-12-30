@@ -3964,7 +3964,7 @@ PrefabInstance:
       objectReference: {fileID: 260925285}
     - target: {fileID: 7779515614692344566, guid: 2c7755cc605975848b07983e04678dfd, type: 3}
       propertyPath: startHour
-      value: 18
+      value: 6
       objectReference: {fileID: 0}
     - target: {fileID: 7779515614692344566, guid: 2c7755cc605975848b07983e04678dfd, type: 3}
       propertyPath: dirtToSpawn
@@ -4120,6 +4120,10 @@ PrefabInstance:
       propertyPath: 'stainPrefabs.Array.data[0]'
       value: 
       objectReference: {fileID: 4754641058478249299, guid: 2a1358fff0ceb594c93c58a4ecfbd504, type: 3}
+    - target: {fileID: 3557373222661973799, guid: c0b17b8a2b8919842bfbd23c49ebdce3, type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
