@@ -61,7 +61,8 @@ public class TutorialScript : MonoBehaviour
 
     void LoadPositionsConfig()
     {
-        string path = Path.Combine(Application.dataPath, positionsConfigFile);
+        // Usa la nueva ruta relativa a la carpeta Assets/Scripts
+        string path = Path.Combine(Application.dataPath, "Scripts", positionsConfigFile);
         if (File.Exists(path))
         {
             string json = File.ReadAllText(path);

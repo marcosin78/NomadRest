@@ -33,7 +33,8 @@ public class GameConditions : MonoBehaviour
 
     void LoadConditionsConfig()
     {
-        string path = Path.Combine(Application.dataPath, configFileName);
+        // Cambia la ruta para buscar en Assets/Scripts
+        string path = Path.Combine(Application.dataPath, "Scripts", configFileName);
         if (File.Exists(path))
         {
             string json = File.ReadAllText(path);

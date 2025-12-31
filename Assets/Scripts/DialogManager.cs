@@ -5,7 +5,6 @@ using System.Collections;
 
 public class DialogManager : MonoBehaviour, IInteractable
 {
-
     private static PlayerController playerController;
     public DialogTree dialogTree;
     private static Canvas dialogCanvas;
@@ -27,6 +26,8 @@ public class DialogManager : MonoBehaviour, IInteractable
 
     private bool isTyping = false;
     private string currentFullText = "";
+
+    private SpecialNPCMovement specialNpcMovement; // Referencia al movimiento especial del NPC
 
     void Start()
     {
@@ -109,6 +110,18 @@ public class DialogManager : MonoBehaviour, IInteractable
         if (dialogCanvas != null)
             dialogCanvas.gameObject.SetActive(true);
         interactingEntity = entity; // <-- Aquí entity debe ser el NPC
+
+        // Obtén la referencia al movimiento especial del NPC (si existe)
+        specialNpcMovement = interactingEntity != null ? interactingEntity.GetComponent<SpecialNPCMovement>() : null;
+
+        // Solo permite iniciar el diálogo si el NPC está listo para interactuar
+        if (specialNpcMovement != null && !specialNpcMovement.IsInteractable())
+        {
+            Debug.Log("NPC aún no está listo para interactuar.");
+            EndDialog();
+            return;
+        }
+
         ShowCurrentNode();
     }
 
@@ -179,12 +192,17 @@ public class DialogManager : MonoBehaviour, IInteractable
             {
                 // Bloquea el ratón/cámara si no hay decisiones
                 if (playerController != null)
-                playerController.LockCursorAndRestoreSensitivity();
-
+                    playerController.LockCursorAndRestoreSensitivity();
             }   
         }
         else
         {
+            // Llama a la función que termina el diálogo en SpecialNPCMovement si existe
+            if (specialNpcMovement != null)
+            {
+                specialNpcMovement.OnConversationEnded();
+            }
+
             EndDialog();
             if (playerController != null)
                 playerController.LockCursorAndRestoreSensitivity();
@@ -357,14 +375,26 @@ public class DialogManager : MonoBehaviour, IInteractable
             // Si termina el diálogo normalmente
             if (currentNodeIndex < 0 || currentNodeIndex >= dialogTree.nodes.Length)
             {
+                // Llama a la función que termina el diálogo en SpecialNPCMovement si existe
+                if (specialNpcMovement != null)
+                {
+                    specialNpcMovement.OnConversationEnded();
+                }
+
                 EndDialog();
                 return;
             }
-
+            
             ShowCurrentNode();
         }
         else
         {
+            // Llama a la función que termina el diálogo en SpecialNPCMovement si existe
+            if (specialNpcMovement != null)
+            {
+                specialNpcMovement.OnConversationEnded();
+            }
+
             EndDialog();
         }
     }

@@ -75,17 +75,42 @@
       ]
     },
     {
-      "npcType": "Bandolero",
+      "npcType": "RentPayerNPC",
       "states": [
         {
-          "state": "NotTalkedTo",
-          "conditions": ["PlayerHasNotTalkedToBandoler"],
-          "dialogTreeName": "BandoleroWaitingDialog"
+          "state": "HasNotPayedRent",
+          "conditions": ["PlayerHasNotPayedRent"],
+          "dialogTreeName": "NotPayedRentDialog"
         },
         {
-          "state": "TalkedToBandoler",
-          "conditions": ["PlayerHasTalkedToBandoler"],
-          "dialogTreeName": "TalkedBandoleroDialog"
+          "state": "PendingOfFirstRentTalk",
+          "conditions": ["PlayerPendingOfFirstRentTalk"],
+          "dialogTreeName": "PlayerPendingOfFirstRentTalkDialog"
+        },
+        {
+          "state": "PlayerHasPayedFirstRent",
+          "conditions": ["PlayerHasPayedFirstRent"],
+          "dialogTreeName": "PayedFirstRentDialog"
+        },{
+
+          "state": "PlayerHasPayedSecondRent",
+          "conditions": ["PlayerHasPayedSecondRent"],
+          "dialogTreeName": "PayedSecondRentDialog"
+        },{
+
+          "state": "PlayerHasPayedThirdRent",
+          "conditions": ["PlayerHasPayedThirdRent"],
+          "dialogTreeName": "PayedThirdRentDialog"
+        },{
+
+          "state": "PlayerHasPayedFourthRent",
+          "conditions": ["PlayerHasPayedFourthRent"],
+          "dialogTreeName": "PayedFourthRentDialog"
+        },{
+
+          "state": "EndOfTheGameRent",
+          "conditions": ["PlayerLastRent"],
+          "dialogTreeName": "PlayerLastRentDialog"
         }
       ]
     }

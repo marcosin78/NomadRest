@@ -31,6 +31,7 @@ TagManager:
   - PlayerDialogCanvas
   - DecisionButtonsParent
   - PositionsParent
+  - SpecialNPCPoint
   layers:
   - Default
   - TransparentFX

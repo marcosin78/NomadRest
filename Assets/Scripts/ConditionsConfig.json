@@ -4,13 +4,11 @@
       "key": "PlayerNotTalkedToTutorialBird",
       "description": "El jugador no ha hablado aún con el pájaro tutorial.",
       "active": true
-
     },
     {
       "key": "PlayerHasTalkedToTutorialBird",
       "description": "El jugador ha hablado por primera vez con el pájaro tutorial.",
       "active": false
-
     }
     ,
     {
@@ -70,16 +68,43 @@
       "active": false
     },{
 
-      "key": "PlayerHasTalkedToBandoler",
-      "description": "El jugador ha hablado con el bandido.",
+      "key": "PlayerHasNotPayedRent",
+      "description": "El jugador no ha pagado la renta.",
       "active": false
-
     },
     {
-      "key": "PlayerHasNotTalkedToBandoler",
-      "description": "El jugador no ha hablado con el bandido.",
+      "key": "PlayerHasPayedFirstRent",
+      "description": "El jugador ha pagado la primera renta.",
       "active": false
 
+    }
+    ,
+    {
+      "key": "PlayerHasPayedSecondRent",
+      "description": "El jugador ha pagado la segunda renta.",
+      "active": false
+
+    }
+    ,
+    {
+      "key": "PlayerHasPayedThirdRent",
+      "description": "El jugador ha pagado la tercera renta.",
+      "active": false
+    }
+    ,
+    {
+      "key": "PlayerHasPayedFourthRent",
+      "description": "El jugador ha pagado la cuarta renta.",
+      "active": false
+    },
+    {
+      "key": "PlayerLastRent",
+      "description": "El jugador ha pagado la última renta.",
+      "active": false
+    },{
+      "key": "PlayerPendingOfFirstRentTalk",
+      "description": "El jugador está pendiente de la primera charla sobre la renta.",
+      "active": true
     }
   ]
 }

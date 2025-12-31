@@ -1,0 +1,48 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 90ed0434704aef648b1253746ede729a, type: 3}
+  m_Name: PlayerPendingOfFirstRentTalkDialog
+  m_EditorClassIdentifier: Assembly-CSharp::DialogTree
+  nodes:
+  - text: Buenas... Supongo que ya sabes quien soy, y como va esto.
+    choices: []
+    nextNodeIndex: 1
+    nextDialogTree: {fileID: 0}
+    setNpcStateIfCondition: 
+  - text: "Soy tu casero, y vendr\xE9 al final de cada dia a pedirte el dinero."
+    choices: []
+    nextNodeIndex: 2
+    nextDialogTree: {fileID: 0}
+    setNpcStateIfCondition: 
+  - text: 
+    choices:
+    - choiceText: Aqui tienes el dinero
+      nextNodeIndex: 3
+      unlockKey: PlayerHasPayedFirstRent
+      requiredMoney: 0
+    - choiceText: No tengo el dinero
+      nextNodeIndex: 4
+      unlockKey: NotPayedRentDialog
+      requiredMoney: 0
+    nextNodeIndex: -1
+    nextDialogTree: {fileID: 0}
+    setNpcStateIfCondition: 
+  - text: "Muchas gracias, volver\xE9 ma\xF1ana."
+    choices: []
+    nextNodeIndex: -1
+    nextDialogTree: {fileID: 0}
+    setNpcStateIfCondition: PlayerHasPayedFirstRent
+  - text: "No tienes suficiente? Ma\xF1ana te quiero ver fuera de aqui."
+    choices: []
+    nextNodeIndex: -1
+    nextDialogTree: {fileID: 0}
+    setNpcStateIfCondition: NotPayedRentDialog
