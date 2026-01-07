@@ -1124,31 +1124,31 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: -8679921383154817045, guid: 2732e618e8f154c46b986936a299e585, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 8.43499
+      value: 13.66
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 2732e618e8f154c46b986936a299e585, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0.022304118
+      value: -1.3700001
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 2732e618e8f154c46b986936a299e585, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 5.9275084
+      value: -15.69
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 2732e618e8f154c46b986936a299e585, type: 3}
       propertyPath: m_LocalRotation.w
-      value: 0.70710623
+      value: 0.7071068
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 2732e618e8f154c46b986936a299e585, type: 3}
       propertyPath: m_LocalRotation.x
-      value: -0
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 2732e618e8f154c46b986936a299e585, type: 3}
       propertyPath: m_LocalRotation.y
-      value: 0.70710737
+      value: 0.7071068
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 2732e618e8f154c46b986936a299e585, type: 3}
       propertyPath: m_LocalRotation.z
-      value: -0
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 2732e618e8f154c46b986936a299e585, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
@@ -1179,7 +1179,11 @@ PrefabInstance:
       value: Interactable
       objectReference: {fileID: 0}
     m_RemovedComponents: []
-    m_RemovedGameObjects: []
+    m_RemovedGameObjects:
+    - {fileID: 8513859187771203891, guid: 2732e618e8f154c46b986936a299e585, type: 3}
+    - {fileID: -8391222552659086748, guid: 2732e618e8f154c46b986936a299e585, type: 3}
+    - {fileID: -5568371526223589888, guid: 2732e618e8f154c46b986936a299e585, type: 3}
+    - {fileID: -6733177361254619370, guid: 2732e618e8f154c46b986936a299e585, type: 3}
     m_AddedGameObjects:
     - targetCorrespondingSourceObject: {fileID: -8679921383154817045, guid: 2732e618e8f154c46b986936a299e585, type: 3}
       insertIndex: -1
@@ -1227,6 +1231,7 @@ MonoBehaviour:
   drinkOptions: 0100000002000000
   selectedDrink: 0
   beerMinigameScript: {fileID: 5192355418075505036}
+  openingAudioClip: {fileID: 0}
   lastUsedIngredients: 
 --- !u!65 &8104512058143660585
 BoxCollider:

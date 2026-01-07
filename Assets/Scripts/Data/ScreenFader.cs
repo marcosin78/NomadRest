@@ -33,6 +33,12 @@ public class ScreenFader : MonoBehaviour
     // Rutina interna para interpolar el valor alfa de la imagen de fade.
     private IEnumerator Fade(float from, float to)
     {
+        if (fadeImage == null)
+        {
+            Debug.LogError("ScreenFader: fadeImage no está asignado.");
+            yield break;
+        }
+        Debug.Log($"[ScreenFader] Iniciando Fade de {from} a {to} en {fadeDuration} segundos.");
         float elapsed = 0f;
         Color c = fadeImage.color;
         while (elapsed < fadeDuration)
@@ -43,5 +49,6 @@ public class ScreenFader : MonoBehaviour
             yield return null;
         }
         fadeImage.color = new Color(c.r, c.g, c.b, to);
+        Debug.Log("[ScreenFader] Fade terminado.");
     }
 }

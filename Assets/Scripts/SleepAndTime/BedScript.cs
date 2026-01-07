@@ -59,9 +59,11 @@ public class BedScript : MonoBehaviour, IInteractable
 
     private IEnumerator SleepSequence()
     {
+        Debug.Log("Iniciando secuencia de sueño.");
         isSleeping = true;
         yield return ScreenFader.Instance.FadeOut();
-
+        
+        Debug.Log("FadeOut terminado");
         ClockScript.Instance.PlayerSleep();
 
         yield return new WaitForSeconds(0.5f);

@@ -33,6 +33,7 @@ TagManager:
   - PositionsParent
   - SpecialNPCPoint
   - MoneyText
+  - TutorialBird
   layers:
   - Default
   - TransparentFX

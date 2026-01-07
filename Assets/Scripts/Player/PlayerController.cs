@@ -184,7 +184,7 @@ private Vector3 grabOffset;
         availableHands = true;
         Debug.Log("Player dropped item: " + item.name);
     }
-
+    
        // Bloquea movimiento y cámara
     public void LockAll()
     {

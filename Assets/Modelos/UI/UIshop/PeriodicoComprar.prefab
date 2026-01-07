@@ -149,11 +149,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: '::'
   playerInventory: {fileID: 0}
   shopMenuUI: {fileID: 0}
+  buyButton: {fileID: 4432612413730426725}
+  itemDataList: []
   itemPrefabs:
   - {fileID: 8110115580279306967}
   - {fileID: 2558184963708591298}
   - {fileID: 6586930828348468668}
-  buyButton: {fileID: 4432612413730426725}
+  interactAudioClip: {fileID: 0}
+  endInteractAudioClip: {fileID: 0}
 --- !u!1 &2822098261961612286
 GameObject:
   m_ObjectHideFlags: 0
@@ -251,7 +254,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &111756706769333142
 RectTransform:
   m_ObjectHideFlags: 0
