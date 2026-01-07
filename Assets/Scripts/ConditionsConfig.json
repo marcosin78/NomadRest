@@ -105,6 +105,11 @@
       "key": "PlayerPendingOfFirstRentTalk",
       "description": "El jugador está pendiente de la primera charla sobre la renta.",
       "active": true
+    },{
+      "key": "DeveloperNpcNotTalkedTo",
+      "description": "No ha hablado con el NPC del desarrollador.",
+      "active": true
+
     }
   ]
 }

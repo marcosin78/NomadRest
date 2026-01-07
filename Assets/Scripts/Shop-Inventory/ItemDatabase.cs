@@ -2,6 +2,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using System.IO;
 
+// Script encargado de gestionar la base de datos de ingredientes y objetos del juego.
+// Permite cargar los datos desde un archivo JSON, acceder a los datos por ID y cargar los sprites asociados desde Resources.
 public class ItemDatabase : MonoBehaviour
 {
     public static ItemDatabase Instance;
@@ -22,6 +24,7 @@ public class ItemDatabase : MonoBehaviour
         }
     }
 
+    // Carga los items desde un archivo JSON y los guarda en la lista y el diccionario
     void LoadItems()
     {
         string path = Application.dataPath + "/Data/items.json";
@@ -42,6 +45,7 @@ public class ItemDatabase : MonoBehaviour
         }
     }
 
+    // Devuelve el ItemData correspondiente a un ID
     public ItemData GetItemById(int id)
     {
         itemDict.TryGetValue(id, out var data);

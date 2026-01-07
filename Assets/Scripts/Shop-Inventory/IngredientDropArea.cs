@@ -2,29 +2,29 @@ using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 
+// Script para el área donde se sueltan los ingredientes y se agita el cóctel.
+// Permite añadir ingredientes, detectar el shake/agitado, cambiar sprites, reproducir sonidos y comunicar el resultado al minijuego.
 public class IngredientDropArea : MonoBehaviour
 {
-    
-    //SCRIPT PARA EL ÁREA DONDE SE SUELTAN LOS INGREDIENTES Y SE AGITA EL CÓCTEL
-    //PENDIENTE DE MODIFICAR EL COCTEL SE CREA MUY RAPIDO.
+    // Variables de movimiento y shake
     private bool isDragging = false;
     private Vector3 offset;
     private Vector3 lastPosition;
-
     private Vector3 initialPosition;
     private Rigidbody2D rb;
     public float mass = 1.5f; // Peso del cóctel
-    public float shakeMultiplier = 0.00005f; // Ajusta la sensibilidad del shake (más bajo = más lento)
-
+    public float shakeMultiplier = 0.00005f; // Sensibilidad del shake
     public BeerMinigameScript beerMinigameScript; // Asigna en el inspector
 
-    //Logica de Sprites
+    // Sprites de la coctelera
     public Sprite closedShakerSprite;
     public Sprite openShakerSprite;
     public GameObject shakerSprite;
 
+    // Sonido al añadir ingrediente
     public AudioSource playerAudioSource;
     public AudioClip shakerFillSoundClip;
+
     void Awake()
     {
         rb = GetComponent<Rigidbody2D>();
@@ -37,7 +37,6 @@ public class IngredientDropArea : MonoBehaviour
         rb.constraints = RigidbodyConstraints2D.FreezeRotation;
         rb.linearDamping = 10f;
         initialPosition = transform.position;
-
     }
 
     void Update()
@@ -45,15 +44,12 @@ public class IngredientDropArea : MonoBehaviour
         // Solo permite agarrar si hay al menos 2 ingredientes
         if (CanGrabArea())
         {
-            // Mouse 1 presionado sobre el área
             if (Input.GetMouseButtonDown(0))
             {
-                // Comprobar si el mouse está sobre este objeto (UI)
                 if (IsPointerOverUIElement())
                 {
                     isDragging = true;
                     StartShaking();
-                    // Calcular offset para que el área no salte al centro del ratón
                     Vector3 mousePos;
                     RectTransformUtility.ScreenPointToWorldPointInRectangle(
                         GetComponent<RectTransform>(),
@@ -77,15 +73,12 @@ public class IngredientDropArea : MonoBehaviour
                 null,
                 out mousePos);
             Vector3 targetPos = mousePos + offset;
-            Vector2 force = (targetPos - transform.position) * rb.mass * 50f; // Ajusta el factor para la "sensación" de peso
+            Vector2 force = (targetPos - transform.position) * rb.mass * 50f;
             rb.AddForce(force);
 
-            // Calcular distancia movida este frame
             float distance = Vector3.Distance(transform.position, lastPosition);
-            // Incrementar shakeProgress según distancia y fuerza
             if (isBeingShaken)
             {
-                // El progreso depende solo de la distancia movida, no de la fuerza
                 float shakeAmount = distance * shakeMultiplier;
                 shakeProgress += shakeAmount;
                 Debug.Log($"Shake Progress: {shakeProgress:F3}");
@@ -95,58 +88,62 @@ public class IngredientDropArea : MonoBehaviour
                     isBeingShaken = false;
                     isDragging = false;
 
+                    // Restar del inventario cada ingrediente añadido
+                    if (InventorySystem.Instance != null)
+                    {
+                        foreach (int id in addedIngredientIDs)
+                        {
+                            InventorySystem.Instance.RemoveItem(id, 1);
+                        }
+                    }
+
                     if (beerMinigameScript != null)
-                {
-                    Debug.Log("Llamando a OnMinigameComplete desde IngredientDropArea");
-                    beerMinigameScript.OnMinigameComplete(addedIngredientIDs);
-                }
+                    {
+                        Debug.Log("Llamando a OnMinigameComplete desde IngredientDropArea");
+                        beerMinigameScript.OnMinigameComplete(addedIngredientIDs);
+                    }
                     else
                     {
-                    Debug.LogError("beerMinigameScript no está asignado en IngredientDropArea");
-                    }  
-
+                        Debug.LogError("beerMinigameScript no está asignado en IngredientDropArea");
+                    }
                 }
             }
             lastPosition = transform.position;
         }
 
-        // --- Cambia el sprite según si hay un IngredientButton cerca ---
-    bool ingredientNear = false;
-    float checkRadius = 100f; // Ajusta según tu escala de UI
+        // Cambia el sprite según si hay un IngredientButton cerca
+        bool ingredientNear = false;
+        float checkRadius = 100f;
+        var allButtons = FindObjectsOfType<IngredientButton>();
+        Vector2 dropAreaScreenPos = RectTransformUtility.WorldToScreenPoint(null, transform.position);
 
-    // Busca todos los IngredientButton activos en la escena
-    var allButtons = FindObjectsOfType<IngredientButton>();
-    Vector2 dropAreaScreenPos = RectTransformUtility.WorldToScreenPoint(null, transform.position);
-
-    foreach (var btn in allButtons)
-    {
-        if (btn != null && btn.gameObject.activeInHierarchy)
+        foreach (var btn in allButtons)
         {
-            Vector2 btnScreenPos = RectTransformUtility.WorldToScreenPoint(null, btn.transform.position);
-            float dist = Vector2.Distance(btnScreenPos, dropAreaScreenPos);
-            if (dist < checkRadius)
+            if (btn != null && btn.gameObject.activeInHierarchy)
             {
-                ingredientNear = true;
-                break;
+                Vector2 btnScreenPos = RectTransformUtility.WorldToScreenPoint(null, btn.transform.position);
+                float dist = Vector2.Distance(btnScreenPos, dropAreaScreenPos);
+                if (dist < checkRadius)
+                {
+                    ingredientNear = true;
+                    break;
+                }
             }
         }
-    }
 
         if (shakerSprite != null)
         {
-       var img = shakerSprite.GetComponent<Image>();
-        if (img != null)
-        {
-            img.sprite = ingredientNear ? openShakerSprite : closedShakerSprite;
+            var img = shakerSprite.GetComponent<Image>();
+            if (img != null)
+            {
+                img.sprite = ingredientNear ? openShakerSprite : closedShakerSprite;
+            }
         }
-        }
-    
     }
 
     // Comprueba si el puntero está sobre este UI (DropArea)
     private bool IsPointerOverUIElement()
     {
-        // Raycast UI para ver si el mouse está sobre este objeto
         var pointerData = new UnityEngine.EventSystems.PointerEventData(UnityEngine.EventSystems.EventSystem.current)
         {
             position = Input.mousePosition
@@ -160,8 +157,9 @@ public class IngredientDropArea : MonoBehaviour
         }
         return false;
     }
+
     public System.Collections.Generic.List<int> addedIngredientIDs = new System.Collections.Generic.List<int>();
-    // Estructura para guardar info del botón original
+
     [System.Serializable]
     public class IngredientButtonInfo
     {
@@ -173,7 +171,7 @@ public class IngredientDropArea : MonoBehaviour
     }
     public System.Collections.Generic.List<IngredientButtonInfo> movedIngredientButtons = new System.Collections.Generic.List<IngredientButtonInfo>();
 
-    // Devuelve true si se añadió, false si no se puede añadir
+    // Añade un ingrediente al área si hay suficiente cantidad y no hay otro del mismo tipo
     public bool AddIngredient(int id, Sprite sprite)
     {
         if (InventorySystem.Instance.GetItemCount(id) < 1)
@@ -189,9 +187,8 @@ public class IngredientDropArea : MonoBehaviour
             return false;
         }
 
-            // --- Reproducir sonido al añadir ingrediente ---
         if (playerAudioSource != null && shakerFillSoundClip != null)
-        playerAudioSource.PlayOneShot(shakerFillSoundClip);
+            playerAudioSource.PlayOneShot(shakerFillSoundClip);
 
         string tipo = data.ingredientType;
         foreach (int addedId in addedIngredientIDs)
@@ -206,12 +203,9 @@ public class IngredientDropArea : MonoBehaviour
 
         addedIngredientIDs.Add(id);
 
-        // NO muevas ni ocultes el botón aquí
-
         if (playerAudioSource != null && shakerFillSoundClip != null)
-        playerAudioSource.PlayOneShot(shakerFillSoundClip);
+            playerAudioSource.PlayOneShot(shakerFillSoundClip);
 
-        // Solo añade el sprite visual al área
         GameObject imgObj = new GameObject("AddedIngredient");
         imgObj.transform.SetParent(transform, false);
         var img = imgObj.AddComponent<Image>();
@@ -223,11 +217,9 @@ public class IngredientDropArea : MonoBehaviour
     // Limpia los ingredientes y sprites visuales del área
     public void ClearIngredients()
     {
-
-            isDragging = false;
-            addedIngredientIDs.Clear();
-
+        isDragging = false;
         addedIngredientIDs.Clear();
+
         foreach (var info in movedIngredientButtons)
         {
             if (info.buttonTransform != null && info.originalParent != null)
@@ -238,11 +230,10 @@ public class IngredientDropArea : MonoBehaviour
                     btn.originalParent = info.originalParent;
                     btn.originalSiblingIndex = info.originalSiblingIndex;
                     btn.originalLocalPosition = info.originalLocalPosition;
-                    btn.AnimateReturnToOriginal(true); // <-- instantáneo
+                    btn.AnimateReturnToOriginal(true);
                 }
                 else
                 {
-                    // Fallback por si no es un IngredientButton
                     info.buttonTransform.SetParent(info.originalParent, false);
                     info.buttonTransform.SetSiblingIndex(info.originalSiblingIndex);
                     info.buttonTransform.localPosition = info.originalLocalPosition;
@@ -257,50 +248,47 @@ public class IngredientDropArea : MonoBehaviour
                 GameObject.Destroy(child.gameObject);
         }
     }
-     // Porcentaje de movilidad (0 a 1) para simular el shake del cóctel
-        [Range(0,1)]
-        public float shakeProgress = 0f;
-        public float shakeRequired = 1f; // 100% para completar
-        public bool isBeingShaken = false;
 
-        // Llamar a esto para intentar agarrar el área
-        public bool CanGrabArea()
+    [Range(0,1)]
+    public float shakeProgress = 0f;
+    public float shakeRequired = 1f;
+    public bool isBeingShaken = false;
+
+    // Devuelve true si se puede agarrar el área (mínimo 2 ingredientes)
+    public bool CanGrabArea()
+    {
+        return addedIngredientIDs.Count >= 2;
+    }
+
+    // Inicia el movimiento de shake
+    public void StartShaking()
+    {
+        if (CanGrabArea())
         {
-            return addedIngredientIDs.Count >= 2;
+            isBeingShaken = true;
+            shakeProgress = 0f;
+            lastPosition = transform.position;
         }
+    }
 
-        // Llamar a esto para iniciar el movimiento de shake
-        public void StartShaking()
+    // Actualiza el shake manualmente (no usado en este flujo)
+    public void UpdateShaking(float shakeAmount)
+    {
+        if (isBeingShaken)
         {
-            if (CanGrabArea())
+            shakeProgress += shakeAmount;
+
+            if (shakeProgress >= shakeRequired)
             {
-                isBeingShaken = true;
-                shakeProgress = 0f;
-                lastPosition = transform.position;
-                // initialPosition ya no se reasigna aquí
+                shakeProgress = shakeRequired;
+                isBeingShaken = false;
+                transform.position = initialPosition;
+                rb.linearVelocity = Vector2.zero;
             }
         }
+    }
 
-        // Llamar a esto cada frame mientras se agita
-        public void UpdateShaking(float shakeAmount)
-        {
-            if (isBeingShaken)
-            {
-                shakeProgress += shakeAmount;
-
-                if (shakeProgress >= shakeRequired)
-                {
-                    shakeProgress = shakeRequired;
-                    isBeingShaken = false;
-
-                    // Vuelve a la posición inicial
-                    transform.position = initialPosition;
-                    rb.linearVelocity = Vector2.zero; 
-                }
-            }
-        }
-
-         // Recoloca el área en su posición inicial
+    // Recoloca el área en su posición inicial
     public void ResetToInitialPosition()
     {
         transform.position = initialPosition;
@@ -315,26 +303,4 @@ public class IngredientDropArea : MonoBehaviour
             Debug.Log("Reset IngredientDropArea to initial position. no Rigidbody found.");
         }
     }
-
-    /*void OnGUI()  //VER EL RADIO DE DETECCIÓN DE INGREDIENTES CERCANOS
-{
-    // Visualiza el radio de detección en pantalla
-    float checkRadius = 100f; // Usa el mismo valor que en Update
-    Vector2 dropAreaScreenPos = RectTransformUtility.WorldToScreenPoint(null, transform.position);
-
-    // Ajusta el círculo para que esté centrado
-    Rect rect = new Rect(dropAreaScreenPos.x - checkRadius, 
-                         Screen.height - dropAreaScreenPos.y - checkRadius, 
-                         checkRadius * 2, 
-                         checkRadius * 2);
-
-    // Color y transparencia del círculo
-    Color prevColor = GUI.color;
-    GUI.color = new Color(0, 1, 0, 0.2f); // Verde translúcido
-
-    // Dibuja el círculo (realmente es una textura cuadrada, pero sirve para debug)
-    GUI.DrawTexture(rect, Texture2D.whiteTexture);
-
-    GUI.color = prevColor;
-}*/
 }

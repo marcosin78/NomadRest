@@ -5,13 +5,14 @@ using TMPro;
 using System.Collections;
 using Unity.VisualScripting;
 
+// Script encargado de gestionar el botón de ingrediente en la UI del minijuego.
+// Permite arrastrar el ingrediente, mostrar la cantidad disponible, animar el botón y la imagen,
+// y añadir el ingrediente al área de preparación cuando se suelta.
 public class IngredientButton : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler
 {
     public int ingredientID;
     public Image ingredientImage;
     public TextMeshProUGUI cantidadText;
-
-    
 
     [HideInInspector] public Transform originalParent;
     [HideInInspector] public int originalSiblingIndex;
@@ -20,32 +21,31 @@ public class IngredientButton : MonoBehaviour, IBeginDragHandler, IDragHandler, 
     private int initialCantidad = -1;
     private Vector3 originalScale;
     private IngredientDropArea currentDropArea;
-    private Vector3 targetScale; // Añade esto arriba
-    public Image buttonImage; // Añade esta línea arriba para referenciar la imagen del botón
+    private Vector3 targetScale;
+    public Image buttonImage;
     private Coroutine returnRoutine;
 
     public bool IsReturning => returnRoutine != null;
 
+    // Inicializa referencias, carga datos del ingrediente y guarda la cantidad inicial
     void Start()
     {
         if (ingredientImage == null)
             ingredientImage = transform.Find("IngredientImage")?.GetComponent<Image>();
         if (buttonImage == null)
-            buttonImage = GetComponent<Image>(); // Obtiene la imagen del propio botón
+            buttonImage = GetComponent<Image>();
         canvas = GetComponentInParent<Canvas>();
         LoadDataFromDatabase();
         SaveInitialCantidad();
         originalScale = ingredientImage != null ? ingredientImage.rectTransform.localScale : Vector3.one;
-        targetScale = originalScale; // Inicializa targetScale
-
-
-        
+        targetScale = originalScale;
     }
+
+    // Actualiza la cantidad y anima la escala del botón e imagen
     void Update()
     {
         UpdateCantidad();
 
-        // Animación suave de escala para ambas imágenes
         if (ingredientImage != null)
         {
             ingredientImage.rectTransform.localScale = Vector3.Lerp(
@@ -64,6 +64,7 @@ public class IngredientButton : MonoBehaviour, IBeginDragHandler, IDragHandler, 
         }
     }
 
+    // Carga los datos del ingrediente desde la base de datos y actualiza la imagen y cantidad
     public void LoadDataFromDatabase()
     {
         var data = ItemDatabase.Instance.GetItemById(ingredientID);
@@ -90,6 +91,7 @@ public class IngredientButton : MonoBehaviour, IBeginDragHandler, IDragHandler, 
         }
     }
 
+    // Actualiza el texto de cantidad según el inventario
     private void UpdateCantidad()
     {
         if (InventorySystem.Instance == null)
@@ -105,6 +107,7 @@ public class IngredientButton : MonoBehaviour, IBeginDragHandler, IDragHandler, 
             cantidadText.text = actualCantidad.ToString();
     }
 
+    // Guarda la posición, escala y padre originales al empezar a arrastrar
     public void OnBeginDrag(PointerEventData eventData)
     {
         if (originalParent == null)
@@ -113,11 +116,10 @@ public class IngredientButton : MonoBehaviour, IBeginDragHandler, IDragHandler, 
         originalLocalPosition = transform.localPosition;
         originalScale = ingredientImage != null ? ingredientImage.rectTransform.localScale : Vector3.one;
         targetScale = originalScale;
-        // También resetea la escala de la imagen del botón
         if (buttonImage != null)
             buttonImage.rectTransform.localScale = originalScale;
 
-        // --- Reproducir audio solo una vez por drag ---
+        // Reproduce el audio del ingrediente si está definido
         var data = ItemDatabase.Instance.GetItemById(ingredientID);
         if (data != null && !string.IsNullOrEmpty(data.audioName))
         {
@@ -127,6 +129,7 @@ public class IngredientButton : MonoBehaviour, IBeginDragHandler, IDragHandler, 
         }
     }
 
+    // Actualiza la posición y escala del botón mientras se arrastra
     public void OnDrag(PointerEventData eventData)
     {
         Vector2 pos;
@@ -138,16 +141,15 @@ public class IngredientButton : MonoBehaviour, IBeginDragHandler, IDragHandler, 
         );
         transform.position = canvas.transform.TransformPoint(pos);
 
-        // Escalado dinámico al acercarse a un IngredientDropArea
         IngredientDropArea nearestArea = FindNearestDropArea();
         if (nearestArea != null && ingredientImage != null)
         {
-            float minScale = 0.5f; // Escala mínima al llegar al centro
-            float maxDistance = 200f; // Distancia máxima para empezar a escalar (ajusta según tu UI)
+            float minScale = 0.5f;
+            float maxDistance = 200f;
             float dist = Vector3.Distance(transform.position, nearestArea.transform.position);
             float t = Mathf.Clamp01(1 - (dist / maxDistance));
             float scale = Mathf.Lerp(1f, minScale, t);
-            targetScale = Vector3.one * scale; // Solo cambiamos la escala objetivo
+            targetScale = Vector3.one * scale;
         }
         else if (ingredientImage != null)
         {
@@ -155,10 +157,9 @@ public class IngredientButton : MonoBehaviour, IBeginDragHandler, IDragHandler, 
         }
     }
 
-    // Al soltar, restaura la escala
+    // Al soltar el botón, intenta añadir el ingrediente al área y anima el retorno
     public void OnEndDrag(PointerEventData eventData)
     {
-        // Detecta el objeto bajo el puntero al soltar
         var results = new System.Collections.Generic.List<RaycastResult>();
         EventSystem.current.RaycastAll(eventData, results);
 
@@ -169,7 +170,6 @@ public class IngredientButton : MonoBehaviour, IBeginDragHandler, IDragHandler, 
             var dropArea = r.gameObject.GetComponent<IngredientDropArea>();
             if (dropArea != null)
             {
-                // Intenta añadir el ingrediente
                 var data = ItemDatabase.Instance.GetItemById(ingredientID);
                 Sprite sprite = data != null ? Resources.Load<Sprite>(data.spriteName) : null;
                 dropArea.AddIngredient(ingredientID, sprite);
@@ -178,16 +178,15 @@ public class IngredientButton : MonoBehaviour, IBeginDragHandler, IDragHandler, 
             }
         }
 
-        // Inicia animación de retorno suave
         if (returnRoutine != null)
             StopCoroutine(returnRoutine);
         returnRoutine = StartCoroutine(SmoothReturn());
     }
 
-    // Corrutina para volver suavemente a la posición y escala original
+    // Corrutina para animar el retorno del botón a su posición y escala original
     private IEnumerator SmoothReturn()
     {
-        float duration = 0.25f; // Duración de la animación
+        float duration = 0.25f;
         float elapsed = 0f;
 
         Vector3 startPos = transform.position;
@@ -203,13 +202,11 @@ public class IngredientButton : MonoBehaviour, IBeginDragHandler, IDragHandler, 
 
         while (elapsed < duration)
         {
-            // --- NUEVO: Si el objeto se desactiva, sal de la corrutina ---
             if (!gameObject.activeInHierarchy)
             {
                 Debug.Log("IngredientButton desactivado durante la animación de retorno. Saliendo de la corrutina.");
                 yield break;
             }
-                
 
             float t = elapsed / duration;
             transform.position = Vector3.Lerp(startPos, endPos, t);
@@ -232,10 +229,10 @@ public class IngredientButton : MonoBehaviour, IBeginDragHandler, IDragHandler, 
         targetScale = originalScale;
         returnRoutine = null;
 
-        // --- Animación de rebote/expansión ---
         yield return StartCoroutine(BounceEffect());
     }
 
+    // Efecto de rebote al terminar la animación de retorno
     private IEnumerator BounceEffect()
     {
         float bounceDuration = 0.12f;
@@ -244,7 +241,6 @@ public class IngredientButton : MonoBehaviour, IBeginDragHandler, IDragHandler, 
 
         Vector3 overshoot = originalScale * bounceScale;
 
-        // Expande
         while (elapsed < bounceDuration / 2f)
         {
             float t = elapsed / (bounceDuration / 2f);
@@ -256,7 +252,6 @@ public class IngredientButton : MonoBehaviour, IBeginDragHandler, IDragHandler, 
             yield return null;
         }
 
-        // Contrae
         elapsed = 0f;
         while (elapsed < bounceDuration / 2f)
         {
@@ -269,13 +264,13 @@ public class IngredientButton : MonoBehaviour, IBeginDragHandler, IDragHandler, 
             yield return null;
         }
 
-        // Asegura escala final
         if (ingredientImage != null)
             ingredientImage.rectTransform.localScale = originalScale;
         if (buttonImage != null)
             buttonImage.rectTransform.localScale = originalScale;
     }
 
+    // Restaura el botón a su posición y estado original
     public void ResetButton()
     {
         transform.SetParent(originalParent);
@@ -283,12 +278,14 @@ public class IngredientButton : MonoBehaviour, IBeginDragHandler, IDragHandler, 
         gameObject.SetActive(true);
     }
 
+    // Guarda la cantidad inicial del ingrediente al iniciar el minijuego
     public void SaveInitialCantidad()
     {
         if (InventorySystem.Instance != null)
             initialCantidad = InventorySystem.Instance.GetItemCount(ingredientID);
     }
 
+    // Restaura la cantidad inicial del ingrediente si ha cambiado
     public void RestoreInitialCantidad()
     {
         if (InventorySystem.Instance != null && initialCantidad != -1)
@@ -303,7 +300,7 @@ public class IngredientButton : MonoBehaviour, IBeginDragHandler, IDragHandler, 
         }
     }
 
-    // Encuentra el IngredientDropArea más cercano al botón
+    // Busca el área de ingredientes más cercana al botón
     private IngredientDropArea FindNearestDropArea()
     {
         IngredientDropArea[] areas = GameObject.FindObjectsOfType<IngredientDropArea>();
@@ -318,25 +315,23 @@ public class IngredientButton : MonoBehaviour, IBeginDragHandler, IDragHandler, 
                 nearest = area;
             }
         }
-        // Puedes poner un umbral si quieres limitar el efecto solo cuando está cerca
         return nearest;
     }
+
+    // Anima el retorno del botón a su posición original, instantáneo o con animación
     public void AnimateReturnToOriginal(bool instant = false)
     {
-        gameObject.SetActive(true); // Asegura que está activo antes de animar
+        gameObject.SetActive(true);
 
-        // Detén cualquier animación pendiente
         if (returnRoutine != null)
         {
             StopCoroutine(returnRoutine);
             returnRoutine = null;
         }
 
-        // Cambia el padre antes de ajustar la posición local
         transform.SetParent(originalParent, false);
         transform.SetSiblingIndex(originalSiblingIndex);
 
-        // Coloca la posición y escala originales
         transform.localPosition = originalLocalPosition;
         if (ingredientImage != null)
             ingredientImage.rectTransform.localScale = originalScale;
@@ -344,11 +339,11 @@ public class IngredientButton : MonoBehaviour, IBeginDragHandler, IDragHandler, 
             buttonImage.rectTransform.localScale = originalScale;
         targetScale = originalScale;
 
-        // No inicies animación si es instantáneo
         if (!instant)
             returnRoutine = StartCoroutine(SmoothReturn());
     }
 
+    // Detiene la animación de retorno si el botón se desactiva
     void OnDisable()
     {
         if (returnRoutine != null)

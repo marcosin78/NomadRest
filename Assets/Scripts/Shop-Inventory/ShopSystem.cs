@@ -3,6 +3,8 @@ using System.IO;
 using System.Collections.Generic;
 using TMPro;
 
+// Script encargado de gestionar la tienda del juego.
+// Permite mostrar la UI de la tienda, comprar ingredientes, actualizar el inventario y controlar el acceso según condiciones del juego.
 public class ShopSystem : MonoBehaviour, IInteractable
 {
     public InventorySystem playerInventory;
@@ -14,7 +16,7 @@ public class ShopSystem : MonoBehaviour, IInteractable
     public List<ItemData> itemDataList = new List<ItemData>();
     public ItemScript[] itemPrefabs; // Prefabs de UI, asignados en el Inspector
 
-        [Header("Audio")]
+    [Header("Audio")]
     public AudioClip interactAudioClip;
     public AudioClip endInteractAudioClip;
 
@@ -62,43 +64,44 @@ public class ShopSystem : MonoBehaviour, IInteractable
       }
     }
     
+    // Realiza la compra de los ingredientes seleccionados y actualiza el inventario
     public void BuyItems()
-{
-    int totalCost = 0;
-
-    for (int i = 0; i < itemPrefabs.Length; i++)
     {
-        var itemScript = itemPrefabs[i];
-        totalCost += itemScript.GetPrice() * itemScript.GetCantidadComprar();
-    }
+        int totalCost = 0;
 
-    if (playerInventory.money >= totalCost)
-    {
         for (int i = 0; i < itemPrefabs.Length; i++)
         {
             var itemScript = itemPrefabs[i];
+            totalCost += itemScript.GetPrice() * itemScript.GetCantidadComprar();
+        }
 
-            if (itemScript.GetCantidadComprar() > 0)
+        if (playerInventory.money >= totalCost)
+        {
+            for (int i = 0; i < itemPrefabs.Length; i++)
             {
-                playerInventory.AddItem(itemScript.id, itemScript.GetCantidadComprar());
-                itemScript.ResetCantidadComprar();
+                var itemScript = itemPrefabs[i];
 
-                foreach (var item in itemPrefabs)
+                if (itemScript.GetCantidadComprar() > 0)
                 {
-                item.SyncCantidadInventario();
+                    playerInventory.AddItem(itemScript.id, itemScript.GetCantidadComprar());
+                    itemScript.ResetCantidadComprar();
+
+                    foreach (var item in itemPrefabs)
+                    {
+                        item.SyncCantidadInventario();
+                    }
                 }
             }
+            playerInventory.SpendMoney(totalCost);
+            Debug.Log("Compra realizada por " + totalCost + " monedas.");
         }
-        playerInventory.SpendMoney(totalCost);
-        Debug.Log("Compra realizada por " + totalCost + " monedas.");
-    }
-    else
-    {
-        Debug.Log("No tienes suficiente dinero para la compra.");
+        else
+        {
+            Debug.Log("No tienes suficiente dinero para la compra.");
+        }
     }
 
-    }
-
+    // Carga los datos de los ingredientes desde el archivo JSON
     private void LoadItemsFromJson()
     {
         string path = Application.dataPath + "/Data/items.json";
@@ -125,6 +128,8 @@ public class ShopSystem : MonoBehaviour, IInteractable
     }
 
     private bool hasCheckedShop = false;
+
+    // Muestra la tienda y desbloquea el cursor, activa condición si corresponde
     public void OnInteract()
     {
         // Solo la primera vez que se abre la tienda y si HasCheckedCocktails es true
@@ -146,6 +151,8 @@ public class ShopSystem : MonoBehaviour, IInteractable
 
         AudioManager.Instance.PlaySound(interactAudioClip);
     }
+
+    // Oculta la tienda y bloquea el cursor
     public void OnEndInteract()
     {
         shopMenuUI.SetActive(false);
@@ -155,7 +162,5 @@ public class ShopSystem : MonoBehaviour, IInteractable
         Cursor.visible = false;
 
         AudioManager.Instance.PlaySound(endInteractAudioClip);
-
     }
-
 }

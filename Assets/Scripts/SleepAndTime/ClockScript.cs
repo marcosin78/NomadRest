@@ -2,6 +2,9 @@ using UnityEngine;
 using TMPro;
 using System;
 
+// Script encargado de gestionar el reloj y el ciclo de día/noche en el juego.
+// Permite avanzar el tiempo, controlar el horario de apertura/cierre del bar, gestionar el sueño del jugador y actualizar la UI.
+// También controla el spawn de suciedad y la lógica especial del tutorial.
 public class ClockScript : MonoBehaviour
 {
     public static ClockScript Instance { get; private set; }

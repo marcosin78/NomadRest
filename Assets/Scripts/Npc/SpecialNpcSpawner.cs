@@ -26,6 +26,9 @@ public class NpcSpawnInfo
     [HideInInspector] public HashSet<string> spawnedFlags = new HashSet<string>();
 }
 
+// Script encargado de gestionar el spawn de NPCs especiales según horario y condiciones.
+// Permite definir en qué día y hora debe aparecer cada NPC, y bajo qué condiciones del juego.
+// Instancia el NPC en la posición indicada y configura sus targets de movimiento.
 public class SpecialNpcSpawner : MonoBehaviour
 {
     [Header("Configuración de NPCs especiales")]

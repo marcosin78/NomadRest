@@ -1,6 +1,9 @@
 using UnityEngine;
 using System.Collections.Generic;
 
+// Script encargado de gestionar la suciedad en el bar.
+// Permite spawnear objetos y manchas de suciedad, limpiar con la fregona, reproducir efectos y sonidos,
+// y calcular el porcentaje de limpieza para activar condiciones del juego.
 public class DirtynessScript : MonoBehaviour
 {
     [Header("Zona de spawn de suciedad")]
@@ -11,14 +14,11 @@ public class DirtynessScript : MonoBehaviour
     public GameObject[] stainPrefabs; // Prefabs de manchas (sprites o planos con sprite)
     public GameObject trashBin; // Contenedor de basura para recoger suciedad
 
-
     [Header("Partícula de limpieza")]
     public ParticleSystem cleanParticlePrefab; // Asigna un prefab de partícula de polvo
 
     [Header("Sonidos de limpieza")]
-
     public AudioClip cleanSoundClip; // Asigna un clip de sonido de limpieza
-
 
     public float cleanTime = 2f; // Segundos necesarios para limpiar la mancha
     private float cleaningTimer = 0f;
@@ -27,19 +27,16 @@ public class DirtynessScript : MonoBehaviour
     private Camera mainCamera;
 
     private int totalDirtSpawned = 0;
-
     private List<GameObject> spawnedDirt = new List<GameObject>();
-
     private bool barCleanedOnce = false;
 
-    /// <summary>
-    /// Spawnea un objeto de suciedad aleatorio en la zona.
-    /// </summary>
-
+    // Inicializa la referencia a la cámara principal
     void Start()
     {
         mainCamera = Camera.main;
     }
+
+    // Controla el proceso de limpieza y activa condiciones del tutorial si corresponde
     void Update()
     {
         if(trashBin == null)
@@ -51,7 +48,7 @@ public class DirtynessScript : MonoBehaviour
         {
             StartCleaning();
 
-            // Check if bar is cleaned 40% for the first time and the pending condition is true
+            // Activa la condición de limpieza del tutorial si se ha limpiado el 40% por primera vez
             if (!barCleanedOnce && GetCleanPercentage() >= 40f && totalDirtSpawned > 0)
             {
                 if (GameConditions.Instance != null && GameConditions.Instance.HasCondition("PlayerPendingOfCleaningSaloonWithTutorialBird"))
@@ -66,9 +63,9 @@ public class DirtynessScript : MonoBehaviour
         {
             ResetCleaning();
         }
-
-
     }
+
+    // Spawnea un objeto de suciedad aleatorio en la zona
     public void SpawnRandomDirt()
     {
         if (spawnArea == null || dirtPrefabs.Length == 0) return;
@@ -80,23 +77,20 @@ public class DirtynessScript : MonoBehaviour
         totalDirtSpawned++;
     }
 
-    /// <summary>
-    /// Spawnea una mancha (sprite/plano) aleatoria en la zona.
-    /// </summary>
+    // Spawnea una mancha (sprite/plano) aleatoria en la zona
     public void SpawnRandomStain()
     {
         if (spawnArea == null || stainPrefabs.Length == 0) return;
 
-    Vector3 pos = GetRandomPointInBounds(spawnArea.bounds);
-    GameObject prefab = stainPrefabs[Random.Range(0, stainPrefabs.Length)];
-    Quaternion rot = Quaternion.Euler(-90f, 0f, 0f); // Rotación -90 en X
-    GameObject stain = Instantiate(prefab, pos, rot, transform);
-    spawnedDirt.Add(stain);
-    totalDirtSpawned++;
+        Vector3 pos = GetRandomPointInBounds(spawnArea.bounds);
+        GameObject prefab = stainPrefabs[Random.Range(0, stainPrefabs.Length)];
+        Quaternion rot = Quaternion.Euler(-90f, 0f, 0f); // Rotación -90 en X
+        GameObject stain = Instantiate(prefab, pos, rot, transform);
+        spawnedDirt.Add(stain);
+        totalDirtSpawned++;
     }
-  
-    /// Elimina y limpia un objeto de suciedad (llamar desde la fregona).
 
+    // Elimina y limpia un objeto de suciedad (llamar desde la fregona)
     public void CleanDirt(GameObject dirt)
     {
         if (spawnedDirt.Contains(dirt))
@@ -106,9 +100,7 @@ public class DirtynessScript : MonoBehaviour
         }
     }
 
-
-    /// Devuelve un punto aleatorio dentro del área de spawn.
- 
+    // Devuelve un punto aleatorio dentro del área de spawn
     Vector3 GetRandomPointInBounds(Bounds bounds)
     {
         return new Vector3(
@@ -118,6 +110,7 @@ public class DirtynessScript : MonoBehaviour
         );
     }
 
+    // Calcula el porcentaje de limpieza del bar
     public float GetCleanPercentage()
     {
         if (totalDirtSpawned == 0) return 100f;
@@ -125,44 +118,51 @@ public class DirtynessScript : MonoBehaviour
         return cleaned / totalDirtSpawned * 100f;
     }
 
+    // Resetea el estado de limpieza
     void ResetCleaning()
     {
         isCleaning = false;
         cleaningTimer = 0f;
     }
 
+    // Inicia el proceso de limpieza si el jugador tiene la fregona equipada y está apuntando a suciedad
     void StartCleaning()
-{
-    MopScript mop = FindObjectOfType<MopScript>();
-    if (mop == null || !mop.grabbingMop)
     {
-        ResetCleaning();
-        return;
-    }
-
-    Ray ray = mainCamera.ScreenPointToRay(Input.mousePosition);
-    RaycastHit hit;
-    if (Physics.Raycast(ray, out hit, 3f))
-    {
-        if (hit.collider.CompareTag("Dirt"))
+        MopScript mop = FindObjectOfType<MopScript>();
+        if (mop == null || !mop.grabbingMop)
         {
-            if (!isCleaning)
+            ResetCleaning();
+            return;
+        }
+
+        Ray ray = mainCamera.ScreenPointToRay(Input.mousePosition);
+        RaycastHit hit;
+        if (Physics.Raycast(ray, out hit, 3f))
+        {
+            if (hit.collider.CompareTag("Dirt"))
             {
-                AudioManager.Instance.PlaySound(cleanSoundClip); // Solo al empezar
-                ParticleSystem particle = Instantiate(cleanParticlePrefab, hit.point, Quaternion.identity);
-                particle.Play();
+                if (!isCleaning)
+                {
+                    AudioManager.Instance.PlaySound(cleanSoundClip); // Solo al empezar
+                    ParticleSystem particle = Instantiate(cleanParticlePrefab, hit.point, Quaternion.identity);
+                    particle.Play();
+                }
+
+                isCleaning = true;
+                cleaningTimer += Time.deltaTime;
+
+                Debug.Log("Cleaning timer: " + cleaningTimer);
+
+                if (cleaningTimer >= cleanTime)
+                {
+                    CleanDirt(hit.collider.gameObject);
+                    cleaningTimer = 0f;
+                    isCleaning = false;
+                }
             }
-
-            isCleaning = true;
-            cleaningTimer += Time.deltaTime;
-
-            Debug.Log("Cleaning timer: " + cleaningTimer);
-
-            if (cleaningTimer >= cleanTime)
+            else
             {
-                CleanDirt(hit.collider.gameObject);
-                cleaningTimer = 0f;
-                isCleaning = false;
+                ResetCleaning();
             }
         }
         else
@@ -170,10 +170,4 @@ public class DirtynessScript : MonoBehaviour
             ResetCleaning();
         }
     }
-    else
-    {
-        ResetCleaning();
-    }
-}
-
 }

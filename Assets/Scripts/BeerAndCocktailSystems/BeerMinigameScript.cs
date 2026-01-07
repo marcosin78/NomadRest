@@ -2,33 +2,35 @@ using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
 
+// Script que gestiona el minijuego de preparación de cerveza.
+// Controla la UI, la interacción del jugador, la gestión de ingredientes y la comunicación con el dispensador.
 public class BeerMinigameScript : MonoBehaviour
 {
     [Header("Referencias UI")]
-    public GameObject minigameCanvas; // Asigna el Canvas en el Inspector
-    [Header("Minijuego UI Root (solo hijos del minijuego)")]
-    public Transform minigameIngredientsRoot; // Asigna el GameObject raíz de los ingredientes del minijuego
-    public PlayerInteractor playerInteractor; // Inspector asignado
-    public PlayerController playerController; // Inspector asignado
-    private BeerDispenserScript currentDispenser;
-    public IngredientDropArea ingredientDropArea;
+    public GameObject minigameCanvas; // Canvas principal del minijuego, asignar en el Inspector
 
+    [Header("Minijuego UI Root (solo hijos del minijuego)")]
+    public Transform minigameIngredientsRoot; // Raíz de los ingredientes del minijuego
+    public PlayerInteractor playerInteractor; // Referencia al script de interacción del jugador
+    public PlayerController playerController; // Referencia al controlador del jugador
+    private BeerDispenserScript currentDispenser; // Referencia al dispensador actual
+    public IngredientDropArea ingredientDropArea; // Área donde se sueltan los ingredientes
+
+    // Inicializa referencias, desactiva el canvas y bloquea el cursor al iniciar.
     void Start()
     {
         if (minigameCanvas != null)
             minigameCanvas.SetActive(false);
         HideAndLockCursor();
 
-        // Si no está asignado en el inspector, buscarlo automáticamente
+        // Si no está asignado el IngredientDropArea, intenta buscarlo o crearlo
         if (ingredientDropArea == null)
         {
-            // Busca un IngredientDropArea hijo del minigameIngredientsRoot
             if (minigameIngredientsRoot != null)
             {
                 ingredientDropArea = minigameIngredientsRoot.GetComponentInChildren<IngredientDropArea>(true);
                 if (ingredientDropArea == null)
                 {
-                    // Si no existe, lo creamos como hijo
                     GameObject go = new GameObject("IngredientDropArea", typeof(RectTransform), typeof(IngredientDropArea));
                     go.transform.SetParent(minigameIngredientsRoot, false);
                     ingredientDropArea = go.GetComponent<IngredientDropArea>();
@@ -50,6 +52,7 @@ public class BeerMinigameScript : MonoBehaviour
             Debug.LogWarning("ingredientDropArea no asignado ni encontrado.");
         }
 
+        // Busca referencias a PlayerInteractor y PlayerController si no están asignadas
         if (playerInteractor == null)
         {
             playerInteractor = FindObjectOfType<PlayerInteractor>();
@@ -69,6 +72,7 @@ public class BeerMinigameScript : MonoBehaviour
         }
     }
 
+    // Si el minijuego está activo y se pulsa Q, inicia la rutina de cierre
     void Update()
     {
         if (minigameCanvas != null && minigameCanvas.activeSelf)
@@ -80,6 +84,7 @@ public class BeerMinigameScript : MonoBehaviour
         }
     }
     
+    // Rutina para cerrar el minijuego solo cuando todos los ingredientes hayan vuelto a su posición original
     private IEnumerator CloseMinigameWhenButtonsFinish()
     {
         if (minigameIngredientsRoot != null)
@@ -93,7 +98,7 @@ public class BeerMinigameScript : MonoBehaviour
                     {
                         var btn = info.buttonTransform.GetComponent<IngredientButton>();
                         if (btn != null)
-                            btn.AnimateReturnToOriginal(); // Animación normal
+                            btn.AnimateReturnToOriginal();
                     }
                 }
             }
@@ -102,7 +107,7 @@ public class BeerMinigameScript : MonoBehaviour
         // Espera a que todas las animaciones terminen
         yield return StartCoroutine(WaitForAllIngredientButtonsToFinish());
 
-        // Ahora sí, desactiva el canvas y limpia
+        // Desactiva el canvas y limpia los ingredientes
         minigameCanvas.SetActive(false);
         HideAndLockCursor();
 
@@ -116,6 +121,7 @@ public class BeerMinigameScript : MonoBehaviour
         }
     }
 
+    // Activa el minijuego, muestra el canvas y desbloquea el cursor
     public void StartMinigame(BeerDispenserScript dispenser)
     {
         currentDispenser = dispenser;
@@ -126,6 +132,7 @@ public class BeerMinigameScript : MonoBehaviour
         }
     }
 
+    // Lógica al completar el minijuego: notifica al dispensador, limpia ingredientes y oculta la UI
     public void OnMinigameComplete(System.Collections.Generic.List<int> ingredientIDs)
     {
         if (minigameCanvas != null)
@@ -134,7 +141,7 @@ public class BeerMinigameScript : MonoBehaviour
             HideAndLockCursor();
             ingredientDropArea.ResetToInitialPosition();
         }
-        if (currentDispenser == null) // Arreglar posible null reference
+        if (currentDispenser == null)
         {
             currentDispenser = FindObjectOfType<BeerDispenserScript>();
             Debug.LogWarning("currentDispenser era null, se ha reasignado automáticamente.");
@@ -148,7 +155,7 @@ public class BeerMinigameScript : MonoBehaviour
             Debug.Log("Notified dispenser of minigame completion.");
         }
         
-        // Limpiar solo los IngredientDropArea hijos de minigameIngredientsRoot
+        // Limpia los IngredientDropArea hijos de minigameIngredientsRoot
         if (minigameIngredientsRoot != null)
         {
             var dropAreas = minigameIngredientsRoot.GetComponentsInChildren<IngredientDropArea>(true);
@@ -163,22 +170,21 @@ public class BeerMinigameScript : MonoBehaviour
         }
     }
 
-    // Llama este método desde el botón para sacar todos los ingredientes de los IngredientDropArea del minijuego
+    // Elimina todos los ingredientes de los IngredientDropArea del minijuego y resetea la posición
     public void RemoveAllIngredientsFromDropAreas()
     {
         if (minigameIngredientsRoot != null)
         {
-            // Limpiar los IngredientDropArea
             var dropAreas = minigameIngredientsRoot.GetComponentsInChildren<IngredientDropArea>(true);
             foreach (var area in dropAreas)
             {
                 area.ClearIngredients();
             }
-            // Resetear la posición de los IngredientDropArea al pulsar el boton
             ingredientDropArea.ResetToInitialPosition();
         }
     }
 
+    // Muestra y desbloquea el cursor, desactiva el control del jugador y la interacción
     void ShowAndUnlockCursor()
     {
         Cursor.lockState = CursorLockMode.None;
@@ -189,6 +195,7 @@ public class BeerMinigameScript : MonoBehaviour
             playerController.LockAll();
     }
 
+    // Oculta y bloquea el cursor, reactiva el control del jugador y la interacción
     void HideAndLockCursor()
     {
         Cursor.lockState = CursorLockMode.Locked;
@@ -198,36 +205,12 @@ public class BeerMinigameScript : MonoBehaviour
         if (playerController != null)
             playerController.UnlockAll();
     }
+
+    // Espera a que todos los IngredientButton terminen su animación de retorno antes de cerrar el minijuego
     private IEnumerator WaitForAllIngredientButtonsToFinish()
-{
-    bool anyRunning = false;
-
-    if (minigameIngredientsRoot != null)
     {
-        var dropAreas = minigameIngredientsRoot.GetComponentsInChildren<IngredientDropArea>(true);
-        foreach (var area in dropAreas)
-        {
-            foreach (var info in area.movedIngredientButtons)
-            {
-                if (info.buttonTransform != null)
-                {
-                    var btn = info.buttonTransform.GetComponent<IngredientButton>();
-                    if (btn != null && btn.IsReturning)
-                    {
-                        anyRunning = true;
-                        break;
-                    }
-                }
-            }
-            if (anyRunning) break;
-        }
-    }
+        bool anyRunning = false;
 
-    // Solo entra al bucle si hay alguno retornando
-    while (anyRunning)
-    {
-        Debug.Log("Esperando a que todos los IngredientButton terminen sus corrutinas de retorno...");
-        anyRunning = false;
         if (minigameIngredientsRoot != null)
         {
             var dropAreas = minigameIngredientsRoot.GetComponentsInChildren<IngredientDropArea>(true);
@@ -248,9 +231,34 @@ public class BeerMinigameScript : MonoBehaviour
                 if (anyRunning) break;
             }
         }
-        if (anyRunning)
-            yield return null; // Espera un frame
-    }
-}
 
+        // Solo entra al bucle si hay alguno retornando
+        while (anyRunning)
+        {
+            Debug.Log("Esperando a que todos los IngredientButton terminen sus corrutinas de retorno...");
+            anyRunning = false;
+            if (minigameIngredientsRoot != null)
+            {
+                var dropAreas = minigameIngredientsRoot.GetComponentsInChildren<IngredientDropArea>(true);
+                foreach (var area in dropAreas)
+                {
+                    foreach (var info in area.movedIngredientButtons)
+                    {
+                        if (info.buttonTransform != null)
+                        {
+                            var btn = info.buttonTransform.GetComponent<IngredientButton>();
+                            if (btn != null && btn.IsReturning)
+                            {
+                                anyRunning = true;
+                                break;
+                            }
+                        }
+                    }
+                    if (anyRunning) break;
+                }
+            }
+            if (anyRunning)
+                yield return null; // Espera un frame
+        }
+    }
 }

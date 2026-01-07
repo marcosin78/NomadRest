@@ -24,6 +24,9 @@ public class NpcStateConfig
     public string dialogTreeName;
 }
 
+// Script encargado de gestionar la configuración de estados y diálogos de los NPCs.
+// Permite cargar los estados desde un archivo JSON, consultar el estado actual según condiciones,
+// y lanzar el árbol de diálogo correspondiente para cada NPC.
 public class NpcStageScript : MonoBehaviour
 {
     public string configFileName = "NpcStatesConfig.json";
@@ -34,9 +37,9 @@ public class NpcStageScript : MonoBehaviour
         LoadNpcStatesConfig();
     }
 
+    // Carga la configuración de estados de los NPCs desde un archivo JSON en Assets/Scripts
     void LoadNpcStatesConfig()
     {
-        // Cambia la ruta para buscar en Assets/Scripts
         string path = Path.Combine(Application.dataPath, "Scripts", configFileName);
         if (File.Exists(path))
         {
@@ -76,7 +79,7 @@ public class NpcStageScript : MonoBehaviour
         return stateConfig != null ? stateConfig.conditions : null;
     }
 
-    // Ejemplo de integración: obtener el DialogTree para un NPC y lanzarlo con DialogManager
+    // Lanza el árbol de diálogo correspondiente para el NPC y estado actual
     public void StartNpcDialog(string npcType, string state, Transform npcTransform)
     {
         string dialogTreeName = GetDialogTreeName(npcType, state);
@@ -97,14 +100,13 @@ public class NpcStageScript : MonoBehaviour
         }
     }
 
+    // Busca el DialogTree por nombre en Resources/DialogLines o en la escena
     DialogTree FindDialogTreeByName(string name)
     {
-        // Busca en Resources/DialogLines
         DialogTree tree = Resources.Load<DialogTree>("DialogLines/" + name);
         if (tree != null)
             return tree;
 
-        // Opcional: busca en la escena si no lo encuentra en Resources
         DialogTree[] allTrees = FindObjectsOfType<DialogTree>();
         foreach (var t in allTrees)
         {
@@ -114,6 +116,7 @@ public class NpcStageScript : MonoBehaviour
         return null;
     }   
 
+    // Devuelve el DialogTree para un NPC y estado concreto
     public DialogTree GetDialogTreeForNpc(string npcType, string state)
     {
         if (npcStatesConfig == null) return null;
@@ -122,7 +125,6 @@ public class NpcStageScript : MonoBehaviour
         var stateConfig = npcTypeConfig.states.Find(s => s.state == state);
         if (stateConfig == null || string.IsNullOrEmpty(stateConfig.dialogTreeName)) return null;
 
-        // Busca el DialogTree en la escena o recursos por nombre
         DialogTree[] allTrees = FindObjectsOfType<DialogTree>();
         foreach (var tree in allTrees)
         {
@@ -132,6 +134,7 @@ public class NpcStageScript : MonoBehaviour
         return null;
     }
 
+    // Devuelve el estado actual para un NPC según las condiciones y prioridad
     public string GetCurrentStateForNpc(string npcType)
     {
         var states = GetStatesForNpcType(npcType);
@@ -184,13 +187,12 @@ public class NpcStageScript : MonoBehaviour
                 }
                 else if (state.priority == bestPriority)
                 {
-                    // Si quieres que el primero tenga prioridad en empate, no actualices bestState aquí
                     bestState = state;
                     Debug.Log($"[GetCurrentStateForNpc] Empate de prioridad, se selecciona el último encontrado: '{state.state}'");
                 }
             }
         }
-
+        
         if (bestState != null)
         {
             Debug.Log($"[GetCurrentStateForNpc] Estado seleccionado para '{npcType}': '{bestState.state}' (prioridad {bestState.priority})");

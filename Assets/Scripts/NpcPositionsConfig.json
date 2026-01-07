@@ -19,7 +19,7 @@
       ]
     },
     {
-      "npcType": "Customer",
+      "npcType": "DeveloperNpc",
       "states": [
         { "state": "Waiting", "positions": [0] },
         { "state": "Served", "positions": [1] }

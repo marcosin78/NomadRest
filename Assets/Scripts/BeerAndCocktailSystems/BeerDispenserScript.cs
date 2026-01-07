@@ -2,21 +2,39 @@ using NUnit.Framework;
 using UnityEngine;
 using UnityEngine.XR;
 
+/// <summary>
+/// Script encargado de gestionar el dispensador de bebidas.
+/// Permite la interacción del jugador para iniciar el minijuego de servir bebidas,
+/// controla el tipo de bebida seleccionada y almacena los ingredientes usados.
+/// Además, integra condiciones del juego y reproduce audio al interactuar.
+/// </summary>
 public class BeerDispenserScript : MonoBehaviour, IInteractable
 {
+    // Referencia al controlador del jugador
     PlayerController player;
+
+    // Prefabs de las bebidas que puede dispensar
     public GameObject[] drinkPrefabs;
+
+    // Indica si el dispensador está actualmente sirviendo una bebida
     public bool isDispensing = false;
-    public int[] drinkOptions = new int[2]; //Array de opciones de bebida (Por si en un futuro hay más tipos de bebida)
-    public int selectedDrink = 0; //Opción de bebida seleccionada (Por defecto la primera)
 
-    public BeerMinigameScript beerMinigameScript; // Asigna en el inspector
+    // Array de opciones de bebida (pensado para futuras ampliaciones)
+    public int[] drinkOptions = new int[2];
+
+    // Opción de bebida seleccionada (por defecto la primera)
+    public int selectedDrink = 0;
+
+    // Referencia al script del minijuego de cerveza (asignar en el inspector)
+    public BeerMinigameScript beerMinigameScript;
+
+    [Header("Audio")]
+    // Clip de audio que se reproduce al abrir el dispensador
+    public AudioClip openingAudioClip;
 
 
-        [Header("Audio")]
-        public AudioClip openingAudioClip;
+    /// Inicializa referencias al jugador y al minijuego de cerveza.
 
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
         player = FindObjectOfType<PlayerController>();
@@ -26,15 +44,20 @@ public class BeerDispenserScript : MonoBehaviour, IInteractable
         {
             Debug.LogWarning("beerMinigameScript no encontrado en la escena.");
         }
-        
     }
 
-    // Update is called once per frame
+    // No se utiliza lógica en Update actualmente
     void Update()
     {
-
     }
+
+    // Controla si ya se ha comprobado la condición de cócteles
     private bool hasCheckedCocktails = false;
+
+
+    /// Método llamado al interactuar con el dispensador.
+    /// Si el jugador tiene las manos libres, lanza el minijuego y gestiona condiciones del tutorial.
+
     public void OnInteract()
     {
         if(player!=null && player.availableHands==true)
@@ -68,20 +91,23 @@ public class BeerDispenserScript : MonoBehaviour, IInteractable
             Debug.Log("Player's hands are not available to take a drink.");
         }
     }
-    public System.Collections.Generic.List<int> lastUsedIngredients; // Puedes usar esto para guardar los ingredientes
 
-public void OnMinigameFinished(System.Collections.Generic.List<int> ingredientIDs)
-{
-    isDispensing = true;
-    lastUsedIngredients = new System.Collections.Generic.List<int>(ingredientIDs); // COPIA, no referencia
-    // Aquí puedes hacer lógica extra, como validar la receta, etc.
-    Debug.Log("Minigame finished, dispensing drink with ingredients: " + string.Join(", ", ingredientIDs));
+    // Lista de ingredientes usados en la última bebida dispensada
+    public System.Collections.Generic.List<int> lastUsedIngredients;
 
-}
+
+    /// Llamado al finalizar el minijuego, almacena los ingredientes usados y marca el dispensador como ocupado.
+    /// <param name="ingredientIDs">Lista de IDs de ingredientes usados</param>
+    public void OnMinigameFinished(System.Collections.Generic.List<int> ingredientIDs)
+    {
+        isDispensing = true;
+        lastUsedIngredients = new System.Collections.Generic.List<int>(ingredientIDs); // COPIA, no referencia
+    
+
+        Debug.Log("Minigame finished, dispensing drink with ingredients: " + string.Join(", ", ingredientIDs));
+    }
     public string GetName()
     {
         return "Drink Dispenser";
     }
-
-   
 }

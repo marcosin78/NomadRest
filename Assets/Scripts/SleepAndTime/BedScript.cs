@@ -1,6 +1,9 @@
 using System.Collections;
 using UnityEngine;
 
+// Script encargado de gestionar la interacción con la cama para dormir.
+// Permite al jugador dormir si se cumplen las condiciones, activa el fundido de pantalla y actualiza el reloj.
+// Al dormir por primera vez en el día 1, activa la condición del tutorial y refresca el estado del pájaro tutorial.
 public class BedScript : MonoBehaviour, IInteractable
 {
     private bool isSleeping = false; // Añadido para evitar múltiples ejecuciones

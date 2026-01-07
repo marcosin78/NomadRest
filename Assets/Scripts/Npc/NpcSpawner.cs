@@ -23,8 +23,6 @@ public class NpcSpawner : MonoBehaviour
         if (ClockScript.Instance != null && ClockScript.Instance.OpenBarTime)
         {
             allowSpawning = true;
-
-            
         }
         else
         {
@@ -48,8 +46,6 @@ public class NpcSpawner : MonoBehaviour
         }
         
     }
-  
-
    void SpawnNpcAtWaypoint(WaypointScript waypoint)
     {
         // Instancia el NPC en la posición del waypoint

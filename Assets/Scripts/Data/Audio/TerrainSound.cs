@@ -1,5 +1,7 @@
 using UnityEngine;
 
+// Script encargado de reproducir sonidos de pasos según el tipo de terreno bajo el jugador.
+// Detecta el terreno usando raycast y reproduce el clip correspondiente (hierba, madera, piedra).
 public class TerrainSound : MonoBehaviour
 {
     public AudioSource audioSource;
@@ -39,6 +41,7 @@ public class TerrainSound : MonoBehaviour
         }
     }
 
+    // Reproduce el sonido de paso según el terreno detectado bajo el jugador
     void PlayStepSound()
     {
         Ray ray = new Ray(transform.position, Vector3.down);

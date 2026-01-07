@@ -1,6 +1,8 @@
 using UnityEngine;
 using System.Collections.Generic;
 
+// Script encargado de gestionar el sistema de pathfinding en grilla para los NPCs.
+// Permite calcular caminos entre dos puntos usando A* y visualizar la grilla y el camino en el editor.
 public class Pathfinding : MonoBehaviour
 {
     public class Node

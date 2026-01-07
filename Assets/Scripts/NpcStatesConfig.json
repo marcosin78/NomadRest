@@ -113,6 +113,24 @@
           "dialogTreeName": "PlayerLastRentDialog"
         }
       ]
+    },{
+
+      "npcType": "DeveloperNpc",
+      "states": [
+        {
+          "state": "NotTalkedTo",
+          "priority": 0,
+          "conditions": ["DeveloperNpcNotTalkedTo"],
+          "dialogTreeName": "DeveloperNpcNotTalkedToDialog"
+        },
+        {
+          "state": "Served",
+          "priority": 1,
+          "conditions": ["DeveloperNpcServed"],
+          "dialogTreeName": "DeveloperNpcServedDialog"
+        }
+      ]
+
     }
   ]
 }

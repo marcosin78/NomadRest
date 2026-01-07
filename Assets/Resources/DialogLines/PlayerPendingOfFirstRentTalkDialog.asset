@@ -13,36 +13,41 @@ MonoBehaviour:
   m_Name: PlayerPendingOfFirstRentTalkDialog
   m_EditorClassIdentifier: Assembly-CSharp::DialogTree
   nodes:
-  - text: Buenas... Supongo que ya sabes quien soy, y como va esto.
+  - text: Hey tio, que tal?
     choices: []
     nextNodeIndex: 1
     nextDialogTree: {fileID: 0}
     setNpcStateIfCondition: 
-  - text: "Soy tu casero, y vendr\xE9 al final de cada dia a pedirte el dinero."
-    choices: []
+  - text: 
+    choices:
+    - choiceText: Quien eres?
+      nextNodeIndex: 2
+      unlockKey: 
+      requiredMoney: 0
+    - choiceText: Si no vas a tomarte nada, vete
+      nextNodeIndex: 4
+      unlockKey: 
+      requiredMoney: 0
     nextNodeIndex: 2
     nextDialogTree: {fileID: 0}
     setNpcStateIfCondition: 
-  - text: 
-    choices:
-    - choiceText: Aqui tienes el dinero
-      nextNodeIndex: 3
-      unlockKey: PlayerHasPayedFirstRent
-      requiredMoney: 0
-    - choiceText: No tengo el dinero
-      nextNodeIndex: 4
-      unlockKey: NotPayedRentDialog
-      requiredMoney: 0
-    nextNodeIndex: -1
+  - text: "Soy Oscar, he visto este bar, y me ha llamado la atenci\xF3n, sin m\xE1s."
+    choices: []
+    nextNodeIndex: 3
     nextDialogTree: {fileID: 0}
     setNpcStateIfCondition: 
-  - text: "Muchas gracias, volver\xE9 ma\xF1ana."
+  - text: Espero que te vaya de maravilla, chaval.
     choices: []
     nextNodeIndex: -1
     nextDialogTree: {fileID: 0}
     setNpcStateIfCondition: PlayerHasPayedFirstRent
-  - text: "No tienes suficiente? Ma\xF1ana te quiero ver fuera de aqui."
+  - text: "Hey hey, tampoco tienes que ponerte as\xED, chico"
+    choices: []
+    nextNodeIndex: 5
+    nextDialogTree: {fileID: 0}
+    setNpcStateIfCondition: 
+  - text: Solamente me pasaba a ver por dentro el nuevo bar.
     choices: []
     nextNodeIndex: -1
     nextDialogTree: {fileID: 0}
-    setNpcStateIfCondition: NotPayedRentDialog
+    setNpcStateIfCondition: 

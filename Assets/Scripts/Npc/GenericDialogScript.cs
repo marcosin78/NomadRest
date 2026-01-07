@@ -2,14 +2,16 @@ using System;
 using UnityEngine;
 using TMPro;
 
+// Script encargado de mostrar diálogos genéricos en NPCs simples.
+// Permite mostrar frases aleatorias en una burbuja de diálogo durante un tiempo determinado.
 public class GenericDialogScript : MonoBehaviour
 {
     [TextArea]
     public string[] dialogTexts = new string[3]
     {
-        "Hola Guille.",
-        "Hola Toni.",
-        "Hola Mundo."
+        "Hola Generico1.",
+        "Hola Generico2.",
+        "Hola Generico3."
     };
     public TextMeshProUGUI dialogUIText;
     public Canvas dialogCanvas; // Asigna el Canvas de la burbuja en el inspector
@@ -36,6 +38,7 @@ public class GenericDialogScript : MonoBehaviour
         }
     }
 
+    // Inicia el diálogo genérico mostrando una frase aleatoria en la UI
     public void StartGenericDialog()
     {
         string chosenText = dialogTexts.Length > 0
@@ -54,6 +57,7 @@ public class GenericDialogScript : MonoBehaviour
         Debug.Log("¡Has iniciado un diálogo genérico con este NPC! Frase: " + chosenText);
     }
 
+    // Oculta la burbuja de diálogo y resetea el temporizador
     private void HideDialog()
     {
         if (dialogCanvas != null)

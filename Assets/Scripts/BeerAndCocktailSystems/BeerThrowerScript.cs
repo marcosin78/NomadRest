@@ -1,31 +1,33 @@
 using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+
+// Script encargado de gestionar el lanzamiento de la cerveza durante el minijuego.
+// Controla la creación de gotas, la dirección y fuerza del lanzamiento, la recogida de cerveza y la entrega final al jugador.
 public class BeerThrowerScript : MonoBehaviour
 {
-    public GameObject beerLiquidPrefab;
-    BeerDispenserScript BeerDispenserScript;
-    LiquidDetector liquidDetector;
-    PlayerController player;
-    MoveArmScript moveArm;
-    public float throwForce = 0.3f;
-    public int throwBeerQuantity = 1;
-    public float angleRange = 60f; // Rango máximo de ángulo en grados
+    public GameObject beerLiquidPrefab; // Prefab de la gota de cerveza a lanzar
+    BeerDispenserScript BeerDispenserScript; // Referencia al dispensador de cerveza
+    LiquidDetector liquidDetector; // Detector de líquido para medir el éxito del minijuego
+    PlayerController player; // Referencia al jugador
+    MoveArmScript moveArm; // Script para animar el brazo del jugador
+
+    public float throwForce = 0.3f; // Fuerza con la que se lanza cada gota
+    public int throwBeerQuantity = 1; // Número de gotas a lanzar
+    public float angleRange = 60f; // Rango máximo de ángulo en grados para la dirección aleatoria
     public int angleOffset = 0;
-    public float destroyDelay = 3f; // Segundos antes de eliminar cada cubo
-    public float cooldownTime = 0.5f; // Cambia a float para mayor precisión
-    public float directionLerpTime = 0.5f; // Tiempo para interpolar la dirección
-    public float cancelDistance = 3f; // Distancia para cancelar el lanzamiento    
+    public float destroyDelay = 3f; // Segundos antes de eliminar cada gota
+    public float cooldownTime = 0.5f; // Tiempo entre lanzamientos de gotas
+    public float directionLerpTime = 0.5f; // Tiempo para interpolar la dirección de lanzamiento
+    public float cancelDistance = 3f; // Distancia máxima permitida al dispensador para lanzar
 
-
-    private Vector3 currentDirection = Vector3.down;
+    private Vector3 currentDirection = Vector3.down; // Dirección actual de lanzamiento
     private Coroutine throwRoutine;
     private Coroutine directionRoutine;
 
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
+    // Inicializa referencias a los scripts necesarios al iniciar
     void Start()
     {
-
         BeerDispenserScript = FindObjectOfType<BeerDispenserScript>();
         player = FindObjectOfType<PlayerController>();
         moveArm = player.GetComponentInChildren<MoveArmScript>(true);
@@ -38,13 +40,11 @@ public class BeerThrowerScript : MonoBehaviour
         {
             Debug.LogWarning("BeerDispenserScript not found.");
         }
-
     }
 
-    // Update is called once per frame
+    // Si el dispensador está en modo de servir, inicia las rutinas de lanzamiento y dirección
     void Update()
     {
-
         if (BeerDispenserScript.isDispensing)
         {
             if (throwRoutine == null && directionRoutine == null)
@@ -55,123 +55,112 @@ public class BeerThrowerScript : MonoBehaviour
             BeerDispenserScript.isDispensing = false;
             Debug.Log("Dispensando cerveza...");
         }
-
-    
     }
 
-
-    //Rutina para lanzar la cerveza
+    // Rutina para lanzar las gotas de cerveza, comprobar distancia y entregar la bebida final al jugador
     IEnumerator ThrowBeerCoroutine()
-{
-    if (beerLiquidPrefab != null)
     {
-        Debug.Log("Iniciando lanzamiento de cerveza.");
-        player.LockCamera();
-        moveArm.ActivateArm();
-        liquidDetector = FindObjectOfType<LiquidDetector>();
-        liquidDetector.setTotalDrops(throwBeerQuantity);
-
-        int thrown = 0;
-        bool cancelled = false;
-        GameObject beerInstance = null;
-        
-
-        while (thrown < throwBeerQuantity)
+        if (beerLiquidPrefab != null)
         {
-            // Comprobar distancia al dispensador
-            float distance = Vector3.Distance(player.transform.position, BeerDispenserScript.transform.position);
-            if (distance > cancelDistance)
+            Debug.Log("Iniciando lanzamiento de cerveza.");
+            player.LockCamera();
+            moveArm.ActivateArm();
+            liquidDetector = FindObjectOfType<LiquidDetector>();
+            liquidDetector.setTotalDrops(throwBeerQuantity);
+
+            int thrown = 0;
+            bool cancelled = false;
+            GameObject beerInstance = null;
+
+            while (thrown < throwBeerQuantity)
             {
-                Debug.Log("Demasiado lejos del dispensador, se cancela el lanzamiento.");
-                cancelled = true;
-                break;
+                // Comprueba si el jugador se aleja demasiado del dispensador
+                float distance = Vector3.Distance(player.transform.position, BeerDispenserScript.transform.position);
+                if (distance > cancelDistance)
+                {
+                    Debug.Log("Demasiado lejos del dispensador, se cancela el lanzamiento.");
+                    cancelled = true;
+                    break;
+                }
+
+                beerInstance = Instantiate(beerLiquidPrefab, transform.position, transform.rotation);
+                Rigidbody rb = beerInstance.GetComponent<Rigidbody>();
+
+                if (rb != null)
+                {
+                    rb.AddForce(currentDirection * throwForce, ForceMode.VelocityChange);
+                }
+
+                // Asigna los ingredientes a la gota lanzada
+                var data = beerInstance.AddComponent<BeerCocktailData>();
+                data.ingredientIDs = new List<int>(BeerDispenserScript.lastUsedIngredients);
+
+                StartCoroutine(DestroyAfterDelay(beerInstance, destroyDelay));
+                thrown++;
+                yield return new WaitForSeconds(cooldownTime);
             }
 
-            beerInstance = Instantiate(beerLiquidPrefab, transform.position, transform.rotation);
-            Rigidbody rb = beerInstance.GetComponent<Rigidbody>();
-
-            if (rb != null)
+            if (directionRoutine != null)
             {
-                rb.AddForce(currentDirection * throwForce, ForceMode.VelocityChange);
+                StopCoroutine(directionRoutine);
+                directionRoutine = null;
             }
+            throwRoutine = null;
+            Debug.Log("Ingredientes que se asignan al BeerCocktailData: " + string.Join(",", BeerDispenserScript.lastUsedIngredients));
+            moveArm.DeactivateArm();
+            player.UnlockCamera();
 
-            // Al instanciar la cerveza en BeerThrowerScript o donde corresponda:
-            var data = beerInstance.AddComponent<BeerCocktailData>();
-            data.ingredientIDs = new List<int>(BeerDispenserScript.lastUsedIngredients); // O la lista que corresponda
-            // Debug de los ingredientes asignados
-
-
-            
-            StartCoroutine(DestroyAfterDelay(beerInstance, destroyDelay));
-            thrown++;
-            yield return new WaitForSeconds(cooldownTime);
-        }
-
-        if (directionRoutine != null)
-        {
-            StopCoroutine(directionRoutine);
-            directionRoutine = null;
-        }
-        throwRoutine = null;
-        Debug.Log("Ingredientes que se asignan al BeerCocktailData: " + string.Join(",", BeerDispenserScript.lastUsedIngredients));
-        moveArm.DeactivateArm();
-        player.UnlockCamera();
-
-        if (!cancelled)
-        {
-            float fillPercent = liquidDetector.GetFillPercent();
-            Debug.Log($"Porcentaje de gotas recogidas: {fillPercent * 100f}%");
-
-            if (fillPercent < 0.2f)
+            if (!cancelled)
             {
-                Debug.Log("El jugador ha fallado al recoger suficiente cerveza.");
+                float fillPercent = liquidDetector.GetFillPercent();
+                Debug.Log($"Porcentaje de gotas recogidas: {fillPercent * 100f}%");
+
+                if (fillPercent < 0.2f)
+                {
+                    Debug.Log("El jugador ha fallado al recoger suficiente cerveza.");
+                }
+                else
+                {
+                    Debug.Log("El jugador ha recogido suficiente cerveza.");
+                    if (BeerDispenserScript != null && BeerDispenserScript.drinkPrefabs.Length > BeerDispenserScript.selectedDrink)
+                    {
+                        // Instancia el objeto de cerveza real y lo entrega al jugador
+                        GameObject beerObject = Instantiate(
+                            BeerDispenserScript.drinkPrefabs[BeerDispenserScript.selectedDrink],
+                            player.HoldPoint.position,
+                            Quaternion.identity
+                        );
+
+                        var data = beerObject.GetComponent<BeerCocktailData>();
+                        if (data == null)
+                            data = beerObject.AddComponent<BeerCocktailData>();
+                        data.ingredientIDs = new List<int>(BeerDispenserScript.lastUsedIngredients);
+
+                        player.TakeItem(beerObject);
+                        Debug.Log("Cerveza entregada al jugador con ingredientes: " + string.Join(",", data.ingredientIDs));
+                    }
+                }
             }
             else
             {
-                Debug.Log("El jugador ha recogido suficiente cerveza.");
-                if (BeerDispenserScript != null && BeerDispenserScript.drinkPrefabs.Length > BeerDispenserScript.selectedDrink)
-                {
-                    // Instancia el objeto de cerveza real
-                    GameObject beerObject = Instantiate(
-                        BeerDispenserScript.drinkPrefabs[BeerDispenserScript.selectedDrink],
-                        player.HoldPoint.position, // o la posición que corresponda
-                        Quaternion.identity
-                    );
-
-                    // Añade los ingredientes
-                    var data = beerObject.GetComponent<BeerCocktailData>();
-                    if (data == null)
-                        data = beerObject.AddComponent<BeerCocktailData>();
-                    data.ingredientIDs = new List<int>(BeerDispenserScript.lastUsedIngredients);
-
-                    // Da el objeto al jugador
-                    player.TakeItem(beerObject);
-                    Debug.Log("Cerveza entregada al jugador con ingredientes: " + string.Join(",", data.ingredientIDs));
-                }
+                Debug.Log("Lanzamiento cancelado por distancia.");
             }
         }
         else
         {
-            Debug.Log("Lanzamiento cancelado por distancia.");
+            Debug.LogWarning("beerLiquidPrefab is not assigned.");
         }
     }
-    else
-    {
-        Debug.LogWarning("beerLiquidPrefab is not assigned.");
-    }
-}
-    
-    //Redirecciona la cerveza lanzada cada cierto tiempo
+
+    // Rutina que cambia la dirección de lanzamiento de forma aleatoria e interpolada
     IEnumerator DirectionCoroutine()
     {
         while (true)
         {
-            // Genera una nueva dirección aleatoria
             float randomAngleX = Random.Range(-angleRange, angleRange);
             float randomAngleZ = Random.Range(-angleRange, angleRange);
             Vector3 targetDirection = Quaternion.Euler(randomAngleX, 0, randomAngleZ) * Vector3.down;
 
-            // Interpola suavemente desde la dirección actual a la nueva
             float elapsed = 0f;
             Vector3 startDirection = currentDirection;
             while (elapsed < directionLerpTime)
@@ -184,7 +173,7 @@ public class BeerThrowerScript : MonoBehaviour
         }
     }
 
-    //Destruye el objeto después de un retraso
+    // Destruye el objeto después de un retraso
     IEnumerator DestroyAfterDelay(GameObject obj, float delay)
     {
         yield return new WaitForSeconds(delay);

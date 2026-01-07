@@ -3,6 +3,9 @@ using Unity.VisualScripting;
 using UnityEngine;
 using System;
 
+// Script encargado de gestionar el movimiento de los NPCs por el escenario.
+// Utiliza pathfinding en grilla, evita obstáculos con spherecast y permite que los NPCs salgan por el LeavePoint.
+// El NPC sigue una lista de waypoints y puede cambiar su destino dinámicamente.
 [RequireComponent(typeof(Collider))]
 public class NPCWalkingScript : MonoBehaviour
 {
@@ -10,17 +13,16 @@ public class NPCWalkingScript : MonoBehaviour
     public float stopDistance = 0.3f;
     public float repathInterval = 1f;
 
-    // Avoidance
+    // Parámetros de evasión de obstáculos
     public LayerMask obstacleMask = ~0;
     public float avoidDistance = 1f;
     public float avoidRadius = 0.3f;
     public float avoidWeight = 2f;
-    public float avoidHeight = 0.5f; // spherecast height from ground
+    public float avoidHeight = 0.5f; // Altura del spherecast desde el suelo
 
     public IWaypointProvider provider;
 
     private Transform leavePoint;
-
     public bool isLeaving = false;
     Pathfinding pathfinder;
     Rigidbody rb;
@@ -31,28 +33,26 @@ public class NPCWalkingScript : MonoBehaviour
 
     void Start()
     {
-         // NO reasignes provider aquí, solo usa el que ya tiene
-         pathfinder = FindObjectOfType<Pathfinding>();
-         rb = GetComponent<Rigidbody>();
+        pathfinder = FindObjectOfType<Pathfinding>();
+        rb = GetComponent<Rigidbody>();
         RequestPath();
-        
     }
 
+    // Llama al LeavePoint y marca el NPC como saliendo
     public void GoToLeavePoint()
- {
-    GameObject leaveObj = GameObject.FindWithTag("LeavePoint");
-    if (leaveObj != null)
     {
-        leavePoint = leaveObj.transform;
-        provider = new StaticWaypointProvider(leavePoint); // StaticWaypointProvider implementa IWaypointProvider
-        isLeaving = true;
+        GameObject leaveObj = GameObject.FindWithTag("LeavePoint");
+        if (leaveObj != null)
+        {
+            leavePoint = leaveObj.transform;
+            provider = new StaticWaypointProvider(leavePoint); // StaticWaypointProvider implementa IWaypointProvider
+            isLeaving = true;
+        }
+        else
+        {
+            Debug.LogWarning("No LeavePoint found in the scene!");
+        }
     }
-    else
-    {
-        Debug.LogWarning("No LeavePoint found in the scene!");
-    }
- }
-
 
     void Update()
     {
@@ -68,7 +68,7 @@ public class NPCWalkingScript : MonoBehaviour
         if (path == null || path.Count == 0) return;
 
         Vector3 target = path[index];
-        // maintain NPC current height
+        // Mantiene la altura actual del NPC
         target.y = transform.position.y;
 
         Vector3 toTarget = target - transform.position;
@@ -81,18 +81,18 @@ public class NPCWalkingScript : MonoBehaviour
 
         Vector3 dir = toTarget.normalized;
 
-        // local avoidance: spherecast forward along dir, if hit steer around
+        // Evasión local: spherecast hacia adelante, si hay obstáculo, esquiva
         Vector3 castOrigin = transform.position + Vector3.up * avoidHeight;
         if (Physics.SphereCast(castOrigin, avoidRadius, dir, out RaycastHit hit, avoidDistance, obstacleMask, QueryTriggerInteraction.Ignore))
         {
-            // compute avoidance direction: reflect + side steer so we don't get stuck
+            // Calcula dirección de evasión: reflect + giro lateral para no quedarse atascado
             Vector3 reflect = Vector3.Reflect(dir, hit.normal).normalized;
             Vector3 side = Vector3.Cross(hit.normal, Vector3.up).normalized;
-            // pick side direction that points away from obstacle toward target
+            // Elige el lado que apunta lejos del obstáculo hacia el objetivo
             if (Vector3.Dot(side, dir) < 0) side = -side;
             Vector3 avoidDir = (reflect + side * 0.5f).normalized;
 
-            // blend toward avoidance direction
+            // Mezcla hacia la dirección de evasión
             dir = Vector3.Lerp(dir, avoidDir, Mathf.Clamp01(avoidWeight * Time.deltaTime)).normalized;
         }
 
@@ -107,20 +107,23 @@ public class NPCWalkingScript : MonoBehaviour
         }
     }
 
+    // Solicita un nuevo path al pathfinder
     void RequestPath()
     {
         if (pathfinder == null || provider == null || provider.Waypoint == null) return;
 
+        // Convierte posiciones world a grid
         Vector2Int startGrid = pathfinder.WorldToGrid(transform.position);
         Vector2Int endGrid = pathfinder.WorldToGrid(provider.Waypoint.position);
 
+        // Si start o end están fuera de la grilla, asigna path directo al waypoint
         if (!pathfinder.IsInsideGrid(startGrid) || !pathfinder.IsInsideGrid(endGrid))
         {
             path = new List<Vector3> { provider.Waypoint.position };
             index = 0;
             return;
         }
-
+        // Solicita el path al sistema de pathfinding
         var nodes = pathfinder.FindPath(startGrid, endGrid);
         if (nodes != null && nodes.Count > 0)
         {
@@ -138,6 +141,8 @@ public class NPCWalkingScript : MonoBehaviour
             index = 0;
         }
     }
+
+    // Detecta triggers con waypoints y LeavePoint
     void OnTriggerEnter(Collider other)
     {
         var provider = other.transform.GetComponent<IWaypointProvider>();
@@ -153,21 +158,24 @@ public class NPCWalkingScript : MonoBehaviour
                 Debug.Log("NPC ha llegado a su waypoint: " + other.gameObject.name);
             }
         }
-         // Si es el LeavePoint y estamos saliendo, destruye el NPC
-            if (other.CompareTag("LeavePoint") && isLeaving)
-            {
-                 Debug.Log("NPC destroyed on LeavePoint trigger: " + gameObject.name);
-                Destroy(gameObject);
-                return;
-            }
+        // Si es el LeavePoint y estamos saliendo, destruye el NPC
+        if (other.CompareTag("LeavePoint") && isLeaving)
+        {
+            Debug.Log("NPC destroyed on LeavePoint trigger: " + gameObject.name);
+            Destroy(gameObject);
+            return;
+        }
     }
-    public class StaticWaypointProvider : IWaypointProvider
-{
-    public Transform Waypoint { get; private set; }
-    public bool IsAvailable => true;
-    public StaticWaypointProvider(Transform t) { Waypoint = t; }
-}
 
+    // Implementación de proveedor de waypoint estático
+    public class StaticWaypointProvider : IWaypointProvider
+    {
+        public Transform Waypoint { get; private set; }
+        public bool IsAvailable => true;
+        public StaticWaypointProvider(Transform t) { Waypoint = t; }
+    }
+
+    // Dibuja el path y la esfera de evasión en el editor
     void OnDrawGizmosSelected()
     {
         if (path == null) return;
@@ -178,12 +186,10 @@ public class NPCWalkingScript : MonoBehaviour
             if (i + 1 < path.Count) Gizmos.DrawLine(path[i], path[i + 1]);
         }
 
-        // draw avoidance debug ray
+        // Dibuja el ray de evasión
         Gizmos.color = Color.red;
         Vector3 castOrigin = transform.position + Vector3.up * avoidHeight;
         Gizmos.DrawWireSphere(castOrigin, avoidRadius);
         Gizmos.DrawLine(castOrigin, castOrigin + transform.forward * avoidDistance);
     }
-
-   
 }

@@ -1,5 +1,8 @@
 using UnityEngine;
 
+// Script encargado de gestionar la lógica visual de los NPCs mediante sprites orientados.
+// Cambia el sprite mostrado según la dirección relativa entre el NPC y el objetivo (normalmente el jugador).
+// Permite interpolar la rotación visual para suavizar el cambio de dirección y dibuja sectores de orientación en el editor.
 public class SkinLogic : MonoBehaviour
 {
     public SpriteRenderer spriteRenderer;
@@ -21,6 +24,7 @@ public class SkinLogic : MonoBehaviour
 
     private float currentVisualAngle = 0f;
 
+    // Busca el objetivo a mirar (por defecto el jugador) al iniciar
     void Start()
     {
         if (lookTarget == null)
@@ -31,6 +35,7 @@ public class SkinLogic : MonoBehaviour
         }
     }
 
+    // Actualiza el sprite y la rotación visual cada frame según la dirección al objetivo
     void Update()
     {
         if (lookTarget == null || spriteRenderer == null)
@@ -86,6 +91,7 @@ public class SkinLogic : MonoBehaviour
         spriteRenderer.transform.localEulerAngles = new Vector3(0, spriteRenderer.transform.localEulerAngles.y, visualZ);
     }
 
+    // Dibuja en el editor los sectores de orientación y las líneas de referencia
     void OnDrawGizmosSelected()
     {
         if (spriteRenderer == null)
@@ -119,6 +125,7 @@ public class SkinLogic : MonoBehaviour
         DrawSectorArc(origin, npcForward, -67.5f, -22.5f, 2f, Color.white); // Frente-izquierda
     }
 
+    // Dibuja un arco de sector en el editor para visualizar la orientación
     void DrawSectorArc(Vector3 origin, Vector3 forward, float startAngle, float endAngle, float radius, Color color)
     {
         Gizmos.color = color;

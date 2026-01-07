@@ -1,5 +1,7 @@
 using UnityEngine;
 
+// Script encargado de gestionar el movimiento especial de NPCs que tienen una lógica de entrada y salida personalizada.
+// Permite mover al NPC a un punto inicial al aparecer, activar la interacción cuando llega, y moverlo a un punto de salida al terminar la conversación.
 public class SpecialNPCMovement : MonoBehaviour
 {
     public Vector3 initialTarget;
@@ -66,6 +68,7 @@ public class SpecialNPCMovement : MonoBehaviour
 
     private System.Action onArriveCallback;
 
+    // Inicia el movimiento hacia un objetivo y ejecuta una acción al llegar
     void MoveTo(Vector3 target, System.Action onArrive)
     {
         currentTarget = target;
@@ -73,11 +76,13 @@ public class SpecialNPCMovement : MonoBehaviour
         moving = true;
     }
 
+    // Devuelve si el NPC está listo para ser interactuado
     public bool IsInteractable()
     {
         return canInteract;
     }
 
+    // Lógica al terminar la conversación: mueve al NPC al punto de salida y lo destruye al llegar
     public void OnConversationEnded()
     {
         if (!isExiting)

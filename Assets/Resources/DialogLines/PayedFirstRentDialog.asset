@@ -10,27 +10,38 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 90ed0434704aef648b1253746ede729a, type: 3}
-  m_Name: HasCheckedShopDialog
+  m_Name: PayedFirstRentDialog
   m_EditorClassIdentifier: Assembly-CSharp::DialogTree
   nodes:
-  - text: "Bueno... Y eso ser\xEDa todo..."
+  - text: Hola otra vez!
     choices: []
     nextNodeIndex: 1
     nextDialogTree: {fileID: 0}
     setNpcStateIfCondition: 
-  - text: "Por hoy deberias descansar, ma\xF1ana al final del dia, vendra un primo
-      mio a saludar, y ver como te va todo"
+  - text: Veo que te va la cosa bien, en fin, que queria seguir viendo como iba todo
     choices: []
     nextNodeIndex: 2
     nextDialogTree: {fileID: 0}
     setNpcStateIfCondition: 
-  - text: Por el momento, no me queda nada mas por explicarte.
+  - text: "Comentarte, que ma\xF1ana vendr\xE1 alguien especial..."
     choices: []
     nextNodeIndex: 3
     nextDialogTree: {fileID: 0}
     setNpcStateIfCondition: 
-  - text: "Descansa, y ya veremos como lo haces ma\xF1ana..."
+  - text: "No te preocupes, no es nada malo, pero para que est\xE9s avisado"
     choices: []
     nextNodeIndex: 4
     nextDialogTree: {fileID: 0}
-    setNpcStateIfCondition: PlayerHasFinishedTutorial
+    setNpcStateIfCondition: 
+  - text: "No te preocupes, no es nada malo, pero para que est\xE9s avisado"
+    choices: []
+    nextNodeIndex: 5
+    nextDialogTree: {fileID: 0}
+    setNpcStateIfCondition: 
+  - text: 'En fin... Mucha suerte!
+
+'
+    choices: []
+    nextNodeIndex: -1
+    nextDialogTree: {fileID: 0}
+    setNpcStateIfCondition: 

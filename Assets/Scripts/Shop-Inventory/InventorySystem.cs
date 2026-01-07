@@ -1,6 +1,9 @@
 using UnityEngine;
 using System.Collections.Generic;
 
+// Script encargado de gestionar el inventario del jugador.
+// Permite añadir y quitar dinero, añadir y quitar ingredientes por ID, consultar cantidades y mostrar el inventario.
+// Incluye lógica para bonificar al jugador según la limpieza del bar.
 public class InventorySystem : MonoBehaviour
 {
     public int money = 0;
@@ -32,6 +35,7 @@ public class InventorySystem : MonoBehaviour
         }
     }
 
+    // Muestra el inventario actual en consola
     public void PrintInventory()
     {
         Debug.Log("Inventario:");
@@ -47,12 +51,14 @@ public class InventorySystem : MonoBehaviour
         }
     }
 
+    // Añade dinero al inventario
     public void AddMoney(int amount)
     {
         money += amount;
         Debug.Log("Dinero ganado: " + amount + ". Total: " + money);
     }
 
+    // Resta dinero si hay suficiente
     public void SpendMoney(int amount)
     {
         if (amount > money)
@@ -64,6 +70,7 @@ public class InventorySystem : MonoBehaviour
         Debug.Log("Dinero gastado: " + amount + ". Total restante: " + money);
     }
 
+    // Añade una cantidad de un ingrediente por ID
     public void AddItem(int itemID, int amount)
     {
         if (!itemCounts.ContainsKey(itemID))
@@ -74,11 +81,33 @@ public class InventorySystem : MonoBehaviour
         Debug.Log($"Añadido {amount} a {data.itemName}. Total: {itemCounts[itemID]}");
     }
 
+    // Quita una cantidad de un ingrediente por ID si hay suficiente
+    public bool RemoveItem(int itemID, int amount)
+    {
+        if (!itemCounts.ContainsKey(itemID) || itemCounts[itemID] < amount)
+        {
+            Debug.LogWarning($"No hay suficiente cantidad del ingrediente ID {itemID} para restar {amount}.");
+            return false;
+        }
+
+        itemCounts[itemID] -= amount;
+        if (itemCounts[itemID] <= 0)
+        {
+            itemCounts.Remove(itemID);
+        }
+
+        var data = ItemDatabase.Instance.GetItemById(itemID);
+        Debug.Log($"Removido {amount} de {data.itemName}. Total restante: {GetItemCount(itemID)}");
+        return true;
+    }
+
+    // Devuelve la cantidad de un ingrediente por ID
     public int GetItemCount(int itemID)
     {
         return itemCounts.ContainsKey(itemID) ? itemCounts[itemID] : 0;
     }
 
+    // Devuelve la cantidad de un ingrediente por nombre
     public int GetItemCount(string itemName)
     {
         foreach (var kvp in itemCounts)
@@ -90,6 +119,7 @@ public class InventorySystem : MonoBehaviour
         return 0;
     }
 
+    // Muestra todos los ingredientes y sus cantidades en consola
     public void PrintAllItemsWithCounts()
     {
         if (ItemDatabase.Instance == null || ItemDatabase.Instance.items == null)
@@ -105,6 +135,7 @@ public class InventorySystem : MonoBehaviour
         }
     }
 
+    // Añade dinero extra según el porcentaje de limpieza del bar
     public void AddMoneyByCleanliness(float cleanPercentage)
     {
         // Ajusta el multiplicador según tu economía de juego

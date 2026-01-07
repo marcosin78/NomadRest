@@ -3,24 +3,8 @@ using UnityEngine.XR;
 
 public class SitDownScript : MonoBehaviour
 {
-
-
-
     Transform targetSeat; 
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
-    {
-        
-       
 
-
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-
-    }
 
     void HandleContact(Transform targetSeat)
     {
@@ -41,7 +25,6 @@ public class SitDownScript : MonoBehaviour
     }
     void OnCollisionEnter(Collision collision)
     {
-
         HandleContact(collision.transform);
     }
     void OnTriggerEnter(Collider other)

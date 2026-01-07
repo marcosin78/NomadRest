@@ -11,7 +11,7 @@ public class WaypointScript : MonoBehaviour, IWaypointProvider
     void Start()
     {
 
-            //Añadir en un futuro más condicionales para el script(De momento asumo que siempre esta disponible)
+            
 
     }
 
