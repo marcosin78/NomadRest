@@ -1,0 +1,70 @@
+# Nomad Rest
+
+Proyecto de videojuego en Unity ambientado en un bar, con minijuegos de servir bebidas y limpieza, controles de jugador en primera persona y un sistema de interacción con objetos.
+
+## Estructura del Proyecto
+
+- **Assets/**  
+  Carpeta principal de recursos y scripts del juego.
+  - **Scripts/**  
+    Contiene la lógica principal del juego, organizada en subcarpetas:
+    - `BeerAndCocktailSystems/`  
+      - `BeerMinigameScript.cs`: Controla el minijuego de servir cerveza, gestión de UI, ingredientes y comunicación con el dispensador.
+      - `BeerDispenserScript.cs`: Lógica del dispensador de bebidas, interacción con el jugador y conexión con el minijuego.
+    - `CleaningScripts/`  
+      - `MopScript.cs`: Permite al jugador equipar y soltar la mopa para limpiar el entorno.
+    - `Player/`  
+      - `PlayerController.cs`: Controlador principal del jugador (movimiento, interacción, agarre de objetos, cámara).
+      - `CamaraVision.cs`: Script de control de la cámara en primera persona.
+  - **Prefabs, Audio, Scenes, Resources, etc.**  
+    Recursos y configuraciones del juego.
+
+- **ProjectSettings/**  
+  Configuración global del proyecto Unity.
+
+- **.vscode/**  
+  Configuración para Visual Studio Code.
+
+- **NudeProject3D.sln, Assembly-CSharp.csproj**  
+  Archivos de solución y proyecto para integración con IDEs.
+
+## Principales Características
+
+- **Minijuego de Cerveza:**  
+  El jugador puede interactuar con dispensadores para iniciar un minijuego de selección de ingredientes y servir bebidas.
+
+- **Sistema de Limpieza:**  
+  El jugador puede recoger y soltar una mopa para limpiar el entorno, con controles intuitivos.
+
+- **Interacción y Agarre de Objetos:**  
+  El jugador puede agarrar objetos con el ratón, soltarlos y ver indicadores visuales para objetos interactuables.
+
+- **Control de Cámara en Primera Persona:**  
+  Movimiento fluido de cámara con sensibilidad ajustable y efectos de inclinación.
+
+- **Gestión de UI y Cursor:**  
+  El cursor se bloquea/desbloquea según el contexto (minijuegos, diálogos, juego libre).
+
+## Controles
+
+- **Movimiento:** WASD  
+- **Agarrar/Soltar objetos:** Click izquierdo / Q  
+- **Interactuar con dispensadores:** E  
+- **Equipar/Soltar mopa:** E / Q  
+- **Salir de minijuegos:** Q
+
+## Requisitos
+
+- Unity 2021.3 o superior recomendado.
+- Visual Studio Code (opcional, para edición de scripts).
+
+## Instalación y Ejecución
+
+1. Clona el repositorio o copia la carpeta del proyecto.
+2. Abre la carpeta raíz en Unity Hub.
+3. Abre la escena principal desde `Assets/Scenes/`.
+4. Ejecuta el juego desde el editor.
+
+## Créditos
+
+Desarrollado por Marc Bravo Madrid
