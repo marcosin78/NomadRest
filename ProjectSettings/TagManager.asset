@@ -32,6 +32,7 @@ TagManager:
   - DecisionButtonsParent
   - PositionsParent
   - SpecialNPCPoint
+  - MoneyText
   layers:
   - Default
   - TransparentFX

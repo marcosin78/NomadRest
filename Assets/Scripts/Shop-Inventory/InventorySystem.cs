@@ -1,5 +1,6 @@
 using UnityEngine;
 using System.Collections.Generic;
+using TMPro; // Añadido para usar TextMeshProUGUI
 
 // Script encargado de gestionar el inventario del jugador.
 // Permite añadir y quitar dinero, añadir y quitar ingredientes por ID, consultar cantidades y mostrar el inventario.
@@ -13,6 +14,8 @@ public class InventorySystem : MonoBehaviour
 
     public static InventorySystem Instance;
 
+    private TextMeshProUGUI moneyText; // Referencia al texto de dinero
+
     void Awake()
     {
         if (CompareTag("Player"))
@@ -25,6 +28,16 @@ public class InventorySystem : MonoBehaviour
             if (playerObj != null)
                 Instance = playerObj.GetComponent<InventorySystem>();
         }
+
+        // Busca el texto con tag "MoneyText" dentro del Player
+        var moneyTextObj = GameObject.FindGameObjectWithTag("MoneyText");
+        if (moneyTextObj != null)
+            moneyText = moneyTextObj.GetComponent<TextMeshProUGUI>();
+    }
+
+    void Start()
+    {
+        UpdateMoneyText();
     }
 
     void Update()
@@ -56,6 +69,7 @@ public class InventorySystem : MonoBehaviour
     {
         money += amount;
         Debug.Log("Dinero ganado: " + amount + ". Total: " + money);
+        UpdateMoneyText();
     }
 
     // Resta dinero si hay suficiente
@@ -68,6 +82,7 @@ public class InventorySystem : MonoBehaviour
         }
         money -= amount;
         Debug.Log("Dinero gastado: " + amount + ". Total restante: " + money);
+        UpdateMoneyText();
     }
 
     // Añade una cantidad de un ingrediente por ID
@@ -151,6 +166,13 @@ public class InventorySystem : MonoBehaviour
         {
             Debug.Log("La tienda está demasiado sucia para recibir un bono de limpieza.");
         }
+    }
+
+    // Actualiza el texto de dinero en la UI
+    private void UpdateMoneyText()
+    {
+        if (moneyText != null)
+            moneyText.text = $"DINERO : {money}";
     }
 }
 

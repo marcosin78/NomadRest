@@ -1,9 +1,9 @@
 [
-  { "id": 0, "itemName": "Beer", "ingredientType": "Licor", "price": 0, "spriteName": "beer_sprite", "audioName": "Audio/Ingredients/BOTTLE_GRAB_INVENTORY" },
-  { "id": 1, "itemName": "Whiskey", "ingredientType": "Licor", "price": 0, "spriteName": "whiskey_sprite", "audioName": "Audio/Ingredients/BOTTLE_GRAB_INVENTORY" },
-  { "id": 10, "itemName": "Mint", "ingredientType": "Herb", "price": 0, "spriteName": "mint_sprite", "audioName": "Audio/Ingredients/HERBS_GRAB_INVENTORY" },
-  { "id": 11, "itemName": "Basil", "ingredientType": "Herb", "price": 0, "spriteName": "basil_sprite", "audioName": "Audio/Ingredients/HERBS_GRAB_INVENTORY" },
-  { "id": 20, "itemName": "Bleach", "ingredientType": "Cleaning", "price": 0, "spriteName": "bleach_sprite", "audioName": "Audio/Ingredients/CLEANING_GRAB_INVENTORY" },
-  { "id": 30, "itemName": "Other_Item", "ingredientType": "Other", "price": 0, "spriteName": "other_item_sprite", "audioName": "Audio/Ingredients/OTHER_GRAB_INVENTORY" }
+  { "id": 0, "itemName": "Beer", "ingredientType": "Licor", "price": 5, "spriteName": "beer_sprite", "audioName": "Audio/Ingredients/BOTTLE_GRAB_INVENTORY" },
+  { "id": 1, "itemName": "Whiskey", "ingredientType": "Licor", "price": 5, "spriteName": "whiskey_sprite", "audioName": "Audio/Ingredients/BOTTLE_GRAB_INVENTORY" },
+  { "id": 10, "itemName": "Mint", "ingredientType": "Herb", "price": 5, "spriteName": "mint_sprite", "audioName": "Audio/Ingredients/HERBS_GRAB_INVENTORY" },
+  { "id": 11, "itemName": "Basil", "ingredientType": "Herb", "price": 5, "spriteName": "basil_sprite", "audioName": "Audio/Ingredients/HERBS_GRAB_INVENTORY" },
+  { "id": 20, "itemName": "Bleach", "ingredientType": "Cleaning", "price": 5, "spriteName": "bleach_sprite", "audioName": "Audio/Ingredients/CLEANING_GRAB_INVENTORY" },
+  { "id": 30, "itemName": "Other_Item", "ingredientType": "Other", "price": 5, "spriteName": "other_item_sprite", "audioName": "Audio/Ingredients/OTHER_GRAB_INVENTORY" }
   
 ]
