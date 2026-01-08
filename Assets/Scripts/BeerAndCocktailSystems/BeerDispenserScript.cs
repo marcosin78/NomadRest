@@ -95,11 +95,11 @@ public class BeerDispenserScript : MonoBehaviour, IInteractable
     // Lista de ingredientes usados en la última bebida dispensada
     public System.Collections.Generic.List<int> lastUsedIngredients;
 
-
     /// Llamado al finalizar el minijuego, almacena los ingredientes usados y marca el dispensador como ocupado.
     /// <param name="ingredientIDs">Lista de IDs de ingredientes usados</param>
     public void OnMinigameFinished(System.Collections.Generic.List<int> ingredientIDs)
     {
+
         isDispensing = true;
         lastUsedIngredients = new System.Collections.Generic.List<int>(ingredientIDs); // COPIA, no referencia
     

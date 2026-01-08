@@ -21,6 +21,12 @@ public class SpecialNPCMovement : MonoBehaviour
     {
         rb = GetComponent<Rigidbody>();
 
+        // Congelar rotaciones para que el NPC no se caiga
+        rb.freezeRotation = true;
+
+        // Guardar el punto de spawn como exitTarget
+        exitTarget = transform.position;
+
         // Buscar el punto inicial por tag
         GameObject targetPoint = GameObject.FindGameObjectWithTag("SpecialNPCPoint");
         if (targetPoint != null)

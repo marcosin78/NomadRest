@@ -164,12 +164,20 @@ private Vector3 grabOffset;
 
     }
 
+    // Toma un objeto y lo coloca en el HoldPoint
     public void TakeItem(GameObject itemPrefab)
     {
         if (!availableHands || HoldPoint == null || itemPrefab == null)
             return;
 
-        Instantiate(itemPrefab, HoldPoint.position, HoldPoint.rotation, HoldPoint);
+            // Con el objeto instanciado, se hace el parenting
+        itemPrefab.transform.SetParent(HoldPoint);
+        itemPrefab.transform.localPosition = Vector3.zero;
+        itemPrefab.transform.localRotation = Quaternion.identity;
+        itemPrefab.transform.localScale = Vector3.one;
+
+
+        //Instantiate(itemPrefab, HoldPoint.position, HoldPoint.rotation, HoldPoint);
         availableHands = false;
         Debug.Log("Player took item: " + itemPrefab.name);
     }

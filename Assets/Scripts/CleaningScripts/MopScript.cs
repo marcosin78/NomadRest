@@ -47,9 +47,10 @@ public class MopScript : MonoBehaviour
         // Haz hijo de HoldPoint y coloca la mopa en la mano
         transform.SetParent(playerController.HoldPoint);
 
-        // Valores ajustados para que quede bien en la mano
-        transform.localPosition = new Vector3(1, -0.25f, -0.15f); 
-        transform.localRotation = Quaternion.Euler(-72, -12, -15);
+        // Asigna la posición, rotación y escala exactas
+        transform.localPosition = new Vector3(0.8f, 0f, -1.23f);
+        transform.localRotation = Quaternion.Euler(-180f, -12f, -15f);
+        transform.localScale = new Vector3(125f, 125f, 125f);
 
         // Desactiva el collider para que no interfiera
         Collider col = GetComponent<Collider>();
