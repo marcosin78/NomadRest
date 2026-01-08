@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: 38172d710580f21479dd647cdeb9f9f0
+guid: 57e39681f135e944ab5d331c3f4e9192
 TextureImporter:
   internalIDToNameTable: []
   externalObjects: {}
@@ -110,7 +110,7 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: MentaPixelated_0
+      name: ResetPixelated_01_0
       rect:
         serializedVersion: 2
         x: 0
@@ -125,8 +125,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 83d800a01a0a370498ed719f6333a446
-      internalID: -2002589942
+      spriteID: b268df9425b201848902f92bd9295051
+      internalID: -1317849904
       vertices: []
       indices: 
       edges: []
@@ -135,7 +135,7 @@ TextureImporter:
     customData: 
     physicsShape: []
     bones: []
-    spriteID: 3fd0c2764566e714d8c06aeaf998e38e
+    spriteID: cd8aa9e8fe2def948a0309744f40e994
     internalID: 0
     vertices: []
     indices: 
@@ -145,7 +145,7 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      MentaPixelated_0: -2002589942
+      ResetPixelated_01_0: -1317849904
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

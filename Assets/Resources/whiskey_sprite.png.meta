@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: da71780587ac7eb498969946d4408ce5
+guid: d853b829fd57e0343a76261edb837fd0
 TextureImporter:
   internalIDToNameTable: []
   externalObjects: {}
@@ -110,13 +110,57 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: Botella_Whiskey_0
+      name: WhiskyPixelated_0
       rect:
         serializedVersion: 2
-        x: 93
-        y: 26
-        width: 293
-        height: 474
+        x: 2
+        y: 0
+        width: 62
+        height: 64
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: c2875546372e954429434cfb6ebd967a
+      internalID: -1361459781
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: WhiskyPixelated_1
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 0
+        width: 64
+        height: 64
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: b2bea8462dc070941a763f533717355f
+      internalID: 575251051
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: WhiskyPixelated_2
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 0
+        width: 64
+        height: 64
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -125,8 +169,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 24c9379fb10e2714e8ab01924f5297c0
-      internalID: -1207366125
+      spriteID: b9af0bcdc94c5be458e7b956b546f62e
+      internalID: -1129415647
       vertices: []
       indices: 
       edges: []
@@ -135,7 +179,7 @@ TextureImporter:
     customData: 
     physicsShape: []
     bones: []
-    spriteID: 350d56c0ad7c054479745edcc2648e28
+    spriteID: dbe7ae75f042cfc42891bfcbbbe88a38
     internalID: 0
     vertices: []
     indices: 
@@ -145,7 +189,9 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      Botella_Whiskey_0: -1207366125
+      WhiskyPixelated_0: -1361459781
+      WhiskyPixelated_1: 575251051
+      WhiskyPixelated_2: -1129415647
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

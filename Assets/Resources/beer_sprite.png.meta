@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: 2ddc389e109ac7047a5cff5ece6a5758
+guid: 39ce35612d4c8ec4f89d07cbdf832689
 TextureImporter:
   internalIDToNameTable: []
   externalObjects: {}
@@ -110,13 +110,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: Barril_Cerveza_0
+      name: Barril_Cerveza_Pixelated_0
       rect:
         serializedVersion: 2
-        x: 1
+        x: 0
         y: 0
-        width: 499
-        height: 495
+        width: 64
+        height: 64
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -125,8 +125,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 1d4842728ba11634994881ef6f4012cb
-      internalID: 1363482606
+      spriteID: 117c063edfacdc74299135b27f082d49
+      internalID: 1156570877
       vertices: []
       indices: 
       edges: []
@@ -135,7 +135,7 @@ TextureImporter:
     customData: 
     physicsShape: []
     bones: []
-    spriteID: cdceb612bd9dc9c47b4bc6082ca9f51a
+    spriteID: 73c7fcd82a58060439d9a560658d46db
     internalID: 0
     vertices: []
     indices: 
@@ -145,7 +145,7 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      Barril_Cerveza_0: 1363482606
+      Barril_Cerveza_Pixelated_0: 1156570877
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
