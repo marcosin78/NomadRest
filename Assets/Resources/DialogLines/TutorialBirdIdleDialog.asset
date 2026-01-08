@@ -13,7 +13,8 @@ MonoBehaviour:
   m_Name: TutorialBirdIdleDialog
   m_EditorClassIdentifier: Assembly-CSharp::DialogTree
   nodes:
-  - text: Otra vez en el punto de partida... verdad?
+  - text: Otra vez en el punto de partida... verdad?(PULSA MOUSE 1 PARA AVANZAR EN
+      LAS CONVERSACIONES)
     choices: []
     nextNodeIndex: 1
     nextDialogTree: {fileID: 0}
@@ -23,7 +24,8 @@ MonoBehaviour:
     nextNodeIndex: 2
     nextDialogTree: {fileID: 0}
     setNpcStateIfCondition: 
-  - text: "Deber\xEDas descansar..."
+  - text: "Deber\xEDas descansar... (PULSA E, EN LA CAMA PARA DORMIR Y PASAR AL SIGUIENTE
+      DIA)"
     choices: []
     nextNodeIndex: 3
     nextDialogTree: {fileID: 0}

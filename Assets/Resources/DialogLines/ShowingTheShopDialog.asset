@@ -23,7 +23,7 @@ MonoBehaviour:
     nextNodeIndex: 2
     nextDialogTree: {fileID: 0}
     setNpcStateIfCondition: 
-  - text: Hechale un ojo...
+  - text: Hechale un ojo...(PULSA E, EN LA LIBRETA AZUL PARA COMPRAR)
     choices: []
     nextNodeIndex: 3
     nextDialogTree: {fileID: 0}

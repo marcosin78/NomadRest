@@ -25,8 +25,7 @@ MonoBehaviour:
     nextNodeIndex: 2
     nextDialogTree: {fileID: 0}
     setNpcStateIfCondition: 
-  - text: "En fin, no me importa. Tienes esto hecho una porquer\xEDa, sigueme hasta
-      el sal\xF3n\n"
+  - text: "Tienes esto hecho una porquer\xEDa, sigueme hasta el sal\xF3n\n"
     choices: []
     nextNodeIndex: 3
     nextDialogTree: {fileID: 0}

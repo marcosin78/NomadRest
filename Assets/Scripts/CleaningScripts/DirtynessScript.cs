@@ -48,14 +48,14 @@ public class DirtynessScript : MonoBehaviour
         {
             StartCleaning();
 
-            // Activa la condición de limpieza del tutorial si se ha limpiado el 40% por primera vez
-            if (!barCleanedOnce && GetCleanPercentage() >= 40f && totalDirtSpawned > 0)
+            // Activa la condición de limpieza del tutorial si se ha limpiado el 10% por primera vez
+            if (!barCleanedOnce && GetCleanPercentage() >= 10f && totalDirtSpawned > 0)
             {
                 if (GameConditions.Instance != null && GameConditions.Instance.HasCondition("PlayerPendingOfCleaningSaloonWithTutorialBird"))
                 {
                     barCleanedOnce = true;
                     GameConditions.Instance.SetCondition("PlayerHasCleanedSaloonWithTutorialBird", true);
-                    Debug.Log("Bar cleaned 40% for the first time. Condition activated.");
+                    Debug.Log("Bar cleaned 10% for the first time. Condition activated.");
                 }
             }
         }

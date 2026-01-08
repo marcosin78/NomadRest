@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::DialogTree
   nodes:
   - text: "Es complicado despues de estar tanto tiempo en letargo... \nPero deberias
-      descansar"
+      descansar(PULSA E EN LA CAMA PARA DESCANSAR)"
     choices: []
     nextNodeIndex: 1
     nextDialogTree: {fileID: 0}
