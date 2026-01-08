@@ -274,6 +274,10 @@ MonoBehaviour:
   ingredientID: 0
   ingredientImage: {fileID: 0}
   cantidadText: {fileID: 2812836747117241389}
+  originalParent: {fileID: 0}
+  originalSiblingIndex: 0
+  originalLocalPosition: {x: 0, y: 0, z: 0}
+  buttonImage: {fileID: 0}
 --- !u!1 &8014666733385127792
 GameObject:
   m_ObjectHideFlags: 0

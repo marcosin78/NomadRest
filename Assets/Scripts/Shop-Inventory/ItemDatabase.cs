@@ -27,7 +27,7 @@ public class ItemDatabase : MonoBehaviour
     // Carga los items desde un archivo JSON y los guarda en la lista y el diccionario
     void LoadItems()
     {
-        string path = Application.dataPath + "/Data/items.json";
+        string path = Path.Combine(Application.streamingAssetsPath, "items.json");
         if (File.Exists(path))
         {
             string json = File.ReadAllText(path);
@@ -41,7 +41,7 @@ public class ItemDatabase : MonoBehaviour
         }
         else
         {
-            Debug.LogError("No se encontró el archivo items.json en " + path);
+            Debug.LogError("No se encontró el archivo items en " + path);
         }
     }
 

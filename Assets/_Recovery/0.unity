@@ -270,6 +270,9 @@ MonoBehaviour:
   isDispensing: 0
   drinkOptions: 0100000002000000
   selectedDrink: 0
+  beerMinigameScript: {fileID: 0}
+  openingAudioClip: {fileID: 0}
+  lastUsedIngredients: 
 --- !u!65 &247266036
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -1301,6 +1304,7 @@ MonoBehaviour:
   destroyDelay: 1
   cooldownTime: 0.05
   directionLerpTime: 0.8
+  cancelDistance: 3
 --- !u!1001 &4435942603620815618
 PrefabInstance:
   m_ObjectHideFlags: 0

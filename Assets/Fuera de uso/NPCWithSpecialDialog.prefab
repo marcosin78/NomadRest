@@ -482,6 +482,7 @@ MonoBehaviour:
   avoidRadius: 0.3
   avoidWeight: 2
   avoidHeight: 0
+  isLeaving: 0
 --- !u!65 &3207060652766083743
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -555,6 +556,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: '::'
   askingBeer: 0
+  beerDelivered: 0
+  licors: []
+  herbs: []
+  bubbleUI: {fileID: 0}
+  ingredientesPanel: {fileID: 0}
+  npcCanvas: {fileID: 0}
 --- !u!114 &2488195478962762772
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -591,12 +598,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4f312d17c3248a5498575ebbd6bead70, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::DialogScript
-  focusPoint: {fileID: 0}
-  isDialogActive: 0
-  CameraDistance: 1.5
-  hasSpecialDialog: 1
-  dialogUIText: {fileID: 726793512979672997}
+  dialogTree: {fileID: 0}
   dialogCanvas: {fileID: 181875211151201107}
+  decisionCanvas: {fileID: 0}
+  dialogUIText: {fileID: 726793512979672997}
+  decisionButtonPrefab: {fileID: 0}
+  hasSpecialDialog: 1
+  decisionButtonParent: {fileID: 0}
+  unlockDialogScript: {fileID: 0}
+  isDialogActive: 0
+  characterRigidbody: {fileID: 0}
+  playerTransform: {fileID: 0}
 --- !u!114 &4096379944629169792
 MonoBehaviour:
   m_ObjectHideFlags: 0

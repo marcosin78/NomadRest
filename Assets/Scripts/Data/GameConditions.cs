@@ -51,13 +51,13 @@ public class GameConditions : MonoBehaviour
     }
 
     /// <summary>
-    /// Carga la configuración de condiciones desde un archivo JSON ubicado en Assets/Scripts.
+    /// Carga la configuración de condiciones desde un archivo JSON ubicado en StreamingAssets.
     /// Llena el diccionario interno para acceso rápido.
     /// </summary>
     void LoadConditionsConfig()
     {
-        // Cambia la ruta para buscar en Assets/Scripts
-        string path = Path.Combine(Application.dataPath, "Scripts", configFileName);
+        // Cambia la ruta para buscar en StreamingAssets
+        string path = Path.Combine(Application.streamingAssetsPath, configFileName);
         if (File.Exists(path))
         {
             string json = File.ReadAllText(path);

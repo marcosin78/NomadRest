@@ -104,7 +104,7 @@ public class ShopSystem : MonoBehaviour, IInteractable
     // Carga los datos de los ingredientes desde el archivo JSON
     private void LoadItemsFromJson()
     {
-        string path = Application.dataPath + "/Data/items.json";
+        string path = Path.Combine(Application.streamingAssetsPath, "items.json");
         if (File.Exists(path))
         {
             string json = File.ReadAllText(path);
@@ -112,7 +112,7 @@ public class ShopSystem : MonoBehaviour, IInteractable
         }
         else
         {
-            Debug.LogError("No se encontró el archivo items.json en " + path);
+            Debug.LogError("No se encontró el archivo items en " + path);
         }
     }
 

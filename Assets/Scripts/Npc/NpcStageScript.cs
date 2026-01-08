@@ -37,10 +37,10 @@ public class NpcStageScript : MonoBehaviour
         LoadNpcStatesConfig();
     }
 
-    // Carga la configuración de estados de los NPCs desde un archivo JSON en Assets/Scripts
+    // Carga la configuración de estados de los NPCs desde un archivo JSON en StreamingAssets
     void LoadNpcStatesConfig()
     {
-        string path = Path.Combine(Application.dataPath, "Scripts", configFileName);
+        string path = Path.Combine(Application.streamingAssetsPath, configFileName);
         if (File.Exists(path))
         {
             string json = File.ReadAllText(path);

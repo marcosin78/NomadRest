@@ -79,7 +79,11 @@ public class NPCWalkingScript : MonoBehaviour
             return;
         }
 
-        Vector3 dir = toTarget.normalized;
+        // Calcula la rotación hacia el objetivo, pero siempre avanza hacia adelante
+        Quaternion targetRot = Quaternion.LookRotation(toTarget, Vector3.up);
+        transform.rotation = Quaternion.Slerp(transform.rotation, targetRot, 10f * Time.deltaTime);
+
+        Vector3 dir = transform.forward; // Siempre avanza hacia adelante local
 
         // Evasión local: spherecast hacia adelante, si hay obstáculo, esquiva
         Vector3 castOrigin = transform.position + Vector3.up * avoidHeight;
@@ -99,12 +103,6 @@ public class NPCWalkingScript : MonoBehaviour
         Vector3 move = dir * speed * Time.deltaTime;
         if (rb != null) rb.MovePosition(rb.position + move);
         else transform.position += move;
-
-        if (move.sqrMagnitude > 0.0001f)
-        {
-            Quaternion rot = Quaternion.LookRotation(move, Vector3.up);
-            transform.rotation = Quaternion.Slerp(transform.rotation, rot, 10f * Time.deltaTime);
-        }
     }
 
     // Solicita un nuevo path al pathfinder
