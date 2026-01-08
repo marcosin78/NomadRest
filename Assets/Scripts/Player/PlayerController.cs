@@ -10,15 +10,18 @@ public class PlayerController : MonoBehaviour
         private Vector3 initialCameraPosition;
         private Quaternion initialCameraRotation;
 
+        //Tilt de la camara
         [SerializeField] private float cameraTiltAmount = 5f; // Grados máximos de inclinación
         [SerializeField] private float cameraTiltSpeed = 1.5f;   // Velocidad de interpolación
         private float currentTilt = 0f;
 
-        private bool showGrabPoint = false;
-        private Color grabPointColor = Color.green;
 
+
+        //Indicadores de objetos agarrables e interactuables
+        private bool showGrabPoint = false;
         private bool showInteractablePoint = false;
-        private Color interactablePointColor = Color.blue;
+        public Sprite grabPointSprite;
+        public Sprite interactablePointSprite;
 
     int movementSpeed = 5;
     Vector3 movement;
@@ -356,23 +359,16 @@ public void LockCursorAndRestoreSensitivity()
 // Dibuja puntos en el centro de la pantalla para indicar objetos agarrables o interactuables
     void OnGUI()
 {
-    if (showGrabPoint)
+    float size = 32f; // Tamaño del icono
+    Rect rect = new Rect((Screen.width - size) / 2, (Screen.height - size) / 2, size, size);
+
+    if (showGrabPoint && grabPointSprite != null)
     {
-        float size = 16f;
-        Rect rect = new Rect((Screen.width - size) / 2, (Screen.height - size) / 2, size, size);
-        Color prevColor = GUI.color;
-        GUI.color = grabPointColor;
-        GUI.DrawTexture(rect, Texture2D.whiteTexture);
-        GUI.color = prevColor;
+        GUI.DrawTexture(rect, grabPointSprite.texture, ScaleMode.ScaleToFit, true);
     }
-    if (showInteractablePoint)
+    else if (showInteractablePoint && interactablePointSprite != null)
     {
-        float size = 16f;
-        Rect rect = new Rect((Screen.width - size) / 2, (Screen.height - size) / 2, size, size);
-        Color prevColor = GUI.color;
-        GUI.color = interactablePointColor;
-        GUI.DrawTexture(rect, Texture2D.whiteTexture);
-        GUI.color = prevColor;
+        GUI.DrawTexture(rect, interactablePointSprite.texture, ScaleMode.ScaleToFit, true);
     }
 }
 }
