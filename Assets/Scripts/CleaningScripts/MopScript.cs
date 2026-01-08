@@ -60,10 +60,10 @@ public class MopScript : MonoBehaviour
         Rigidbody rb = GetComponent<Rigidbody>();
         if (rb != null)
         {
-            rb.isKinematic = true;
-            rb.useGravity = false;
             rb.linearVelocity = Vector3.zero;
             rb.angularVelocity = Vector3.zero;
+            rb.isKinematic = true;
+            rb.useGravity = false;
         }
     }
 
@@ -73,14 +73,13 @@ public class MopScript : MonoBehaviour
         grabbingMop = false;
         playerController.availableHands = true;
 
-        // Suelta la mopa en la posición actual del jugador
+        // Suelta la mopa del HoldPoint ANTES de moverla
         transform.SetParent(null);
 
-        // Reactiva el collider
+        // Reactiva el collider y el Rigidbody
         Collider col = GetComponent<Collider>();
         if (col != null) col.enabled = true;
 
-        // Reactiva el Rigidbody
         Rigidbody rb = GetComponent<Rigidbody>();
         if (rb != null)
         {
@@ -88,8 +87,10 @@ public class MopScript : MonoBehaviour
             rb.useGravity = true;
         }
 
-        // Coloca la mopa justo delante del jugador
-        transform.position = playerController.transform.position + playerController.transform.forward * 1f;
+        // Coloca la mopa justo delante del jugador (posición global)
+        Vector3 dropPosition = playerController.transform.position + playerController.transform.forward * 1f;
+        dropPosition.y = playerController.transform.position.y; // Ajusta la altura si es necesario
+        transform.position = dropPosition;
     }
 
     // Comprueba si el jugador está lo suficientemente cerca para equipar la mopa

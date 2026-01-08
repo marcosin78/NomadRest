@@ -96,13 +96,6 @@ private Vector3 grabOffset;
         }
     }
 
-    if (Input.GetMouseButton(0) && grabbedRigidbody != null)
-    {
-        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-        Vector3 targetPoint = ray.GetPoint(2f); // 2f: distancia delante de la cámara
-        grabbedRigidbody.MovePosition(targetPoint - grabOffset);
-    }
-
     if (Input.GetMouseButtonUp(0) && grabbedRigidbody != null)
     {
         grabbedRigidbody.useGravity = true;
@@ -162,6 +155,13 @@ private Vector3 grabOffset;
 
         rb.MovePosition(rb.position + movement * movementSpeed * Time.fixedDeltaTime);
 
+        // Mueve el objeto agarrado usando físicas
+        if (grabbedRigidbody != null)
+        {
+            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+            Vector3 targetPoint = ray.GetPoint(2f); // 2f: distancia delante de la cámara
+            grabbedRigidbody.MovePosition(targetPoint - grabOffset);
+        }
     }
 
     // Toma un objeto y lo coloca en el HoldPoint
@@ -188,9 +188,37 @@ private Vector3 grabOffset;
             return;
 
         Transform item = HoldPoint.GetChild(0);
-        Destroy(item.gameObject); // Destruye el objeto al soltarlo
+
+        if (item.CompareTag("Beer"))
+        {
+            Destroy(item.gameObject); // Solo destruye si es Beer
+            Debug.Log("Player destroyed Beer item: " + item.name);
+        }
+        else
+        {
+            // Quita el parent
+            item.SetParent(null);
+
+            // Reactiva físicas y collider si tiene Rigidbody
+            Rigidbody rb = item.GetComponent<Rigidbody>();
+            if (rb != null)
+            {
+                rb.isKinematic = false;
+                rb.useGravity = true;
+            }
+            Collider col = item.GetComponent<Collider>();
+            if (col != null)
+                col.enabled = true;
+
+            // Coloca el objeto delante del jugador
+            Vector3 dropPosition = transform.position + transform.forward * 1f;
+            dropPosition.y = transform.position.y;
+            item.position = dropPosition;
+
+            Debug.Log("Player dropped item: " + item.name);
+        }
+
         availableHands = true;
-        Debug.Log("Player dropped item: " + item.name);
     }
     
        // Bloquea movimiento y cámara
