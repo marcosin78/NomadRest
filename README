@@ -6,21 +6,20 @@ Proyecto de videojuego en Unity ambientado en un bar, con minijuegos de servir b
 
 - **Assets/**  
   Carpeta principal de recursos y scripts del juego.
-  - **Scripts/**  
-    Contiene la lógica principal del juego, organizada en subcarpetas:
-    - `BeerAndCocktailSystems/`  
-      - `BeerMinigameScript.cs`: Controla el minijuego de servir cerveza, gestión de UI, ingredientes y comunicación con el dispensador.
-      - `BeerDispenserScript.cs`: Lógica del dispensador de bebidas, interacción con el jugador y conexión con el minijuego.
-    - `CleaningScripts/`  
-      - `MopScript.cs`: Permite al jugador equipar y soltar la mopa para limpiar el entorno.
-    - `Player/`  
-      - `PlayerController.cs`: Controlador principal del jugador (movimiento, interacción, agarre de objetos, cámara).
-      - `CamaraVision.cs`: Script de control de la cámara en primera persona.
-  - **Prefabs, Audio, Scenes, Resources, etc.**  
-    Recursos y configuraciones del juego.
-
-- **ProjectSettings/**  
-  Configuración global del proyecto Unity.
+    - **Scripts/**  
+      Contiene la lógica principal del juego, organizada en subcarpetas
+    - **Essentials/**
+      Carpeta con los prefabs esenciales para poder crear nuestro propio escenario en NomadRest, la escena tendrá que tener como minimo, 1 objeto de cada para que puedan funcionar correctamente todos los sistemas.
+    - **NomadsRestPack/**
+      Contiene el Prefab del escenario principal, con todas las texturas originales del proyecto.
+    - **Prefabs/**
+      Contiene los prefabs de los Npcs
+    - **Audio/**
+      Contiene los archivos de Audio
+    - **StreamingAssets/**  
+      Contiene los archivos JSON con las bases de datos de Npcs, Items, Estados del mundo.
+    - **ProjectSettings/**  
+      Configuración global del proyecto Unity.
 
 - **.vscode/**  
   Configuración para Visual Studio Code.
